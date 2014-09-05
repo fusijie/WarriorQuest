@@ -1,0 +1,19 @@
+dependencies: \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/cocos/platform/CCImage.cpp \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../external/png/include/ios/png.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../external/png/include/ios/pnglibconf.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../external/png/include/ios/pngconf.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../external/tiff/include/ios/tiffio.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../external/tiff/include/ios/tiff.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../external/tiff/include/ios/tiffconf.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../external/tiff/include/ios/tiffvers.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../cocos/base/etc1.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../external/jpeg/include/ios/jpeglib.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../external/jpeg/include/ios/jconfig.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../external/jpeg/include/ios/jmorecfg.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../cocos/base/s3tc.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../cocos/base/atitc.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../cocos/base/pvr.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../cocos/base/TGAlib.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../external/webp/include/ios/decode.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../external/webp/include/ios/./types.h

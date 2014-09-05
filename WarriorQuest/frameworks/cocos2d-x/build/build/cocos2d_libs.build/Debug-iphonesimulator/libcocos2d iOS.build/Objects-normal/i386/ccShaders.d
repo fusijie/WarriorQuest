@@ -1,0 +1,27 @@
+dependencies: \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/cocos/renderer/ccShaders.cpp \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../cocos/renderer/ccShader_Position_uColor.frag \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../cocos/renderer/ccShader_Position_uColor.vert \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../cocos/renderer/ccShader_PositionColor.frag \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../cocos/renderer/ccShader_PositionColor.vert \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../cocos/renderer/ccShader_PositionTexture.frag \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../cocos/renderer/ccShader_PositionTexture.vert \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../cocos/renderer/ccShader_PositionTextureA8Color.frag \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../cocos/renderer/ccShader_PositionTextureA8Color.vert \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../cocos/renderer/ccShader_PositionTextureColor.frag \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../cocos/renderer/ccShader_PositionTextureColor.vert \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../cocos/renderer/ccShader_PositionTextureColor_noMVP.frag \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../cocos/renderer/ccShader_PositionTextureColor_noMVP.vert \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../cocos/renderer/ccShader_PositionTextureColorAlphaTest.frag \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../cocos/renderer/ccShader_PositionTexture_uColor.frag \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../cocos/renderer/ccShader_PositionTexture_uColor.vert \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../cocos/renderer/ccShader_PositionColorLengthTexture.frag \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../cocos/renderer/ccShader_PositionColorLengthTexture.vert \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../cocos/renderer/ccShader_Label.vert \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../cocos/renderer/ccShader_Label_df.frag \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../cocos/renderer/ccShader_Label_df_glow.frag \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../cocos/renderer/ccShader_Label_normal.frag \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../cocos/renderer/ccShader_Label_outline.frag \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../cocos/renderer/ccShader_3D_PositionTex.vert \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../cocos/renderer/ccShader_3D_Color.frag \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../cocos/renderer/ccShader_3D_ColorTex.frag

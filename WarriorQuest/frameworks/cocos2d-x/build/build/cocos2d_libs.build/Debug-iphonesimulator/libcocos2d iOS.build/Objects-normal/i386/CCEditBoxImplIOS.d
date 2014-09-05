@@ -1,0 +1,22 @@
+dependencies: \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/extensions/GUI/CCEditBox/CCEditBoxImplIOS.mm \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/extensions/GUI/CCEditBox/CCEditBoxImplIOS.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../extensions/ExtensionMacros.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/extensions/GUI/CCEditBox/CCEditBoxImpl.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/extensions/GUI/CCEditBox/CCEditBox.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/extensions/GUI/CCEditBox/../CCControlExtension/CCControlExtensions.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/extensions/GUI/CCEditBox/../CCControlExtension/CCScale9Sprite.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../extensions/ExtensionExport.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/extensions/GUI/CCEditBox/../CCControlExtension/CCControl.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/extensions/GUI/CCEditBox/../CCControlExtension/CCControlUtils.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/extensions/GUI/CCEditBox/../CCControlExtension/CCControlButton.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/extensions/GUI/CCEditBox/../CCControlExtension/CCInvocation.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/extensions/GUI/CCEditBox/../CCControlExtension/CCControlColourPicker.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/extensions/GUI/CCEditBox/../CCControlExtension/CCControlHuePicker.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/extensions/GUI/CCEditBox/../CCControlExtension/CCControlSaturationBrightnessPicker.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/extensions/GUI/CCEditBox/../CCControlExtension/CCControlPotentiometer.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/extensions/GUI/CCEditBox/../CCControlExtension/CCControlSlider.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/extensions/GUI/CCEditBox/../CCControlExtension/CCControlStepper.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/extensions/GUI/CCEditBox/../CCControlExtension/CCControlSwitch.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../cocos/platform/ios/CCEAGLView.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../cocos/platform/ios/CCESRenderer.h

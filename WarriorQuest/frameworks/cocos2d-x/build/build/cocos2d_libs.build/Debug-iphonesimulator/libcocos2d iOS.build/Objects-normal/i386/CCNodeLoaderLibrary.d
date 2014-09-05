@@ -1,0 +1,32 @@
+dependencies: \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/cocos/editor-support/cocosbuilder/CCNodeLoaderLibrary.cpp \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/cocos/editor-support/cocosbuilder/CCNodeLoaderLibrary.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/cocos/editor-support/cocosbuilder/CCBReader.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/cocos/editor-support/cocosbuilder/CCBSequence.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/cocos/editor-support/cocosbuilder/CCBSequenceProperty.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/cocos/editor-support/cocosbuilder/CCBKeyframe.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../extensions/GUI/CCControlExtension/CCControl.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../extensions/GUI/CCControlExtension/CCControlUtils.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../extensions/GUI/CCControlExtension/../../ExtensionMacros.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../extensions/ExtensionExport.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../cocos/editor-support/cocosbuilder/CCBAnimationManager.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/cocos/editor-support/cocosbuilder/CCLayerLoader.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/cocos/editor-support/cocosbuilder/CCNodeLoader.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../extensions/GUI/CCControlExtension/CCInvocation.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/cocos/editor-support/cocosbuilder/CCLayerColorLoader.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/cocos/editor-support/cocosbuilder/CCLayerGradientLoader.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/cocos/editor-support/cocosbuilder/CCLabelBMFontLoader.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/cocos/editor-support/cocosbuilder/CCLabelTTFLoader.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/cocos/editor-support/cocosbuilder/CCSpriteLoader.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/cocos/editor-support/cocosbuilder/CCScale9SpriteLoader.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../extensions/GUI/CCControlExtension/CCScale9Sprite.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/cocos/editor-support/cocosbuilder/CCBFileLoader.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/cocos/editor-support/cocosbuilder/CCMenuLoader.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/cocos/editor-support/cocosbuilder/CCMenuItemLoader.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/cocos/editor-support/cocosbuilder/CCMenuItemImageLoader.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/cocos/editor-support/cocosbuilder/CCControlButtonLoader.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/cocos/editor-support/cocosbuilder/CCControlLoader.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../extensions//GUI/CCControlExtension/CCControlButton.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/cocos/editor-support/cocosbuilder/CCParticleSystemQuadLoader.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/cocos/editor-support/cocosbuilder/CCScrollViewLoader.h \
+  /Users/Jacky/WarriorQuest/WarriorQuest/WarriorQuest/frameworks/cocos2d-x/build/../extensions/GUI/CCScrollView/CCScrollView.h
