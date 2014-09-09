@@ -1,5 +1,5 @@
 #include "lua_cocos2dx_custom.hpp"
-#include "EffectSprite3D.h"
+#include "custom/EffectSprite3D.h"
 #include "tolua_fix.h"
 #include "LuaBasicConversions.h"
 
