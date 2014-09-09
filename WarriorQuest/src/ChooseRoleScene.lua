@@ -1,6 +1,7 @@
 require "Cocos2d"
 require "Cocos2dConstants"
 
+
 local ChooseRoleScene  = class("ChooseRoleScene",function ()
 	return cc.Scene:create()
 end)
