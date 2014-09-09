@@ -12,24 +12,95 @@ EnumRace =
 { 
     "BASE",
     "WARRIOR", 
-    "MOSTER",
+    "MONSTER",
     "BOSS", 
 }
 
-EnumRace = CreateEnumTable(EnumRace) 
+EnumState = 
+{ 
+    "STAND", 
+    "WALK",
+    "ATTACK", 
+    "DEFEND",
+    "DEAD",
+}
 
+EnumRace = CreateEnumTable(EnumRace) 
+EnumState = CreateEnumTable(EnumState) 
 ----------------------------------------
 ----LuaSprite3D
 ----------------------------------------
-LuaSprite3D = {sprite3d = 0, battelScene = 0, target = 0, raceType=EnumRace.BASE, alive = true, life = 100, speed = 100, attack = 50, priority = speed, skill = {}}
+LuaSprite3D = {sprite3d = 0, scheduleAttackId = 0, target = 0, raceType=EnumRace.BASE, stateType = EnumState.STAND, alive = true, life = 100, speed = 100, attack = 30, priority = speed, action = {}}
 LuaSprite3D.__index = LuaSprite3D
 
-function LuaSprite3D:new(scene, filename)
+function LuaSprite3D:new(filename)
     local self = {}
     setmetatable(self, LuaSprite3D)
-    self.battelScene = scene
-    self.sprite3d = EffectSprite3D:create(filename)           
+    self.sprite3d = EffectSprite3D:create(filename)    
+    self.action.stand = ""
+    self.action.attack = filename
+    self.action.walk = ""
+    self.action.defend = ""
     return self
+end
+
+function LuaSprite3D:setState(type)
+    if self.stateType == type then
+        return
+    else
+        self.sprite3d:stopActionByTag(self.stateType)    
+        self.stateType = type
+    end
+
+    if type == EnumState.STAND then
+        local standAction = cc.RotateTo:create(0.5, 0)
+        standAction:setTag(self.stateType) 
+        self.sprite3d:runAction(standAction) 
+    end
+    
+    if type == EnumState.DEAD then
+        local rotateAngle = nil
+        if self.raceType == EnumRace.WARRIOR then
+            rotateAngle = 90.0
+        else 
+            rotateAngle = -90.0
+        end
+        self.sprite3d:runAction(cc.RotateTo:create(0.02, rotateAngle))            
+    end    
+    
+    if type == EnumState.WALK then
+        local x = 0
+        if self.raceType == EnumRace.WARRIOR then
+            x = 10
+        else
+            x = -10
+        end
+        local walkAction = cc.JumpBy:create(0.5, cc.p(x,0), 5, 1)
+        local repeatAction = cc.RepeatForever:create(walkAction)
+        repeatAction:setTag(self.stateType) 
+        self.sprite3d:runAction(repeatAction)   
+    end 
+
+    if type == EnumState.ATTACK then
+        local animation = cc.Animation3D:create(self.action.attack)
+        local animate = cc.Animate3D:create(animation)
+        animate:setSpeed(self.speed)
+        local repeatAction = cc.RepeatForever:create(animate)
+        repeatAction:setTag(self.stateType) 
+        self.sprite3d:runAction(repeatAction)
+    end
+    
+    if type == EnumState.DEFEND then
+        local x = 0
+        if self.raceType == EnumRace.WARRIOR then
+            x = -15
+        else
+            x = 15
+        end    
+        local defendAction = cc.RotateBy:create(0.5, x)
+        defendAction:setTag(self.stateType) 
+        self.sprite3d:runAction(defendAction)     
+    end      	
 end
 
 ----------------------------------------
@@ -39,41 +110,68 @@ Warrior3D = {arm = "", chest = "", weapon = ""}
 setmetatable(Warrior3D, LuaSprite3D)
 Warrior3D.__index = Warrior3D
 
-function Warrior3D:new(scene, filename)
-    local self = LuaSprite3D:new(scene, filename)
+function Warrior3D:new(filename)
+    local self = LuaSprite3D:new(filename)
     setmetatable(self, Warrior3D)
     local tempTalbe = self
     tempTalbe.arm = ""
     tempTalbe.chest = ""
     tempTalbe.weapon = math.random()..""     
-    tempTalbe.attack = 80
+    tempTalbe.attack = 50
     self.raceType = EnumRace.WARRIOR
-
-    return self
-end
-
-function Warrior3D:update(dt)
-    for val = 1, List.getSize(WarriorManager) do
-        if WarriorManager[val-1].alive == true then
-            WarriorManager[val-1]:FindEnemy2Attack()
+    local function update(dt)
+        if self.alive == true then
+            self:FindEnemy2Attack()
         end                  
     end
+
+    scheduler:scheduleScriptFunc(update, 0.5, false)
+
+    return self
 end
 
 function Warrior3D:FindEnemy2Attack()
     if self.alive == false then return end 
 
     if self.target ~= 0 and self.target.alive then
-        self.sprite3d:stopActionByTag(95558)
-        cclog("%s %f %f", self.weapon, self.target.sprite3d:getPosition())
-        local time = cc.pGetDistance( cc.p(self.sprite3d:getPosition()), 
-                                     cc.p(self.target.sprite3d:getPosition()) ) / 50
-                                     
-        local x, y = self.target.sprite3d:getPosition()
-        local moveAction = cc.MoveTo:create(time, cc.p(x - 50, y))
-        moveAction:setTag(95558)
-        self.sprite3d:runAction(moveAction)
-        return  
+        if self.stateType == EnumState.Attack then
+            return
+        end
+        
+        local x1, y1 = self.sprite3d:getPosition()
+        local x2, y2 = self.target.sprite3d:getPosition()
+        local distance = math.abs(x1-x2)
+
+        if distance < 100 then
+            self:setState(EnumState.ATTACK)
+            
+            local function scheduleAttack(dt)
+                if self.alive == false or self.target == 0 or self.target.alive == false then
+                    scheduler:unscheduleScriptEntry(self.scheduleAttackId)
+                    self.scheduleAttackId = 0
+                    return          
+                end
+                
+                local attacker = self
+                local defender = self.target
+                                
+                defender.life = defender.life - attacker.attack
+                if defender.life > 0 then
+                    if defender.raceType == EnumRace.BOSS then
+                        local action = cc.Sequence:create(cc.MoveBy:create(0.05, cc.p(10,10)),  cc.MoveBy:create(0.05, cc.p(-10,-10)))
+                        defender.sprite3d:runAction(action)
+                    else 
+                        defender.sprite3d:runAction(cc.RotateBy:create(0.5, 360.0))
+                    end     
+                else
+                    defender.alive = false
+                    defender:setState(EnumState.DEAD)
+                    attacker:setState(EnumState.STAND)
+                end
+            end
+            
+            self.scheduleAttackId = scheduler:scheduleScriptFunc(scheduleAttack, self.priority+5, false)            
+        end  
     end
 
     self.target = findAliveMonster()
@@ -83,7 +181,6 @@ function Warrior3D:FindEnemy2Attack()
     end   
 end
 
-scheduler:scheduleScriptFunc(Warrior3D.update, 0.5, false)
 
 
 ----------------------------------------
@@ -93,42 +190,62 @@ Monster3D = {posion = ""}
 setmetatable(Monster3D, LuaSprite3D)
 Monster3D.__index = Monster3D
 
-function Monster3D:new(scene, filename)
-    local self = LuaSprite3D:new(scene, filename)
+function Monster3D:new(filename)
+    local self = LuaSprite3D:new(filename)
     setmetatable(self, Monster3D)    
     self.raceType = EnumRace.MONSTER
    
-    return self
-end
-
-function Monster3D:update(dt)
-    for val = 1, List.getSize(MonsterManager) do
-        if MonsterManager[val-1].alive == true then
-            MonsterManager[val-1]:FindEnemy2Attack()
+    local function update(dt)
+        if self.alive == true then
+            self:FindEnemy2Attack()
         end                  
     end
+       
+    scheduler:scheduleScriptFunc(update, 0.5, false)
+   
+    return self
 end
 
 function Monster3D:FindEnemy2Attack()
     if self.alive == false then return end 
 
     if self.target ~= 0 and self.target.alive then
-        self.sprite3d:stopActionByTag(95558)
-        cclog("%s %f %f", self.weapon, self.target.sprite3d:getPosition())
-        local time = cc.pGetDistance( cc.p(self.sprite3d:getPosition()), 
-            cc.p(self.target.sprite3d:getPosition()) ) / 50
+        if self.stateType == EnumState.Attack then
+            return
+        end
 
-        local x, y = self.target.sprite3d:getPosition()
-        local moveAction = cc.MoveTo:create(time, cc.p(x + 50, y))
-        moveAction:setTag(95558)
-        self.sprite3d:runAction(moveAction)
-        return  
+        local x1, y1 = self.sprite3d:getPosition()
+        local x2, y2 = self.target.sprite3d:getPosition()
+        local distance = math.abs(x1-x2)
+
+        if distance < 100 then
+            self:setState(EnumState.ATTACK)
+
+            local function scheduleAttack(dt)
+                if self.alive == false or self.target == 0 or self.target.alive == false then
+                    scheduler:unscheduleScriptEntry(self.scheduleAttackId)
+                    self.scheduleAttackId = 0
+                    return            
+                end            
+                local attacker = self
+                local defender = self.target
+
+                defender.life = defender.life - attacker.attack
+                if defender.life > 0 then
+                    defender.sprite3d:runAction(cc.RotateBy:create(0.5, 360.0))
+                else
+                    defender.alive = false
+                    defender:setState(EnumState.DEAD)
+                    attacker:setState(EnumState.STAND)
+                end
+            end
+
+            self.scheduleAttackId = scheduler:scheduleScriptFunc(scheduleAttack, self.priority+5, false)            
+        end  
     end
 
     self.target = findAliveWarrior()
 end
-
-scheduler:scheduleScriptFunc(Monster3D.update, 0.5, false)
 
 ----------------------------------------
 ----Boss3D
@@ -137,23 +254,62 @@ Boss3D = {extra = ""}
 setmetatable(Boss3D, LuaSprite3D)
 Boss3D.__index = Boss3D
 
-function Boss3D:new(scene, filename)
-    local self = LuaSprite3D:new(scene, filename)
+function Boss3D:new(filename)
+    local self = LuaSprite3D:new(filename)
     setmetatable(self, Boss3D)
     self.raceType = EnumRace.BOSS 
 
+    local function update(dt)
+        if self.alive == true then
+            self:FindEnemy2Attack()
+        end                  
+    end
+       
+    scheduler:scheduleScriptFunc(update, 0.5, false)
+    
     return self
 end
 
-function Boss3D:update(dt)
-    for val = 1, List.getSize(BossManager) do
-        if BossManager[val-1].alive == true then
-            BossManager[val-1]:FindEnemy2Attack()
-        end                  
-    end
-end
-
 function Boss3D:FindEnemy2Attack()
+    if self.alive == false then return end 
+
+    if self.target ~= 0 and self.target.alive then
+        if self.stateType == EnumState.Attack then
+            return
+        end
+
+        local x1, y1 = self.sprite3d:getPosition()
+        local x2, y2 = self.target.sprite3d:getPosition()
+        local distance = math.abs(x1-x2)
+
+        if distance < 100 then
+            self:setState(EnumState.ATTACK)
+            
+            local function scheduleAttack(dt)
+                if self.alive == false or self.target == 0 or self.target.alive == false then
+                    scheduler:unscheduleScriptEntry(self.scheduleAttackId)
+                    self.scheduleAttackId = 0
+                    return            
+                end
+                            
+                local attacker = self
+                local defender = self.target
+
+                defender.life = defender.life - attacker.attack
+                if defender.life > 0 then
+                    defender.sprite3d:runAction(cc.RotateBy:create(0.5, 360.0))
+                else
+                    defender.alive = false
+                    defender:setState(EnumState.DEAD)
+                    attacker:setState(EnumState.STAND)
+                end
+            end
+
+            self.scheduleAttackId = scheduler:scheduleScriptFunc(scheduleAttack, self.priority+5, false)            
+        end  
+    end
+
+    self.target = findAliveWarrior()
 end
 
 function findAliveMonster()

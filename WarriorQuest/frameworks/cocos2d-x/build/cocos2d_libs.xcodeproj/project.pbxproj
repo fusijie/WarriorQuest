@@ -1801,6 +1801,10 @@
 		50ABC0671926664800A911A9 /* CCPlatformDefine.h in Headers */ = {isa = PBXBuildFile; fileRef = 50ABBF541926664700A911A9 /* CCPlatformDefine.h */; };
 		50ABC0691926664800A911A9 /* CCStdC.h in Headers */ = {isa = PBXBuildFile; fileRef = 50ABBF551926664700A911A9 /* CCStdC.h */; };
 		A07A4CAF1783777C0073F6A7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1551A342158F2AB200E66CFE /* Foundation.framework */; };
+		ACB25BD619BEB22A00F95C52 /* EffectSprite3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACB25BD419BEB22A00F95C52 /* EffectSprite3D.cpp */; };
+		ACB25BD719BEB22A00F95C52 /* EffectSprite3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACB25BD419BEB22A00F95C52 /* EffectSprite3D.cpp */; };
+		ACB25BD819BEB22A00F95C52 /* EffectSprite3D.h in Headers */ = {isa = PBXBuildFile; fileRef = ACB25BD519BEB22A00F95C52 /* EffectSprite3D.h */; };
+		ACB25BD919BEB22A00F95C52 /* EffectSprite3D.h in Headers */ = {isa = PBXBuildFile; fileRef = ACB25BD519BEB22A00F95C52 /* EffectSprite3D.h */; };
 		B2165EEA19921124000BE3E6 /* CCPrimitiveCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B257B45E198A353E00D9A687 /* CCPrimitiveCommand.cpp */; };
 		B217703C1977ECB4009EE11B /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B217703B1977ECB4009EE11B /* IOKit.framework */; };
 		B21770401977ECE6009EE11B /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B217703F1977ECE6009EE11B /* OpenGL.framework */; };
@@ -2834,6 +2838,8 @@
 		50FCEB9118C72017004AD434 /* WidgetReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetReader.h; sourceTree = "<group>"; };
 		50FCEB9218C72017004AD434 /* WidgetReaderProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetReaderProtocol.h; sourceTree = "<group>"; };
 		A07A4D641783777C0073F6A7 /* libcocos2d iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libcocos2d iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		ACB25BD419BEB22A00F95C52 /* EffectSprite3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EffectSprite3D.cpp; sourceTree = "<group>"; };
+		ACB25BD519BEB22A00F95C52 /* EffectSprite3D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EffectSprite3D.h; sourceTree = "<group>"; };
 		B217703B1977ECB4009EE11B /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		B217703D1977ECC1009EE11B /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		B217703F1977ECE6009EE11B /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
@@ -2940,6 +2946,7 @@
 		1551A334158F2AB200E66CFE = {
 			isa = PBXGroup;
 			children = (
+				ACB25BD319BEB22A00F95C52 /* custom */,
 				46A15FCC1807A544005B8026 /* AUTHORS */,
 				1A57FFF7180BC5160088DEC7 /* CHANGELOG */,
 				50272539190BF1B900AAF4ED /* cocos2d.cpp */,
@@ -4881,6 +4888,16 @@
 			path = TextReader;
 			sourceTree = "<group>";
 		};
+		ACB25BD319BEB22A00F95C52 /* custom */ = {
+			isa = PBXGroup;
+			children = (
+				ACB25BD419BEB22A00F95C52 /* EffectSprite3D.cpp */,
+				ACB25BD519BEB22A00F95C52 /* EffectSprite3D.h */,
+			);
+			name = custom;
+			path = ../cocos/custom;
+			sourceTree = "<group>";
+		};
 		B29594B81926D61F003EEF37 /* 3d */ = {
 			isa = PBXGroup;
 			children = (
@@ -5142,6 +5159,7 @@
 				5034CA43191D591100CE6051 /* ccShader_Label.vert in Headers */,
 				15AE189719AAD33D00C27E9E /* CCMenuItemImageLoader.h in Headers */,
 				15AE189319AAD33D00C27E9E /* CCLayerGradientLoader.h in Headers */,
+				ACB25BD819BEB22A00F95C52 /* EffectSprite3D.h in Headers */,
 				15AE18EF19AAD35000C27E9E /* CCArmature.h in Headers */,
 				15AE19A719AAD39600C27E9E /* TextReader.h in Headers */,
 				1A570227180BCC1A0088DEC7 /* CCParticleExamples.h in Headers */,
@@ -5423,6 +5441,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				15AE197E19AAD35700C27E9E /* CCNodeReader.h in Headers */,
+				ACB25BD919BEB22A00F95C52 /* EffectSprite3D.h in Headers */,
 				503DD8F01926736A00CD74DD /* CCStdC.h in Headers */,
 				15AE1A9A19AAD40300C27E9E /* b2Math.h in Headers */,
 				46A170FF1807CECB005B8026 /* CCPhysicsContact.h in Headers */,
@@ -6017,6 +6036,7 @@
 				15AE18FD19AAD35000C27E9E /* CCComAttribute.cpp in Sources */,
 				46A170ED1807CECA005B8026 /* CCPhysicsShape.cpp in Sources */,
 				15AE1B0F19AAD43700C27E9E /* cpConstraint.c in Sources */,
+				ACB25BD619BEB22A00F95C52 /* EffectSprite3D.cpp in Sources */,
 				50ABBE991925AB6F00A911A9 /* CCRef.cpp in Sources */,
 				15AE186319AAD31D00C27E9E /* CDAudioManager.m in Sources */,
 				15AE1B2219AAD43700C27E9E /* cpShape.c in Sources */,
@@ -6813,6 +6833,7 @@
 				15AE18BF19AAD33D00C27E9E /* CCLabelTTFLoader.cpp in Sources */,
 				15AE1B9519AADA9A00C27E9E /* CocosGUI.cpp in Sources */,
 				15AE1A0D19AAD3A700C27E9E /* extension.cpp in Sources */,
+				ACB25BD719BEB22A00F95C52 /* EffectSprite3D.cpp in Sources */,
 				15AE180919AAD2F700C27E9E /* CCAABB.cpp in Sources */,
 				15AE1AA719AAD40300C27E9E /* b2Island.cpp in Sources */,
 				3E6176741960F89B00DE83F5 /* CCEventController.cpp in Sources */,
