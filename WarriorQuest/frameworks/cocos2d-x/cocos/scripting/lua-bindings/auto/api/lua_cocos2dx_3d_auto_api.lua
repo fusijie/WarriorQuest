@@ -12,6 +12,11 @@
 
 
 --------------------------------------------------------
+-- the cc Bone3D
+-- @field [parent=#cc] Bone3D#Bone3D Bone3D preloaded module
+
+
+--------------------------------------------------------
 -- the cc Skeleton3D
 -- @field [parent=#cc] Skeleton3D#Skeleton3D Skeleton3D preloaded module
 
