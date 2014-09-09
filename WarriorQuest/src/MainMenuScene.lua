@@ -1,5 +1,4 @@
 require "Cocos2d"
-require "extern"
 
 --declare a class extends scene
 local MainMenuScene = class("MainMenuScene",function()
