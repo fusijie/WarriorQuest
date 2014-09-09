@@ -15,6 +15,7 @@ local moveActionTag = 95558
 local spriteBg = nil
 local battleStep = 1
 local enemy = nil  
+local gloableZOrder = 1
 --local bUpdate = true  
 
 local BattleFieldScene = class("BattleFieldScene",function()
@@ -29,33 +30,7 @@ Sprite3DWithSkinTest.__index = Sprite3DWithSkinTest
 
 
 local function update(dt)
---[[
-cclog("11update %f", dt)
-if bUpdate then
-return
-end
-
-local warrior = findAliveWarrior()
-local monster = findAliveMonster() 
-local boss = findAliveBoss()
-
-local bStop = false        
-
-if warrior and monster 
-and cc.pGetDistance(cc.p(monster.sprite3d:getPosition()),cc.p(warrior.sprite3d:getPosition()))< 150 then
-bStop = true        
-elseif warrior and boss 
-and cc.pGetDistance(cc.p(warrior.sprite3d:getPosition()),cc.p(boss.sprite3d:getPosition())) < 150 then
-bStop = true        
-end
-
-if bStop then
-BattleFieldScene.stopAction()
-local nextFunction = cc.CallFunc:create(BattleFieldScene.nextRound)
-spriteBg:runAction(cc.Sequence:create(cc.DelayTime:create(2.0), nextFunction))    
-bUpdate = true
-end  
---]]      
+   
 end
 
 function Sprite3DWithSkinTest.addNewSpriteWithCoords(parent, x, y, tag)
@@ -63,19 +38,15 @@ function Sprite3DWithSkinTest.addNewSpriteWithCoords(parent, x, y, tag)
     local sprite = nil
     local animation = nil
     if tag == warrior3DTag then
-        sprite = Warrior3D:new(BattleFieldScene, "Sprite3DTest/orc.c3b")
-        animation = cc.Animation3D:create("Sprite3DTest/orc.c3b")        
+        sprite = Warrior3D:new("Sprite3DTest/orc.c3b")
         sprite.sprite3d:setScale(3)
         List.pushlast(WarriorManager, sprite)
     elseif tag == monster3DTag then
-        sprite = Monster3D:new(BattleFieldScene, "Sprite3DTest/orc.c3b")    
-        animation = cc.Animation3D:create("Sprite3DTest/orc.c3b")
+        sprite = Monster3D:new("Sprite3DTest/orc.c3b")    
         sprite.sprite3d:setScale(3)   
         List.pushlast(MonsterManager, sprite)
-
     elseif tag == boss3DTag then
-        sprite = Boss3D:new(BattleFieldScene, "Sprite3DTest/girl.c3b")        
-        animation = cc.Animation3D:create("Sprite3DTest/girl.c3b")        
+        sprite = Boss3D:new("Sprite3DTest/girl.c3b")        
         List.pushlast(BossManager, sprite)
     else
         return
@@ -85,47 +56,31 @@ function Sprite3DWithSkinTest.addNewSpriteWithCoords(parent, x, y, tag)
     
     local positionX, positionY = parent:getPosition()
     sprite.sprite3d:setPosition(cc.p(x - positionX, y - positionY))
-    sprite.sprite3d:setGlobalZOrder(1)
+    gloableZOrder = gloableZOrder + 1
+    sprite.sprite3d:setGlobalZOrder(gloableZOrder)
     parent:addChild(sprite.sprite3d)
     sprite.sprite3d:setTag(tag);
-    BattleFieldScene.createRandomDebut(sprite.sprite3d, sprite.sprite3d:getPosition())        
-    
+    --BattleFieldScene.createRandomDebut(sprite.sprite3d, sprite.sprite3d:getPosition())        
     
     local effect  = Effect3DOutline:create()
     local tempColor = {x=1,y=0,z=0}
     effect:setOutlineColor(tempColor)
     effect:setOutlineWidth(0.01)
     sprite.sprite3d:addEffect(effect, -1)
- 
-    if nil ~= animation then
-        local animate = cc.Animate3D:create(animation)
-        local inverse = false
-        if math.random() == 0 then
-            inverse = true
-        end
-
-        local rand2 = math.random()
-        local speed = 1.0
-
-        if rand2 < 1/3 then
-            speed = animate:getSpeed() + math.random()  
-        elseif rand2 < 2/3 then
-            speed = animate:getSpeed() - 0.5 *  math.random()
-        end
-
-        if inverse then
-            animate:setSpeed(-speed)
-        else
-            animate:setSpeed(speed)
-        end
-
-        local repeatAction = cc.RepeatForever:create(animate)
-        repeatAction:setTag(animationTag)
-        sprite.sprite3d:runAction(repeatAction)            
-    end
+   
+    local rand2 = math.random()
+    local speed = 1.0
     
-    sprite.speed =  math.random() + 0.5
+    if rand2 < 1/3 then
+        speed =  math.random()  
+    elseif rand2 < 2/3 then
+        speed = - 0.5 *  math.random()
+    end
+
+    sprite.speed =  speed + 0.5
     sprite.priority = sprite.speed        
+    
+    sprite:setState(EnumState.WALK)
 end
 
 function Sprite3DWithSkinTest.create(layer)
@@ -141,8 +96,10 @@ end
 
 function BattleFieldScene:createBackground(layer)
     spriteBg = cc.Sprite:create("background.jpg")
-    spriteBg:setPosition(size.width / 2 + 80, size.height / 2)
+    spriteBg:setPosition(size.width / 2 + 80, size.height / 2 + 30)
     layer:addChild(spriteBg)
+    
+    spriteBg:setRotation3D({x = -25.0, y = 0.0 ,z = 0.0});    
 end
 
 
@@ -152,7 +109,7 @@ function BattleFieldScene.create()
     local layer = cc.Layer:create()
     scene:addChild(layer)
     layer:setScale(2)
-    
+        
     BattleFieldScene:createBackground(layer)
     Sprite3DWithSkinTest.create(layer)
     
@@ -183,7 +140,6 @@ function BattleFieldScene.create()
 end
 
 function BattleFieldScene.moveForth()
-    
     Sprite3DWithSkinTest.currentLayer:removeChildByTag(monster3DTag)
     Sprite3DWithSkinTest.currentLayer:removeChildByTag(monster3DTag)
     Sprite3DWithSkinTest.currentLayer:removeChildByTag(monster3DTag)
@@ -191,6 +147,7 @@ function BattleFieldScene.moveForth()
     local x, y = spriteBg:getPosition()
 
     if x < 300 then
+--    if x > 500 then
         return    
     end
      
@@ -229,62 +186,8 @@ function BattleFieldScene.monsterDebut()
         
     battleStep = battleStep + 1             
         
-    --BattleFieldScene.encounter()
-    
-    BattleFieldScene:nextRound()
+    --schedulerEntry = scheduler:scheduleScriptFunc(BattleFieldScene.nextRound, 0.5, false)
 end
-
-function BattleFieldScene.encounter()
-    for val = 1, List.getSize(MonsterManager) do   
-        if MonsterManager[val-1].alive == false then
-        	break
-        end         
-        --[[   
-        local moveAction = cc.MoveBy:create(40.0,cc.p(-1000, 0))
-        moveAction:setTag(moveActionTag)
-        MonsterManager[val-1].sprite3d:runAction(moveAction)
-        --]]
-    end
-    
-    for val = 1, List.getSize(WarriorManager) do               
-        if WarriorManager[val-1].alive == false then
-            break
-        end         
-        --[[   
-        local moveAction = cc.MoveBy:create(40.0,cc.p(1000, 0))
-        moveAction:setTag(moveActionTag)
-        WarriorManager[val-1].sprite3d:runAction(moveAction)
-        --]]        
-    end    
-
-    for val = 1, List.getSize(BossManager) do               
-        if BossManager[val-1].alive == false then
-            break
-        end
-        --[[        
-        local moveAction = cc.MoveBy:create(40.0,cc.p(1000, 0))
-        moveAction:setTag(moveActionTag)
-        BossManager[val-1].sprite3d:runAction(moveAction)
-        --]]        
-    end        
-    
-    --bUpdate = false   
-end
-
-function BattleFieldScene.stopAction()
-    for val = 1, List.getSize(MonsterManager) do   
-        MonsterManager[val-1].sprite3d:stopActionByTag(moveActionTag)
-    end
-
-    for val = 1, List.getSize(WarriorManager) do               
-        WarriorManager[val-1].sprite3d:stopActionByTag(moveActionTag)
-    end    
-
-    for val = 1, List.getSize(BossManager) do               
-        BossManager[val-1].sprite3d:stopActionByTag(moveActionTag)
-    end        
-end
-
 
 function BattleFieldScene.nextRound()
     if findAliveMonster() == 0 and findAliveBoss() == 0 then
@@ -297,12 +200,12 @@ function BattleFieldScene.nextRound()
         return
     end    
     
-    local priority = findNextPriority()
-    BattleFieldScene.prepareCombat(priority)
+    --local priority = findNextPriority()
+    --BattleFieldScene.prepareCombat(priority)
     
-    schedulerEntry = scheduler:scheduleScriptFunc(BattleFieldScene.combat, priority + 1.0, false)
+    --schedulerEntry = scheduler:scheduleScriptFunc(BattleFieldScene.combat, priority + 1.0, false)
 end
-
+--[[
 function findNextPriority()
     local nextPriority = 2
     if List.getSize(MonsterManager) > 0 then
@@ -392,11 +295,8 @@ function BattleFieldScene.combat(dt)
         end
         
         local attackAction = cc.Sequence:create(cc.MoveBy:create(1.0, cc.p(10,10)),  cc.MoveBy:create(1.0, cc.p(-10,-10)))        
-        --local attackAction = cc.EaseSineIn:create(cc.MoveTo:create(2.0,cc.p(x2, y2)))
-        --local backAction = cc.EaseSineIn:create(cc.MoveTo:create(2.0,cc.p(x1, y1)))        
         local hurtFunction = cc.CallFunc:create(BattleFieldScene.hurt)
         local nextFunction = cc.CallFunc:create(BattleFieldScene.nextRound)
---        attacker.sprite3d:runAction(cc.Sequence:create(attackAction, hurtFunction, backAction, nextFunction))                
         attacker.sprite3d:runAction(cc.Sequence:create(attackAction, hurtFunction, nextFunction))                
     end    
 end
@@ -423,6 +323,7 @@ function BattleFieldScene.hurt()
         defender.sprite3d:stopActionByTag(animationTag)
     end
 end
+--]]
 
 function BattleFieldScene.success()
     local successLabel = cc.Label:createWithTTF("Warrior SUCCESS!!!", "fonts/Marker Felt.ttf", 18)

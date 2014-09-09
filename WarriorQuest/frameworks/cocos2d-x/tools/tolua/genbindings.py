@@ -138,6 +138,7 @@ def main():
                     'cocos2dx_cocosbuilder.ini': ('cocos2dx_cocosbuilder', 'lua_cocos2dx_cocosbuilder_auto'), \
                     'cocos2dx_cocosdenshion.ini': ('cocos2dx_cocosdenshion', 'lua_cocos2dx_cocosdenshion_auto'), \
                     'cocos2dx_3d.ini': ('cocos2dx_3d', 'lua_cocos2dx_3d_auto'), \
+                    'cocos2dx_custom.ini' : ('cocos2dx_custom', 'lua_cocos2dx_custom'), \
                     }
         target = 'lua'
         generator_py = '%s/generator.py' % cxx_generator_root
