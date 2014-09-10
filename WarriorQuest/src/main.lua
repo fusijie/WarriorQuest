@@ -26,8 +26,8 @@ local function main()
     cc.Director:getInstance():getOpenGLView():setDesignResolutionSize(1136, 640, 0)
     
     --create scene 
-    --local scene = require("ChooseRoleScene")
-    local scene = require("BattleFieldScene")
+    local scene = require("ChooseRoleScene")
+    --local scene = require("BattleFieldScene")
     --local scene = require("MainMenuScene")
     local activateGameScene = scene.create()
     --activateGameScene:playBgMusic()

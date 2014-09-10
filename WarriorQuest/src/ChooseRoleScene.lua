@@ -25,6 +25,15 @@ function ChooseRoleScene:ctor()
     self.origin = cc.Director:getInstance():getVisibleOrigin()
 end
 
+local function addHero(hero_type, pos)
+    local Hero = require("Hero")
+    local hero = Hero:create(hero_type)
+    hero:setScale(8.0)
+    hero:setRotation3D({0,0,0})
+    hero:setPosition(pos)
+    return hero
+end
+
 function ChooseRoleScene:createLayer()
     
     --create layer
@@ -44,36 +53,19 @@ function ChooseRoleScene:createLayer()
     layer:addChild(bag)
         
     --create warrior,archer,sorceress
-    local warrior = cc.Sprite3D:create("Sprite3DTest/girl.c3b")
-    warrior:setScale(3)
+    local warrior = addHero(0,{x=400,y=120})
     warrior:setTag(2)
-    warrior:setPosition(400,120)
-    warrior:setRotation3D({x=0,y=50,z=0})
     layer:addChild(warrior)
     
-    local animation = cc.Animation3D:create("Sprite3DTest/girl.c3b")
-    local animate = cc.Animate3D:create(animation)
-    warrior:runAction(cc.RepeatForever:create(animate))
-    
     --create warrior,archer,sorceress
-    local archer = cc.Sprite3D:create("Sprite3DTest/girl.c3b")
-    archer:setScale(2)
+    local archer = addHero(1,{x=270,y=180})
     archer:setTag(1)
-    archer:setPosition(270,180)
-    archer:setRotation3D({x=0,y=50,z=0})
     layer:addChild(archer)
-    local animation_2 = animate:clone()
-    archer:runAction(cc.RepeatForever:create(animation_2))
     
     --create warrior,archer,sorceress
-    local sorceress = cc.Sprite3D:create("Sprite3DTest/girl.c3b")
-    sorceress:setScale(2)
+    local sorceress = addHero(2,{x=530,y=180})
     sorceress:setTag(3)
-    sorceress:setPosition(530,180)
-    sorceress:setRotation3D({x=0,y=50,z=0})
     layer:addChild(sorceress)
-    local animation_3 = animate:clone()
-    sorceress:runAction(cc.RepeatForever:create(animation_3))
     
     --create arrow
     local function touchEvent_arrowleft(sender,eventType)
@@ -173,6 +165,7 @@ function ChooseRoleScene:createLayer()
     return layer
 end
 
+
 function ChooseRoleScene:initTouchDispatcher()
     local isavaliable = false
     local touchbeginPt
@@ -201,6 +194,8 @@ function ChooseRoleScene:initTouchDispatcher()
     end,cc.Handler.EVENT_TOUCH_MOVED )
     listenner:registerScriptHandler(function(touch, event)
         isavaliable = false
+        layer:getChildByTag(sortorder[2]):switchWeapon()
+        layer:getChildByTag(sortorder[2]):switchArmour()
     end,cc.Handler.EVENT_TOUCH_ENDED )
     local eventDispatcher = layer:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listenner, layer)
@@ -214,7 +209,7 @@ function ChooseRoleScene:rotate3Heroes(isRight)
                 cc.CallFunc:create(function() isMoving = true end), 
                 cc.Spawn:create(
                     cc.MoveTo:create(rotatetime,pos[3]),
-                    cc.ScaleTo:create(rotatetime,2)),
+                    cc.ScaleTo:create(rotatetime,7)),
                 cc.CallFunc:create(function() 
                     isMoving = false
                     for i=1,3 do
@@ -222,9 +217,9 @@ function ChooseRoleScene:rotate3Heroes(isRight)
                     end
                     end)))
         local left = layer:getChildByTag(sortorder[1])
-        left:runAction(cc.Spawn:create(cc.MoveTo:create(rotatetime,pos[2]),cc.ScaleTo:create(rotatetime,3)))
+        left:runAction(cc.Spawn:create(cc.MoveTo:create(rotatetime,pos[2]),cc.ScaleTo:create(rotatetime,8)))
         local right = layer:getChildByTag(sortorder[3])
-        right:runAction(cc.Spawn:create(cc.MoveTo:create(rotatetime,pos[1]),cc.ScaleTo:create(rotatetime,2)))
+        right:runAction(cc.Spawn:create(cc.MoveTo:create(rotatetime,pos[1]),cc.ScaleTo:create(rotatetime,7)))
     	local t = sortorder[3]
     	sortorder[3]=sortorder[2]
     	sortorder[2]=sortorder[1]
@@ -240,34 +235,17 @@ function ChooseRoleScene:rotate3Heroes(isRight)
             end), 
             cc.Spawn:create(
                 cc.MoveTo:create(rotatetime,pos[1]),
-                cc.ScaleTo:create(rotatetime,2)),
+                cc.ScaleTo:create(rotatetime,7)),
             cc.CallFunc:create(function() isMoving = false end)))
         local left = layer:getChildByTag(sortorder[1])
-        left:runAction(cc.Spawn:create(cc.MoveTo:create(rotatetime,pos[3]),cc.ScaleTo:create(rotatetime,2)))
+        left:runAction(cc.Spawn:create(cc.MoveTo:create(rotatetime,pos[3]),cc.ScaleTo:create(rotatetime,7)))
         local right = layer:getChildByTag(sortorder[3])
-        right:runAction(cc.Spawn:create(cc.MoveTo:create(rotatetime,pos[2]),cc.ScaleTo:create(rotatetime,3)))
+        right:runAction(cc.Spawn:create(cc.MoveTo:create(rotatetime,pos[2]),cc.ScaleTo:create(rotatetime,8)))
         local t = sortorder[1]
         sortorder[1]=sortorder[2]
         sortorder[2]=sortorder[3]
         sortorder[3]=t
     end
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 return ChooseRoleScene
