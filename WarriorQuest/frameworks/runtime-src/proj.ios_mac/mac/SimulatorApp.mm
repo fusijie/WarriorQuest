@@ -40,7 +40,7 @@
 using namespace cocos2d;
 
 bool g_landscape = false;
-bool g_windTop = true;
+bool g_windTop = false;
 cocos2d::Size g_screenSize;
 GLView* g_eglView = nullptr;
 
