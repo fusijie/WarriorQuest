@@ -9,18 +9,21 @@ function Hero.create(hero_type)
     
     -- entity
     hero:AddEntity(hero_type)
-    
+       
     return hero
 end
 
 function Hero:AddEntity(hero_type)
     local filename;
-    if hero_type == 0 then 
+    if hero_type == 0 then --warrior
         filename = "Sprite3DTest/ReskinGirl.c3b"
-    elseif hero_type == 1 then
+        self._herotype = 0
+    elseif hero_type == 1 then --archer
         filename = "Sprite3DTest/ReskinGirl.c3b"
-    else
+        self._herotype = 1
+    else --sorceress
         filename = "Sprite3DTest/ReskinGirl.c3b"
+        self._herotype = 2
     end
     self._entity = cc.Sprite3D:create(filename)
     self:addChild(self._entity)
@@ -40,7 +43,8 @@ function Hero:ctor()
 	self._attack = 100
 	self._defense = 100
 	self._useWeaponId = 0
-	self._useArmour = 0
+	self._useArmourId = 0
+	self._herotype = -1
 end
 
 function Hero:walk()
@@ -75,6 +79,21 @@ function Hero:isAlive()
     return self._isalive
 end
 
+-- get weapon id
+function Hero:getWeaponID()
+	return self._useWeaponId
+end
+
+-- get armour id
+function Hero:getArmourID()
+	return self._useArmourId
+end
+
+-- get hero type
+function Hero:getHeroType()
+    return self._herotype
+end
+
 -- set default equipments
 function Hero:setDefaultEqt()
     local girl_lowerbody = self._entity:getMeshByName("Girl_LowerBody01")
@@ -93,7 +112,7 @@ function Hero:switchWeapon()
     if self._useWeaponId > 1 then
         self._useWeaponId = 0;
     end
-	if self._useWeaponId == 0 then
+	if self._useWeaponId == 1 then
         local girl_lowerbody = self._entity:getMeshByName("Girl_LowerBody01")
         girl_lowerbody:setVisible(true)
         local girl_lowerbody = self._entity:getMeshByName("Girl_LowerBody02")
@@ -116,11 +135,11 @@ end
 
 --switch armour
 function Hero:switchArmour()
-    self._useArmour = self._useArmour+1
-    if self._useArmour > 1 then
-        self._useArmour = 0;
+    self._useArmourId = self._useArmourId+1
+    if self._useArmourId > 1 then
+        self._useArmourId = 0;
     end
-    if self._useArmour == 0 then
+    if self._useArmourId == 1 then
         local girl_lowerbody = self._entity:getMeshByName("Girl_Hair01")
         girl_lowerbody:setVisible(true)
         local girl_lowerbody = self._entity:getMeshByName("Girl_Hair02")
