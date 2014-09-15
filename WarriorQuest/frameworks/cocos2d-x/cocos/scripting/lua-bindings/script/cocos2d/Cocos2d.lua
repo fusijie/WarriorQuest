@@ -393,13 +393,16 @@ function cc.V3LengthSquared(p)
 end
 
 function cc.V3Normalize(p)
-    local n = cc.V3LengthSquared(p)
+    local n = p.x * p.x + p.y * p.y + p.z * p.z
     if n == 1.0 then return end
     
     n = math.sqrt(n);
     if n < 2e-37 then return end
     
     n = 1.0 / n;
-    p = cc.V3MulEx(p, n)
+    
+    p.x = p.x * n
+    p.y = p.y * n
+    p.z = p.z * n
 end
 

@@ -31,15 +31,50 @@ local Sprite3DWithSkinTest = {currentLayer = nil}
 Sprite3DWithSkinTest.__index = Sprite3DWithSkinTest
 
 
+local function isOutOfBound()
+    local playser = WarriorManager[0].sprite3d
+    
+    local currentPos = playser:getPosition3D();
+    local state = false;
+
+    if currentPos.x < -10.5 then
+        currentPos.x = -10.5
+        state = true
+        beginUpdate = false
+    end    
+
+    if currentPos.x > 9.5 then
+        currentPos.x = 9.5
+        state = true
+        beginUpdate = false
+    end
+
+    if currentPos.z < -3.0 then
+        currentPos.z = -3.0
+        state = true
+        beginUpdate = false
+    end
+
+    if currentPos.z > 7.0 then
+        currentPos.z = 7.0
+        state = true
+        beginUpdate = false
+    end
+
+    playser:setPosition3D(currentPos)
+    return state;
+end
+
 local function update(dt)
-    if List.getSize(WarriorManager) == 0 then return end
+    if List.getSize(WarriorManager) == 0 or isOutOfBound() then return end
     
     local playser = WarriorManager[0].sprite3d
     if beginUpdate then
-        local dir = cc.V3Sub(touchPos, playser:getPosition3D()) 
+        local position = playser:getPosition3D()
+        local dir = cc.V3Sub(touchPos, position) 
     	cc.V3Normalize(dir)
     	local dp = cc.V3MulEx(dir, 5.0*dt)
-        local endPos = cc.V3Add(playser:getPosition3D(), dp)
+        local endPos = cc.V3Add(position, dp)
         if cc.V3LengthSquared(cc.V3Sub(endPos, touchPos)) <= cc.V3LengthSquared(dp) then
         	if cc.V3Dot(cc.V3Sub(endPos, touchPos), dir) then
         		endPos = touchPos
@@ -47,20 +82,20 @@ local function update(dt)
         	end
         end
     	playser:setPosition3D(endPos)
-    	
+    	cclog("%.2f %.2f %.2f", endPos.x, endPos.y, endPos.z)
     	local aspect = cc.V3Dot(dir, cc.V3(0.0, 0.0, 1.0))
     	aspect = math.acos(aspect)
     	if dir.x < 0.0 then	aspect = -aspect end
-    	playser:setRotation3D(cc.V3(0.0, aspect / math.pi * 180.0 +180.0, 0.0))
+    	playser:setRotation3D(cc.V3(0.0, aspect * 57.29577951 +180.0, 0.0))
     	
     	if camera then
-    	    local postion = playser:getPosition3D()
-            camera:lookAt(postion, cc.V3(0.0, 1.0, 0.0))
-            camera:setPosition3D(cc.V3Add(postion, cc.V3(0.0, 10.0, 10.0)))
+            local position = playser:getPosition3D()
+            camera:lookAt(position, cc.V3(0.0, 1.0, 0.0))
+            camera:setPosition3D(cc.V3Add(position, cc.V3(0.0, 10.0, 10.0)))
     	end
     end
- 
 end
+
 
 function Sprite3DWithSkinTest.addNewSpriteWithCoords(parent, x, y, tag)
     y = y+70
@@ -121,8 +156,8 @@ function Sprite3DWithSkinTest.create(layer)
 --    Sprite3DWithSkinTest.addNewSpriteWithCoords(layer, size.width / 2 - 300, size.height / 4 - 20, warrior3DTag)
 
     Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, size.width / 2 - 300, size.height / 4 + 40, warrior3DTag)
-    Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, size.width / 2 - 260, size.height / 4 + 10, warrior3DTag)
-    Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, size.width / 2 - 300, size.height / 4 - 20, warrior3DTag)
+    --Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, size.width / 2 - 260, size.height / 4 + 10, warrior3DTag)
+    --Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, size.width / 2 - 300, size.height / 4 - 20, warrior3DTag)
 
 
     return layer
@@ -213,8 +248,8 @@ function BattleFieldScene.create()
         local location = touch:getLocationInView()
         local nearP = cc.V3(location.x, location.y, -1.0)
         local farP = cc.V3(location.x, location.y, 1.0)
-        camera:unproject(size, nearP, farP)
-        camera:unproject(size, farP, farP)
+        nearP = camera:unproject(size, nearP, nearP)
+        farP = camera:unproject(size, farP, farP)
         local dir = cc.V3Sub(farP, nearP)
         local dist = 0.0
         local temp = cc.V3(0.0, 1.0, 0.0)
