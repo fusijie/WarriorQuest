@@ -1,3 +1,6 @@
+# Ignore by Jacky
+runtime/
+
 # Ignore thumbnails created by windows
 Thumbs.db
 
