@@ -26,6 +26,7 @@ function Hero:AddEntity(hero_type)
         self._herotype = 2
     end
     self._entity = cc.Sprite3D:create(filename)
+    self._entity:setScale(8)
     self:addChild(self._entity)
 
     --run animation
@@ -138,6 +139,7 @@ function Hero:switchArmour()
     self._useArmourId = self._useArmourId+1
     if self._useArmourId > 1 then
         self._useArmourId = 0;
+        
     end
     if self._useArmourId == 1 then
         local girl_lowerbody = self._entity:getMeshByName("Girl_Hair01")

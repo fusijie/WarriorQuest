@@ -31,7 +31,6 @@ end
 function ChooseRoleScene:addHero(hero_type, pos)
     local Hero = require("Hero")
     local hero = Hero.create(hero_type)
-    hero:setScale(8.0)
     hero:setRotation3D({0,0,0})
     hero:setPosition(pos)    
     
@@ -42,7 +41,6 @@ function ChooseRoleScene:addBag()
     local bag = cc.Sprite:create("cr_bag.png")
     bag:setTag(10)
     bag:setAnchorPoint(1.0,0)
-    bag:setScale(0.6)
     
     self._weaponItem = cc.Sprite:create("eqticon/cr_w_w_1.jpg")
     self._weaponItem:setTag(11)
@@ -137,7 +135,7 @@ function ChooseRoleScene:addButton()
     next_Button:loadTextures("cr_btn_normal.png", "cr_btn_pressed.png", "")
     next_Button:setTitleText("Next")
     next_Button:setAnchorPoint(0,1)
-    next_Button:setPosition(680,600)
+    next_Button:setPosition(580,600)
     next_Button:addTouchEventListener(touchEvent_next)        
     self.layer:addChild(next_Button)
 end
@@ -155,7 +153,7 @@ function ChooseRoleScene:createLayer()
     
     --create bag
     local bag = self:addBag()
-    bag:setPosition(self.origin.x + self.visibleSize.width - 20,self.origin.y)
+    bag:setPosition(self.origin.x + self.visibleSize.width - 50,self.origin.y + 50)
     self.layer:addChild(bag)
         
     --create warrior,archer,sorceress
@@ -164,17 +162,22 @@ function ChooseRoleScene:createLayer()
     self.layer:addChild(warrior)
     
     --create warrior,archer,sorceress
+    
     local archer = self:addHero(1,pos[1])
+    archer:setPositionZ(-100)
     archer:setTag(1)
     self.layer:addChild(archer)
     
     --create warrior,archer,sorceress
     local sorceress = self:addHero(2,pos[3])
+    sorceress:setPositionZ(-100)
     sorceress:setTag(3)
     self.layer:addChild(sorceress)
     
     --create arrow
     self:addButton()
+    
+    local selflayer = self.layer;
     
     --update scheduler
     local function update(dt)
@@ -314,18 +317,20 @@ function ChooseRoleScene:rotate3Heroes(isRight)
         middle:runAction(cc.Sequence:create(
                 cc.CallFunc:create(function() isMoving = true end), 
                 cc.Spawn:create(
-                    cc.MoveTo:create(rotatetime,pos[3]),
-                    cc.ScaleTo:create(rotatetime,7)),
+                    cc.MoveTo:create(rotatetime,pos[3])
+                    ),
                 cc.CallFunc:create(function() 
                     isMoving = false
                     for i=1,3 do
                         self.layer:getChildByTag(sortorder[i]):setRotation3D({x=0,y=50,z=0})
                     end
                     end)))
+        middle:setPositionZ(-100)
         local left = self.layer:getChildByTag(sortorder[1])
-        left:runAction(cc.Spawn:create(cc.MoveTo:create(rotatetime,pos[2]),cc.ScaleTo:create(rotatetime,8)))
+        left:runAction(cc.Spawn:create(cc.MoveTo:create(rotatetime,pos[2])))
+        left:setPositionZ(0)
         local right = self.layer:getChildByTag(sortorder[3])
-        right:runAction(cc.Spawn:create(cc.MoveTo:create(rotatetime,pos[1]),cc.ScaleTo:create(rotatetime,7)))
+        right:runAction(cc.Spawn:create(cc.MoveTo:create(rotatetime,pos[1])))
     	local t = sortorder[3]
     	sortorder[3]=sortorder[2]
     	sortorder[2]=sortorder[1]
@@ -340,13 +345,15 @@ function ChooseRoleScene:rotate3Heroes(isRight)
                 end
             end), 
             cc.Spawn:create(
-                cc.MoveTo:create(rotatetime,pos[1]),
-                cc.ScaleTo:create(rotatetime,7)),
+                cc.MoveTo:create(rotatetime,pos[1])
+                ),
             cc.CallFunc:create(function() isMoving = false end)))
+        middle:setPositionZ(-100)
         local left = self.layer:getChildByTag(sortorder[1])
-        left:runAction(cc.Spawn:create(cc.MoveTo:create(rotatetime,pos[3]),cc.ScaleTo:create(rotatetime,7)))
+        left:runAction(cc.Spawn:create(cc.MoveTo:create(rotatetime,pos[3])))
         local right = self.layer:getChildByTag(sortorder[3])
-        right:runAction(cc.Spawn:create(cc.MoveTo:create(rotatetime,pos[2]),cc.ScaleTo:create(rotatetime,8)))
+        right:runAction(cc.Spawn:create(cc.MoveTo:create(rotatetime,pos[2])))
+        right:setPositionZ(0)
         local t = sortorder[1]
         sortorder[1]=sortorder[2]
         sortorder[2]=sortorder[3]
