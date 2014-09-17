@@ -81,6 +81,9 @@ local function update(dt)
         		beginUpdate = false
         	end
         end
+        
+        if endPos.y < 0 then endPos.y = 0 end
+        
     	playser:setPosition3D(endPos)
     	cclog("%.2f %.2f %.2f", endPos.x, endPos.y, endPos.z)
     	local aspect = cc.V3Dot(dir, cc.V3(0.0, 0.0, 1.0))
@@ -177,11 +180,10 @@ function BattleFieldScene:createBackground(layer)
 end
 
 function BattleFieldScene.setCamera(layer)
-    cc.Director:getInstance():getWinSize()
     camera = cc.Camera:createPerspective(60.0, size.width/size.height, 1.0, 1000.0)
-    --camera:setCameraFlag(cc.CameraFlag.USER1)
-    camera:setPosition3D({x = 0.0, y = 10.0, z = 10.0})
-    camera:lookAt({x = 0.0, y = 0.0, z = 0.0}, {x = 0.0, y = 1.0, z = 0.0})
+    camera:setCameraFlag(2)
+    camera:setPosition3D(cc.V3(0.0, 10.0, 10.0))
+    camera:lookAt(cc.V3(0.0, 0.0, 0.0), cc.V3(0.0, 1.0, 0.0))
     layer:addChild(camera)
 end
 
@@ -190,11 +192,11 @@ function BattleFieldScene.create()
     local layer = cc.Layer:create()
     scene:addChild(layer)
 --    layer:setScale(2)
-    layer:setCameraMask(2);
     
     BattleFieldScene:createBackground(layer)
     BattleFieldScene.setCamera(layer)
     Sprite3DWithSkinTest.create(layer)
+    layer:setCameraMask(2);
 
     --button
     local function touchEvent_return(sender,eventType)
@@ -215,9 +217,9 @@ function BattleFieldScene.create()
     layer:addChild(return_Button, 10)
     return_Button:setScale(0.5)
 
-    local moveBack = cc.EaseSineInOut:create(cc.MoveBy:create(2.0, cc.p(177, 0)))
-    local moveFunction = cc.CallFunc:create(BattleFieldScene.moveForth)
-    layer:runAction(cc.Sequence:create(moveBack, cc.DelayTime:create(1.0), moveFunction));
+    --local moveBack = cc.EaseSineInOut:create(cc.MoveBy:create(2.0, cc.p(177, 0)))
+    --local moveFunction = cc.CallFunc:create(BattleFieldScene.moveForth)
+    --layer:runAction(cc.Sequence:create(moveBack, cc.DelayTime:create(1.0), moveFunction));
     
     local function battle_success(event)
         BattleFieldScene.success()
@@ -246,10 +248,16 @@ function BattleFieldScene.create()
         if touch == nil then return end
 
         local location = touch:getLocationInView()
+        cclog("location %f %f", location.x, location.y)
+---[[        
         local nearP = cc.V3(location.x, location.y, -1.0)
         local farP = cc.V3(location.x, location.y, 1.0)
         nearP = camera:unproject(size, nearP, nearP)
         farP = camera:unproject(size, farP, farP)
+    
+        cclog("near %f %f %f ", nearP.x, nearP.y, nearP.z)
+        cclog("far %f %f %f ", farP.x, farP.y, farP.z)
+            
         local dir = cc.V3Sub(farP, nearP)
         local dist = 0.0
         local temp = cc.V3(0.0, 1.0, 0.0)
@@ -262,7 +270,13 @@ function BattleFieldScene.create()
         
         local tt = cc.V3MulEx(dir, dist)
         touchPos =  cc.V3Add(nearP, tt)
-        beginUpdate = true;
+        
+        cclog("position %f %f", WarriorManager[0].sprite3d:getPosition())
+        cclog("touch %f %f %f ", touchPos.x, touchPos.y, touchPos.z)
+        WarriorManager[0].sprite3d:runAction(cc.JumpBy:create(0.5, cc.p(0, 0), 5, 1))
+        WarriorManager[0].sprite3d:runAction(cc.MoveTo:create(0.5, touchPos))
+        beginUpdate = true;       
+--]]
     end
 
     local listener = cc.EventListenerTouchOneByOne:create()

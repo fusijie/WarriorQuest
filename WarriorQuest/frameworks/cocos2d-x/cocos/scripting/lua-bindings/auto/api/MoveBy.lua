@@ -5,12 +5,14 @@
 -- @parent_module cc
 
 --------------------------------
--- @function [parent=#MoveBy] create 
+-- @overload self, float, vec3_table         
+-- @overload self, float, vec2_table         
+-- @function [parent=#MoveBy] create
 -- @param self
 -- @param #float float
 -- @param #vec2_table vec2
--- @return MoveBy#MoveBy ret (return value: cc.MoveBy)
-        
+-- @return MoveBy#MoveBy ret (retunr value: cc.MoveBy)
+
 --------------------------------
 -- @function [parent=#MoveBy] startWithTarget 
 -- @param self
