@@ -2,6 +2,16 @@
 -- @module cc
 
 --------------------------------------------------------
+-- the cc AABB
+-- @field [parent=#cc] AABB#AABB AABB preloaded module
+
+
+--------------------------------------------------------
+-- the cc OBB
+-- @field [parent=#cc] OBB#OBB OBB preloaded module
+
+
+--------------------------------------------------------
 -- the cc Mesh
 -- @field [parent=#cc] Mesh#Mesh Mesh preloaded module
 
