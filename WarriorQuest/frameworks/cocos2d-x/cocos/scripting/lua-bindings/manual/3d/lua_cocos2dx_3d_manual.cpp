@@ -330,6 +330,381 @@ tolua_lerror:
     return 0;
 }
 
+static int lua_get_OBB_center(lua_State* L)
+{
+    OBB* self = nullptr;
+    
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+    if (!tolua_isusertype(L,1,"cc.OBB",0,&tolua_err)) goto tolua_lerror;
+#endif
+    
+    self = (OBB*)  tolua_tousertype(L,1,0);
+#if COCOS2D_DEBUG >= 1
+    if (nullptr == self)
+    {
+        tolua_error(L,"invalid 'self' in function 'lua_get_OBB_center'\n", nullptr);
+		return 0;
+    }
+#endif
+    
+    vec3_to_luaval(L, self->_center);
+    return 1;
+    
+#if COCOS2D_DEBUG >= 1
+tolua_lerror:
+    tolua_error(L,"#ferror in function 'lua_get_OBB_center'.",&tolua_err);
+    return 0;
+#endif
+}
+
+static int lua_set_OBB_center(lua_State* L)
+{
+    int argc = 0;
+    OBB* self = nullptr;
+    
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+    if (!tolua_isusertype(L,1,"cc.OBB",0,&tolua_err)) goto tolua_lerror;
+#endif
+    
+    self = (OBB*)  tolua_tousertype(L,1,0);
+#if COCOS2D_DEBUG >= 1
+    if (nullptr == self)
+    {
+        tolua_error(L,"invalid 'self' in function 'lua_set_OBB_center'\n", nullptr);
+		return 0;
+    }
+#endif
+    
+    argc = lua_gettop(L) - 1;
+    
+    if (0 == argc)
+    {
+#if COCOS2D_DEBUG >= 1
+        if (!tolua_isnumber(L, 2, 0, &tolua_err))
+            goto tolua_lerror;
+#endif
+        Vec3 vec3;
+        
+        if(luaval_to_vec3(L, 2, &vec3)){
+        
+            self->_center = vec3;
+        }
+        
+        return 0;
+    }
+    
+    CCLOG("'_center' function of OBB is wrong");
+    return 0;
+    
+#if COCOS2D_DEBUG >= 1
+tolua_lerror:
+    tolua_error(L,"#ferror in function 'lua_set_OBB_center'.",&tolua_err);
+    return 0;
+#endif
+}
+
+static int lua_get_OBB_xAxis(lua_State* L)
+{
+    OBB* self = nullptr;
+    
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+    if (!tolua_isusertype(L,1,"cc.OBB",0,&tolua_err)) goto tolua_lerror;
+#endif
+    
+    self = (OBB*)  tolua_tousertype(L,1,0);
+#if COCOS2D_DEBUG >= 1
+    if (nullptr == self)
+    {
+        tolua_error(L,"invalid 'self' in function 'lua_get_OBB_xAxis'\n", nullptr);
+		return 0;
+    }
+#endif
+    
+    vec3_to_luaval(L, self->_xAxis);
+    return 1;
+    
+#if COCOS2D_DEBUG >= 1
+tolua_lerror:
+    tolua_error(L,"#ferror in function 'lua_get_OBB_xAxis'.",&tolua_err);
+    return 0;
+#endif
+}
+
+static int lua_set_OBB_xAxis(lua_State* L)
+{
+    int argc = 0;
+    OBB* self = nullptr;
+    
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+    if (!tolua_isusertype(L,1,"cc.OBB",0,&tolua_err)) goto tolua_lerror;
+#endif
+    
+    self = (OBB*)  tolua_tousertype(L,1,0);
+#if COCOS2D_DEBUG >= 1
+    if (nullptr == self)
+    {
+        tolua_error(L,"invalid 'self' in function 'lua_set_OBB_xAxis'\n", nullptr);
+		return 0;
+    }
+#endif
+    
+    argc = lua_gettop(L) - 1;
+    
+    if (0 == argc)
+    {
+#if COCOS2D_DEBUG >= 1
+        if (!tolua_isnumber(L, 2, 0, &tolua_err))
+            goto tolua_lerror;
+#endif
+        Vec3 vec3;
+        
+        if(luaval_to_vec3(L, 2, &vec3)){
+            
+            self->_xAxis = vec3;
+        }
+        
+        return 0;
+    }
+    
+    CCLOG("'_xAxis' function of OBB is wrong");
+    return 0;
+    
+#if COCOS2D_DEBUG >= 1
+tolua_lerror:
+    tolua_error(L,"#ferror in function 'lua_set_OBB_xAxis'.",&tolua_err);
+    return 0;
+#endif
+}
+
+static int lua_get_OBB_yAxis(lua_State* L)
+{
+    OBB* self = nullptr;
+    
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+    if (!tolua_isusertype(L,1,"cc.OBB",0,&tolua_err)) goto tolua_lerror;
+#endif
+    
+    self = (OBB*)  tolua_tousertype(L,1,0);
+#if COCOS2D_DEBUG >= 1
+    if (nullptr == self)
+    {
+        tolua_error(L,"invalid 'self' in function 'lua_get_OBB_yAxis'\n", nullptr);
+		return 0;
+    }
+#endif
+    
+    vec3_to_luaval(L, self->_yAxis);
+    return 1;
+    
+#if COCOS2D_DEBUG >= 1
+tolua_lerror:
+    tolua_error(L,"#ferror in function 'lua_get_OBB_yAxis'.",&tolua_err);
+    return 0;
+#endif
+}
+
+static int lua_set_OBB_yAxis(lua_State* L)
+{
+    int argc = 0;
+    OBB* self = nullptr;
+    
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+    if (!tolua_isusertype(L,1,"cc.OBB",0,&tolua_err)) goto tolua_lerror;
+#endif
+    
+    self = (OBB*)  tolua_tousertype(L,1,0);
+#if COCOS2D_DEBUG >= 1
+    if (nullptr == self)
+    {
+        tolua_error(L,"invalid 'self' in function 'lua_set_OBB_yAxis'\n", nullptr);
+		return 0;
+    }
+#endif
+    
+    argc = lua_gettop(L) - 1;
+    
+    if (0 == argc)
+    {
+#if COCOS2D_DEBUG >= 1
+        if (!tolua_isnumber(L, 2, 0, &tolua_err))
+            goto tolua_lerror;
+#endif
+        Vec3 vec3;
+        
+        if(luaval_to_vec3(L, 2, &vec3)){
+            
+            self->_yAxis = vec3;
+        }
+        
+        return 0;
+    }
+    
+    CCLOG("'_yAxis' function of OBB is wrong");
+    return 0;
+    
+#if COCOS2D_DEBUG >= 1
+tolua_lerror:
+    tolua_error(L,"#ferror in function 'lua_set_OBB_yAxis'.",&tolua_err);
+    return 0;
+#endif
+}
+
+static int lua_get_OBB_zAxis(lua_State* L)
+{
+    OBB* self = nullptr;
+    
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+    if (!tolua_isusertype(L,1,"cc.OBB",0,&tolua_err)) goto tolua_lerror;
+#endif
+    
+    self = (OBB*)  tolua_tousertype(L,1,0);
+#if COCOS2D_DEBUG >= 1
+    if (nullptr == self)
+    {
+        tolua_error(L,"invalid 'self' in function 'lua_get_OBB_zAxis'\n", nullptr);
+		return 0;
+    }
+#endif
+    
+    vec3_to_luaval(L, self->_zAxis);
+    return 1;
+    
+#if COCOS2D_DEBUG >= 1
+tolua_lerror:
+    tolua_error(L,"#ferror in function 'lua_get_OBB_zAxis'.",&tolua_err);
+    return 0;
+#endif
+}
+
+static int lua_set_OBB_zAxis(lua_State* L)
+{
+    int argc = 0;
+    OBB* self = nullptr;
+    
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+    if (!tolua_isusertype(L,1,"cc.OBB",0,&tolua_err)) goto tolua_lerror;
+#endif
+    
+    self = (OBB*)  tolua_tousertype(L,1,0);
+#if COCOS2D_DEBUG >= 1
+    if (nullptr == self)
+    {
+        tolua_error(L,"invalid 'self' in function 'lua_set_OBB_zAxis'\n", nullptr);
+		return 0;
+    }
+#endif
+    
+    argc = lua_gettop(L) - 1;
+    
+    if (0 == argc)
+    {
+#if COCOS2D_DEBUG >= 1
+        if (!tolua_isnumber(L, 2, 0, &tolua_err))
+            goto tolua_lerror;
+#endif
+        Vec3 vec3;
+        
+        if(luaval_to_vec3(L, 2, &vec3)){
+            
+            self->_zAxis = vec3;
+        }
+        
+        return 0;
+    }
+    
+    CCLOG("'_zAxis' function of OBB is wrong");
+    return 0;
+    
+#if COCOS2D_DEBUG >= 1
+tolua_lerror:
+    tolua_error(L,"#ferror in function 'lua_set_OBB_zAxis'.",&tolua_err);
+    return 0;
+#endif
+}
+
+static int lua_get_OBB_extents(lua_State* L)
+{
+    OBB* self = nullptr;
+    
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+    if (!tolua_isusertype(L,1,"cc.OBB",0,&tolua_err)) goto tolua_lerror;
+#endif
+    
+    self = (OBB*)  tolua_tousertype(L,1,0);
+#if COCOS2D_DEBUG >= 1
+    if (nullptr == self)
+    {
+        tolua_error(L,"invalid 'self' in function 'lua_get_OBB_extents'\n", nullptr);
+		return 0;
+    }
+#endif
+    
+    vec3_to_luaval(L, self->_extents);
+    return 1;
+    
+#if COCOS2D_DEBUG >= 1
+tolua_lerror:
+    tolua_error(L,"#ferror in function 'lua_get_OBB_extents'.",&tolua_err);
+    return 0;
+#endif
+}
+
+static int lua_set_OBB_extents(lua_State* L)
+{
+    int argc = 0;
+    OBB* self = nullptr;
+    
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+    if (!tolua_isusertype(L,1,"cc.OBB",0,&tolua_err)) goto tolua_lerror;
+#endif
+    
+    self = (OBB*)  tolua_tousertype(L,1,0);
+#if COCOS2D_DEBUG >= 1
+    if (nullptr == self)
+    {
+        tolua_error(L,"invalid 'self' in function 'lua_set_OBB_extents'\n", nullptr);
+		return 0;
+    }
+#endif
+    
+    argc = lua_gettop(L) - 1;
+    
+    if (0 == argc)
+    {
+#if COCOS2D_DEBUG >= 1
+        if (!tolua_isnumber(L, 2, 0, &tolua_err))
+            goto tolua_lerror;
+#endif
+        Vec3 vec3;
+        
+        if(luaval_to_vec3(L, 2, &vec3)){
+            
+            self->_extents = vec3;
+        }
+        
+        return 0;
+    }
+    
+    CCLOG("'_extents' function of OBB is wrong");
+    return 0;
+    
+#if COCOS2D_DEBUG >= 1
+tolua_lerror:
+    tolua_error(L,"#ferror in function 'lua_set_OBB_extents'.",&tolua_err);
+    return 0;
+#endif
+}
+
 static void extendSprite3D(lua_State *L)
 {
     lua_pushstring(L, "cc.Sprite3D");
@@ -347,6 +722,11 @@ static void extendOBB(lua_State* L)
     lua_rawget(L, LUA_REGISTRYINDEX);
     if(lua_istable(L, -1))
     {
+        tolua_variable(L, "_center", lua_get_OBB_center, lua_set_OBB_center);
+        tolua_variable(L, "_xAxis", lua_get_OBB_xAxis, lua_set_OBB_xAxis);
+        tolua_variable(L, "_yAxis", lua_get_OBB_yAxis, lua_set_OBB_yAxis);
+        tolua_variable(L, "_zAxis", lua_get_OBB_zAxis, lua_set_OBB_zAxis);
+        tolua_variable(L, "_extents", lua_get_OBB_extents, lua_set_OBB_extents);
         tolua_function(L, "intersects", lua_cocos2dx_3d_OBB_intersects);
         tolua_function(L, "new", lua_cocos2dx_3d_OBB_constructor);
     }
