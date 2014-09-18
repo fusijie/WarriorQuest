@@ -1,3 +1,6 @@
+# Ignore by Jacky
+runtime/
+
 # Ignore thumbnails created by windows
 Thumbs.db
 
@@ -109,3 +112,10 @@ CMakeCache.txt
 CMakeFiles
 Makefile
 cmake_install.cmake
+/WarriorQuest/runtime/mac/WarriorQuest.app/
+
+/WarriorQuest/runtime/mac/WarriorQuest Mac.app/Contents/Resources/config.json
+/WarriorQuest/runtime/mac/WarriorQuest Mac.app/Contents/Resources/res/
+/WarriorQuest/runtime/mac/WarriorQuest Mac.app/Contents/Resources/src/
+
+/WarriorQuest/runtime/mac/WarriorQuest.app/Contents/MacOS/WarriorQuest Mac
