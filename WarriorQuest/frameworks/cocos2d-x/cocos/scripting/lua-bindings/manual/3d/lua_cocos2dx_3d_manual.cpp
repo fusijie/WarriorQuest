@@ -705,6 +705,52 @@ tolua_lerror:
 #endif
 }
 
+int lua_cocos2dx_3d_Mesh_getAABB(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::Mesh* cobj = nullptr;
+    bool ok  = true;
+    
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+    
+    
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.Mesh",0,&tolua_err)) goto tolua_lerror;
+#endif
+    
+    cobj = (cocos2d::Mesh*)tolua_tousertype(tolua_S,1,0);
+    
+#if COCOS2D_DEBUG >= 1
+    if (!cobj)
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_3d_Mesh_getAABB'", nullptr);
+        return 0;
+    }
+#endif
+    
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+            return 0;
+        
+        cocos2d::AABB* ret = const_cast<cocos2d::AABB*>(&(cobj->getAABB()));
+        object_to_luaval<cocos2d::AABB>(tolua_S, "cc.AABB", ret);
+        return 1;
+    }
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "cc.Mesh:getAABB",argc, 0);
+    return 0;
+    
+#if COCOS2D_DEBUG >= 1
+tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_3d_Mesh_getAABB'.",&tolua_err);
+#endif
+    
+    return 0;
+}
+
 static void extendSprite3D(lua_State *L)
 {
     lua_pushstring(L, "cc.Sprite3D");
@@ -758,6 +804,17 @@ static void extendCamera(lua_State* tolua_S)
     lua_pop(tolua_S, 1);
 }
 
+static void extendMesh(lua_State *tolua_S)
+{
+    lua_pushstring(tolua_S, "cc.Mesh");
+    lua_rawget(tolua_S, LUA_REGISTRYINDEX);
+    if(lua_istable(tolua_S, -1))
+    {
+        tolua_function(tolua_S, "getAABB", lua_cocos2dx_3d_Mesh_getAABB);
+    }
+    lua_pop(tolua_S, 1);
+}
+
 int register_cocos3d_module(lua_State* L)
 {
     lua_getglobal(L, "_G");
@@ -771,6 +828,7 @@ int register_cocos3d_module(lua_State* L)
     extendAABB(L);
     extendOBB(L);
     extendSprite3D(L);
+    extendMesh(L);
 
     return 1;
 }
