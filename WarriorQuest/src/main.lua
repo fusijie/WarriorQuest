@@ -24,7 +24,8 @@ local function main()
     cc.FileUtils:getInstance():addSearchPath("src")
     cc.FileUtils:getInstance():addSearchPath("res")
     cc.Director:getInstance():getOpenGLView():setDesignResolutionSize(1136, 640, 0)
-    
+    cc.DrawNode3D:create()
+
     --create scene 
     local scene = require("ChooseRoleScene")
     --local scene = require("BattleFieldScene")
