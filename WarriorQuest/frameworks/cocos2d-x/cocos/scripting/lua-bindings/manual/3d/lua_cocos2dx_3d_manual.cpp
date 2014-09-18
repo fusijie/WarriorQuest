@@ -751,6 +751,94 @@ tolua_lerror:
     return 0;
 }
 
+int lua_cocos2dx_3d_OBB_getCorners(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::OBB* cobj = nullptr;
+    
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+    
+    
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.OBB",0,&tolua_err)) goto tolua_lerror;
+#endif
+    
+    cobj = (cocos2d::OBB*)tolua_tousertype(tolua_S,1,0);
+    
+#if COCOS2D_DEBUG >= 1
+    if (!cobj)
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_3d_OBB_getCorners'", nullptr);
+        return 0;
+    }
+#endif
+    
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        cocos2d::Vec3* arg0;
+#if COCOS2D_DEBUG >= 1
+        if (!tolua_istable(tolua_S, 2, 0, &tolua_err))
+            goto tolua_lerror;
+#endif
+        
+        size_t len = lua_objlen(tolua_S, 2);
+        if (len == 0 )
+        {
+            CCLOG("Table's len equal 0");
+            return 0;
+        }
+        
+        arg0 = new cocos2d::Vec3[len];
+        
+        if (nullptr == arg0)
+        {
+            CCLOG("Allocate cocos2d::Vec3 array in the lua_cocos2dx_3d_OBB_getCorners failed!");
+            return 0;
+        }
+        
+        for (int i = 1 ; i <= len; i++)
+        {
+            lua_pushnumber(tolua_S,i);
+            lua_gettable(tolua_S,2);
+            if (lua_isnil(tolua_S, -1))
+            {
+                arg0[i - 1] = cocos2d::Vec3(0,0,0);
+            }
+            else
+            {
+                luaval_to_vec3(tolua_S, -1, &arg0[i - 1], "cc.OBB:getCorners");
+            }
+            lua_pop(tolua_S,1);
+        }
+        
+        cobj->getCorners(arg0);
+        
+        lua_newtable(tolua_S);
+        
+        for (int i = 1; i <= len; i++)
+        {
+            lua_pushnumber(tolua_S, i);
+            vec3_to_luaval(tolua_S, arg0[i - 1]);
+            lua_rawset(tolua_S, -3);
+        }
+        CC_SAFE_DELETE_ARRAY(arg0);
+        
+        return 1;
+    }
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "cc.OBB:getCorners",argc, 1);
+    return 0;
+    
+#if COCOS2D_DEBUG >= 1
+tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_3d_OBB_getCorners'.",&tolua_err);
+#endif
+    
+    return 0;
+}
+
 static void extendSprite3D(lua_State *L)
 {
     lua_pushstring(L, "cc.Sprite3D");
@@ -775,6 +863,7 @@ static void extendOBB(lua_State* L)
         tolua_variable(L, "_extents", lua_get_OBB_extents, lua_set_OBB_extents);
         tolua_function(L, "intersects", lua_cocos2dx_3d_OBB_intersects);
         tolua_function(L, "new", lua_cocos2dx_3d_OBB_constructor);
+        tolua_function(L, "getCorners", lua_cocos2dx_3d_OBB_getCorners);
     }
     lua_pop(L, -3);
 }

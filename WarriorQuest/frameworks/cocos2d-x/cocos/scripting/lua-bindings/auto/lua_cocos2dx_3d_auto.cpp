@@ -594,52 +594,6 @@ int lua_cocos2dx_3d_OBB_transform(lua_State* tolua_S)
 
     return 0;
 }
-int lua_cocos2dx_3d_OBB_getCorners(lua_State* tolua_S)
-{
-    int argc = 0;
-    cocos2d::OBB* cobj = nullptr;
-    bool ok  = true;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"cc.OBB",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (cocos2d::OBB*)tolua_tousertype(tolua_S,1,0);
-
-#if COCOS2D_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_3d_OBB_getCorners'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        cocos2d::Vec3* arg0;
-
-        ok &= luaval_to_object<cocos2d::Vec3>(tolua_S, 2, "cc.Vec3",&arg0);
-        if(!ok)
-            return 0;
-        cobj->getCorners(arg0);
-        return 0;
-    }
-    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "cc.OBB:getCorners",argc, 1);
-    return 0;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_3d_OBB_getCorners'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_cocos2dx_3d_OBB_containPoint(lua_State* tolua_S)
 {
     int argc = 0;
@@ -702,7 +656,6 @@ int lua_register_cocos2dx_3d_OBB(lua_State* tolua_S)
         tolua_function(tolua_S,"reset",lua_cocos2dx_3d_OBB_reset);
         tolua_function(tolua_S,"set",lua_cocos2dx_3d_OBB_set);
         tolua_function(tolua_S,"transform",lua_cocos2dx_3d_OBB_transform);
-        tolua_function(tolua_S,"getCorners",lua_cocos2dx_3d_OBB_getCorners);
         tolua_function(tolua_S,"containPoint",lua_cocos2dx_3d_OBB_containPoint);
     tolua_endmodule(tolua_S);
     std::string typeName = typeid(cocos2d::OBB).name();
