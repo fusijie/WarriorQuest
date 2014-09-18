@@ -1800,6 +1800,10 @@
 		50ABC0651926664800A911A9 /* CCGL.h in Headers */ = {isa = PBXBuildFile; fileRef = 50ABBF531926664700A911A9 /* CCGL.h */; };
 		50ABC0671926664800A911A9 /* CCPlatformDefine.h in Headers */ = {isa = PBXBuildFile; fileRef = 50ABBF541926664700A911A9 /* CCPlatformDefine.h */; };
 		50ABC0691926664800A911A9 /* CCStdC.h in Headers */ = {isa = PBXBuildFile; fileRef = 50ABBF551926664700A911A9 /* CCStdC.h */; };
+		660994D019CA8023003C76FE /* DrawNode3D.h in Headers */ = {isa = PBXBuildFile; fileRef = 660994CE19CA8023003C76FE /* DrawNode3D.h */; };
+		660994D119CA8023003C76FE /* DrawNode3D.h in Headers */ = {isa = PBXBuildFile; fileRef = 660994CE19CA8023003C76FE /* DrawNode3D.h */; };
+		660994D219CA8023003C76FE /* DrawNode3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 660994CF19CA8023003C76FE /* DrawNode3D.cpp */; };
+		660994D319CA8023003C76FE /* DrawNode3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 660994CF19CA8023003C76FE /* DrawNode3D.cpp */; };
 		A07A4CAF1783777C0073F6A7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1551A342158F2AB200E66CFE /* Foundation.framework */; };
 		ACB25BD619BEB22A00F95C52 /* EffectSprite3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACB25BD419BEB22A00F95C52 /* EffectSprite3D.cpp */; };
 		ACB25BD719BEB22A00F95C52 /* EffectSprite3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACB25BD419BEB22A00F95C52 /* EffectSprite3D.cpp */; };
@@ -2837,6 +2841,8 @@
 		50FCEB9018C72017004AD434 /* WidgetReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WidgetReader.cpp; sourceTree = "<group>"; };
 		50FCEB9118C72017004AD434 /* WidgetReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetReader.h; sourceTree = "<group>"; };
 		50FCEB9218C72017004AD434 /* WidgetReaderProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetReaderProtocol.h; sourceTree = "<group>"; };
+		660994CE19CA8023003C76FE /* DrawNode3D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawNode3D.h; sourceTree = "<group>"; };
+		660994CF19CA8023003C76FE /* DrawNode3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DrawNode3D.cpp; sourceTree = "<group>"; };
 		A07A4D641783777C0073F6A7 /* libcocos2d iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libcocos2d iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACB25BD419BEB22A00F95C52 /* EffectSprite3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EffectSprite3D.cpp; sourceTree = "<group>"; };
 		ACB25BD519BEB22A00F95C52 /* EffectSprite3D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EffectSprite3D.h; sourceTree = "<group>"; };
@@ -4891,6 +4897,8 @@
 		ACB25BD319BEB22A00F95C52 /* custom */ = {
 			isa = PBXGroup;
 			children = (
+				660994CE19CA8023003C76FE /* DrawNode3D.h */,
+				660994CF19CA8023003C76FE /* DrawNode3D.cpp */,
 				ACB25BD419BEB22A00F95C52 /* EffectSprite3D.cpp */,
 				ACB25BD519BEB22A00F95C52 /* EffectSprite3D.h */,
 			);
@@ -5335,6 +5343,7 @@
 				50ABBD3A1925AB0000A911A9 /* CCAffineTransform.h in Headers */,
 				15AE186C19AAD31D00C27E9E /* SimpleAudioEngine_objc.h in Headers */,
 				15AE1BB319AADFEF00C27E9E /* HttpRequest.h in Headers */,
+				660994D019CA8023003C76FE /* DrawNode3D.h in Headers */,
 				50ABBE571925AB6F00A911A9 /* CCEventFocus.h in Headers */,
 				1A01C69218F57BE800EFE3A6 /* CCDouble.h in Headers */,
 				15AE18F919AAD35000C27E9E /* CCBone.h in Headers */,
@@ -5784,6 +5793,7 @@
 				15AE1A9519AAD40300C27E9E /* b2BlockAllocator.h in Headers */,
 				5034CA48191D591100CE6051 /* ccShader_Label_normal.frag in Headers */,
 				15AE183F19AAD2F700C27E9E /* CCSkeleton3D.h in Headers */,
+				660994D119CA8023003C76FE /* DrawNode3D.h in Headers */,
 				50ABBD531925AB0000A911A9 /* Quaternion.h in Headers */,
 				15AE19B119AAD39700C27E9E /* ScrollViewReader.h in Headers */,
 				503DD8E81926736A00CD74DD /* CCES2Renderer.h in Headers */,
@@ -6130,6 +6140,7 @@
 				50ABBE391925AB6F00A911A9 /* CCData.cpp in Sources */,
 				1A57010E180BC8EE0088DEC7 /* CCDrawingPrimitives.cpp in Sources */,
 				50ABBED71925AB6F00A911A9 /* ZipUtils.cpp in Sources */,
+				660994D219CA8023003C76FE /* DrawNode3D.cpp in Sources */,
 				15AE181019AAD2F700C27E9E /* CCAnimation3D.cpp in Sources */,
 				1A01C68418F57BE800EFE3A6 /* CCArray.cpp in Sources */,
 				1A570112180BC8EE0088DEC7 /* CCDrawNode.cpp in Sources */,
@@ -6476,6 +6487,7 @@
 				15AE186119AAD31200C27E9E /* SimpleAudioEngine_objc.m in Sources */,
 				15AE182519AAD2F700C27E9E /* CCMesh.cpp in Sources */,
 				503DD8EE1926736A00CD74DD /* CCImage.mm in Sources */,
+				660994D319CA8023003C76FE /* DrawNode3D.cpp in Sources */,
 				B37510811823ACA100B3BA6A /* CCPhysicsJointInfo_chipmunk.cpp in Sources */,
 				46A170FC1807CECB005B8026 /* CCPhysicsBody.cpp in Sources */,
 				15AE1BEA19AAE01E00C27E9E /* CCControlButton.cpp in Sources */,
