@@ -4,17 +4,11 @@ require("LuaSprite3D")
 local size = cc.Director:getInstance():getWinSize()
 local scheduler = cc.Director:getInstance():getScheduler()
 local schedulerEntry = nil
-local attacker = nil
-local defender = nil    
-local isWarriorAttack = true
 local warrior3DTag = 10086
 local monster3DTag = 10010
 local boss3DTag = 10000
-local animationTag = 95555
-local moveActionTag = 95558
 local spriteBg = nil
 local battleStep = 1
-local enemy = nil  
 local gloableZOrder = 1
 local camera = nil 
 local touchPos = nil
@@ -85,7 +79,7 @@ local function update(dt)
         if endPos.y < 0 then endPos.y = 0 end
         
     	playser:setPosition3D(endPos)
-    	cclog("%.2f %.2f %.2f", endPos.x, endPos.y, endPos.z)
+    	--cclog("%.2f %.2f %.2f", endPos.x, endPos.y, endPos.z)
     	local aspect = cc.V3Dot(dir, cc.V3(0.0, 0.0, 1.0))
     	aspect = math.acos(aspect)
     	if dir.x < 0.0 then	aspect = -aspect end
@@ -106,7 +100,7 @@ function Sprite3DWithSkinTest.addNewSpriteWithCoords(parent, x, y, tag)
     local animation = nil
     if tag == warrior3DTag then
         sprite = Warrior3D:new("Sprite3DTest/orc.c3b")
-        sprite.sprite3d:setScale(3)
+        --sprite.sprite3d:setScale(3)
         List.pushlast(WarriorManager, sprite)
     elseif tag == monster3DTag then
         sprite = Monster3D:new("Sprite3DTest/orc.c3b")    
@@ -130,7 +124,7 @@ function Sprite3DWithSkinTest.addNewSpriteWithCoords(parent, x, y, tag)
     sprite.sprite3d:setTag(tag);
     --BattleFieldScene.createRandomDebut(sprite.sprite3d, sprite.sprite3d:getPosition())        
     
-    local effect  = Effect3DOutline:create()
+    local effect  = cc.Effect3DOutline:create()
     local tempColor = {x=1,y=0,z=0}
     effect:setOutlineColor(tempColor)
     effect:setOutlineWidth(0.01)
@@ -154,26 +148,15 @@ end
 function Sprite3DWithSkinTest.create(layer)
     Sprite3DWithSkinTest.currentLayer = layer
  
---    Sprite3DWithSkinTest.addNewSpriteWithCoords(layer, size.width / 2 - 300, size.height / 4 + 40, warrior3DTag)
---    Sprite3DWithSkinTest.addNewSpriteWithCoords(layer, size.width / 2 - 260, size.height / 4 + 10, warrior3DTag)
---    Sprite3DWithSkinTest.addNewSpriteWithCoords(layer, size.width / 2 - 300, size.height / 4 - 20, warrior3DTag)
-
     Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, size.width / 2 - 300, size.height / 4 + 40, warrior3DTag)
     --Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, size.width / 2 - 260, size.height / 4 + 10, warrior3DTag)
     --Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, size.width / 2 - 300, size.height / 4 - 20, warrior3DTag)
-
 
     return layer
 end
 
 
 function BattleFieldScene:createBackground(layer)
---    spriteBg = cc.Sprite:create("background.jpg")
---    spriteBg:setPosition(size.width / 2 + 80, size.height / 2 + 30)
---    layer:addChild(spriteBg)
---    
---    spriteBg:setRotation3D({x = -25.0, y = 0.0 ,z = 0.0})
-    
     spriteBg = cc.Sprite3D:create("Sprite3DTest/scene/DemoScene.c3b")
     local children = spriteBg:getChildren()
     layer:addChild(spriteBg);
@@ -248,16 +231,11 @@ function BattleFieldScene.create()
         if touch == nil then return end
 
         local location = touch:getLocationInView()
-        cclog("location %f %f", location.x, location.y)
----[[        
         local nearP = cc.V3(location.x, location.y, -1.0)
         local farP = cc.V3(location.x, location.y, 1.0)
         nearP = camera:unproject(size, nearP, nearP)
         farP = camera:unproject(size, farP, farP)
     
-        cclog("near %f %f %f ", nearP.x, nearP.y, nearP.z)
-        cclog("far %f %f %f ", farP.x, farP.y, farP.z)
-            
         local dir = cc.V3Sub(farP, nearP)
         local dist = 0.0
         local temp = cc.V3(0.0, 1.0, 0.0)
@@ -271,12 +249,9 @@ function BattleFieldScene.create()
         local tt = cc.V3MulEx(dir, dist)
         touchPos =  cc.V3Add(nearP, tt)
         
-        cclog("position %f %f", WarriorManager[0].sprite3d:getPosition())
-        cclog("touch %f %f %f ", touchPos.x, touchPos.y, touchPos.z)
         WarriorManager[0].sprite3d:runAction(cc.JumpBy:create(0.5, cc.p(0, 0), 5, 1))
         WarriorManager[0].sprite3d:runAction(cc.MoveTo:create(0.5, touchPos))
         beginUpdate = true;       
---]]
     end
 
     local listener = cc.EventListenerTouchOneByOne:create()

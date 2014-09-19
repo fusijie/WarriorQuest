@@ -368,6 +368,22 @@ function cc.V3(p1, p2, p3)
     return {x = p1, y = p2, z = p3}
 end
 
+function cc.V3Array(n)    
+    local array = {}
+    for i=1,n do
+        local element = {x = 0, y = 0, z =0}
+        table.insert(array, element)
+    end
+
+    return array
+end
+
+function cc.V3Assign(p1, p2)
+    p1.x = p2.x
+    p1.x = p2.x
+    p1.x = p2.x
+end
+
 function cc.V3Add(p1, p2)
     return {x = p1.x + p2.x, y = p1.y + p2.y, z = p1.z + p2.z}
 end
@@ -405,4 +421,29 @@ function cc.V3Normalize(p)
     p.y = p.y * n
     p.z = p.z * n
 end
+
+function cc.Mat4getUpVector(m)
+    return {x = m[5], y = m[6], z = m[7]}
+end
+
+function cc.Mat4getDownVector(m)
+    return {x = -m[5], y = -m[6], z = -m[7]}
+end
+
+function cc.Mat4getLeftVector(m)
+    return {x = -m[1], y = -m[2], z = -m[3]}
+end
+
+function cc.Mat4getRightVector(m)
+    return {x = m[1], y = m[2], z = m[3]}
+end
+
+function cc.Mat4getForwardVector(m)
+    return {x = -m[9], y = -m[10], z = -m[11]}
+end
+
+function cc.Mat4getBackVector(m)
+    return {x = m[9], y = m[10], z = m[11]}
+end
+
 
