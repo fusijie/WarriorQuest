@@ -9,7 +9,9 @@ local ChooseRoleScene  = class("ChooseRoleScene",function ()
 end)
 
 local sortorder = {1,2,3} --hero's tag
-local pos = {{x=270,y=180},{x=400,y=120},{x=530,y=180}} --heroes' pos
+local pos = {{x=210,y=160,z=-120},{x=400,y=120,z=0},{x=530,y=160,z=-120}} --heroes' pos
+local weapon_item_pos = {x=834,y=274}
+local armour_item_pos = {x=918,y=274}
 local isMoving = false
 local direction = 0
 local heroSize = cc.rect(155,120,465,420)
@@ -38,20 +40,20 @@ function ChooseRoleScene:addHero(hero_type, pos)
 end
 
 function ChooseRoleScene:addBag()
-    local bag = cc.Sprite:create("cr_bag.png")
+    local bag = cc.Sprite:create("chooseRole/cr_bag.png")
     bag:setTag(10)
     bag:setAnchorPoint(1.0,0)
     
     self._weaponItem = cc.Sprite:create("eqticon/cr_w_w_1.jpg")
     self._weaponItem:setTag(11)
-    self._weaponItem:setScale(0.25)
-    self._weaponItem:setPosition({x=865,y=250})
+    self._weaponItem:setScale(0.4)
+    self._weaponItem:setPosition(weapon_item_pos)
     self.layer:addChild(self._weaponItem,2)
     
     self._armourItem = cc.Sprite:create("eqticon/cr_w_a_1.jpg")
     self._armourItem:setTag(12)
-    self._armourItem:setScale(0.25)
-    self._armourItem:setPosition({x=900,y=250})
+    self._armourItem:setScale(0.4)
+    self._armourItem:setPosition(armour_item_pos)
     self.layer:addChild(self._armourItem,2)
     
     return bag
@@ -85,21 +87,22 @@ function ChooseRoleScene:addButton()
         end
     end
 
-    local picfileName = "cr_left.png"
+    local picfileName = "chooseRole/cr_rotate.png"
     local button_left = ccui.Button:create()
     button_left:loadTextures(picfileName,picfileName,"")
     button_left:setPosition(300,50)
     button_left:addTouchEventListener(touchEvent_arrowleft)
     self.layer:addChild(button_left)
 
-    picfileName = "cr_right.png"
+    picfileName = "chooseRole/cr_rotate.png"
     local button_right = ccui.Button:create()
     button_right:loadTextures(picfileName,picfileName,"")
+    button_right:setFlippedX(true)
     button_right:setPosition(500,50)
     button_right:addTouchEventListener(touchEvent_arrowright)
     self.layer:addChild(button_right)
 
-    picfileName = "cr_reset.png"
+    picfileName = "chooseRole/cr_reset.png"
     local button_reset = ccui.Button:create()
     button_reset:loadTextures(picfileName,picfileName,"")
     button_reset:setPosition(400,50)
@@ -115,8 +118,8 @@ function ChooseRoleScene:addButton()
 
     local return_Button = ccui.Button:create()
     return_Button:setTouchEnabled(true)
-    return_Button:loadTextures("cr_btn_normal.png", "cr_btn_pressed.png", "")
-    return_Button:setTitleText("Return")
+    return_Button:loadTextures("chooseRole/cr_arrow.png", "chooseRole/cr_arrow.png", "")
+--    return_Button:setTitleText("Return")
     return_Button:setAnchorPoint(0,1)
     return_Button:setPosition(20,600)
     return_Button:addTouchEventListener(touchEvent_return)        
@@ -132,8 +135,9 @@ function ChooseRoleScene:addButton()
 
     local next_Button = ccui.Button:create()
     next_Button:setTouchEnabled(true)
-    next_Button:loadTextures("cr_btn_normal.png", "cr_btn_pressed.png", "")
-    next_Button:setTitleText("Next")
+    next_Button:loadTextures("chooseRole/cr_arrow.png", "chooseRole/cr_arrow.png", "")
+    next_Button:setFlippedX(true)
+--    next_Button:setTitleText("Next")
     next_Button:setAnchorPoint(0,1)
     next_Button:setPosition(580,600)
     next_Button:addTouchEventListener(touchEvent_next)        
@@ -146,14 +150,14 @@ function ChooseRoleScene:createLayer()
     self.layer = cc.Layer:create()
     
     --create bk
-    local bk = cc.Sprite:create("cr_bk.jpg")
+    local bk = cc.Sprite:create("chooseRole/cr_bk.jpg")
     bk:setAnchorPoint(0.5,0.5)
     bk:setPosition(self.origin.x + self.visibleSize.width/2, self.origin.y + self.visibleSize.height/2)
     self.layer:addChild(bk)
     
     --create bag
     local bag = self:addBag()
-    bag:setPosition(self.origin.x + self.visibleSize.width - 50,self.origin.y + 50)
+    bag:setPosition(self.origin.x + self.visibleSize.width - 10,self.origin.y + 50)
     self.layer:addChild(bag)
         
     --create warrior,archer,sorceress
@@ -173,6 +177,15 @@ function ChooseRoleScene:createLayer()
     sorceress:setPositionZ(-100)
     sorceress:setTag(3)
     self.layer:addChild(sorceress)
+    
+    --test
+--    local test = cc.Sprite3D:create("Sprite3DTest/zhanshi_v002fixed.c3b")
+--    test:setTexture("Sprite3DTest/ZHANSHI_type01_head.jpg")
+--    --test:setTexture("Sprite3DTest/ZHANSHI_type01_body.jpg")
+--    test:setScale(50.0)
+--    test:setRotation3D({x=0,y=30,z=0})
+--    test:setPosition(300,500)
+--    self.layer:addChild(test)
     
     --create arrow
     self:addButton()
@@ -246,15 +259,15 @@ function ChooseRoleScene:initTouchDispatcher()
             isRotateavaliable = false
         elseif isWeaponItemavaliable then
             isWeaponItemavaliable = false
-            self._weaponItem:setPosition({x=865,y=250})
-            self._weaponItem:setScale(0.25)
+            self._weaponItem:setPosition(weapon_item_pos)
+            self._weaponItem:setScale(0.4)
             self._weaponItem:setOpacity(255)
             self.layer:getChildByTag(sortorder[2]):switchWeapon()
             self._weaponItem:setTexture(self:getWeaponTextureName())
         elseif isArmourItemavaliable then
             isArmourItemavaliable = false
-            self._armourItem:setPosition({x=900,y=250})
-            self._armourItem:setScale(0.25)
+            self._armourItem:setPosition(armour_item_pos)
+            self._armourItem:setScale(0.4)
             self._armourItem:setOpacity(255)
             self.layer:getChildByTag(sortorder[2]):switchArmour()
             self._armourItem:setTexture(self:getArmourTextureName())
@@ -322,13 +335,11 @@ function ChooseRoleScene:rotate3Heroes(isRight)
                 cc.CallFunc:create(function() 
                     isMoving = false
                     for i=1,3 do
-                        self.layer:getChildByTag(sortorder[i]):setRotation3D({x=0,y=50,z=0})
+                        --self.layer:getChildByTag(sortorder[i]):setRotation3D({x=0,y=50,z=0})
                     end
                     end)))
-        middle:setPositionZ(-100)
         local left = self.layer:getChildByTag(sortorder[1])
         left:runAction(cc.Spawn:create(cc.MoveTo:create(rotatetime,pos[2])))
-        left:setPositionZ(0)
         local right = self.layer:getChildByTag(sortorder[3])
         right:runAction(cc.Spawn:create(cc.MoveTo:create(rotatetime,pos[1])))
     	local t = sortorder[3]
@@ -341,19 +352,17 @@ function ChooseRoleScene:rotate3Heroes(isRight)
             cc.CallFunc:create(function() 
                 isMoving = true
                 for i=1,3 do
-                    self.layer:getChildByTag(sortorder[i]):setRotation3D({x=0,y=50,z=0})
+                    --self.layer:getChildByTag(sortorder[i]):setRotation3D({x=0,y=50,z=0})
                 end
             end), 
             cc.Spawn:create(
                 cc.MoveTo:create(rotatetime,pos[1])
                 ),
             cc.CallFunc:create(function() isMoving = false end)))
-        middle:setPositionZ(-100)
         local left = self.layer:getChildByTag(sortorder[1])
         left:runAction(cc.Spawn:create(cc.MoveTo:create(rotatetime,pos[3])))
         local right = self.layer:getChildByTag(sortorder[3])
         right:runAction(cc.Spawn:create(cc.MoveTo:create(rotatetime,pos[2])))
-        right:setPositionZ(0)
         local t = sortorder[1]
         sortorder[1]=sortorder[2]
         sortorder[2]=sortorder[3]
@@ -411,4 +420,7 @@ function ChooseRoleScene:switchItemtextureWhenRotate()
 	self._armourItem:setTexture(armourTexture)
 end
 
+function ChooseRoleScene:switchTextWhenRotate()
+    --
+end
 return ChooseRoleScene
