@@ -13,6 +13,18 @@ CC_POINT_POINTS_TO_PIXELS = function(points)
     return cc.p(points.x*CC_CONTENT_SCALE_FACTOR(), points.y*CC_CONTENT_SCALE_FACTOR())
 end
 
+--print table
+function printTab(tab)
+  for i,v in pairs(tab) do
+    if type(v) == "table" then
+      print("table",i,"{")
+      printTab(v)
+      print("}")
+    else
+     print(v)
+    end
+  end
+end
 
 -- cclog
 cclog = function(...)
