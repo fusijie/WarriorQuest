@@ -23,12 +23,34 @@ local function main()
     
     cc.FileUtils:getInstance():addSearchPath("src")
     cc.FileUtils:getInstance():addSearchPath("res")
-    cc.Director:getInstance():getOpenGLView():setDesignResolutionSize(1136, 640, 0)
+    
+    --adaptation
+    local pEGLView = cc.Director:getInstance():getOpenGLView()
+    local frameSize = pEGLView:getFrameSize()
+    local winSize = {width=1136,height=640}
+
+    local widthRate = frameSize.width/winSize.width
+    local heightRate = frameSize.height/winSize.height
+
+    if widthRate > heightRate then
+        pEGLView:setDesignResolutionSize(winSize.width,
+            winSize.height*heightRate/widthRate, 1)
+    else
+        pEGLView:setDesignResolutionSize(winSize.width*widthRate/heightRate, winSize.height,
+            1)
+    end
+    
+    --create scene 
+    --local scene = require("ChooseRoleScene")
+--    local scene = require("ActivateGameScene")
+--    local scene = require("LoadingScene")
+--    local scene = require("ChooseRoleScene")
+--    local scene = require("ChooseRoleScene")
 
     --create scene
     local scene = require("ChooseRoleScene")
-    --local scene = require("BattleFieldScene")
-    --local scene = require("MainMenuScene")
+--      local scene = require("BattleFieldScene")
+--    local scene = require("MainMenuScene")
     local activateGameScene = scene.create()
     --activateGameScene:playBgMusic()
     
