@@ -24,7 +24,7 @@ local function main()
     cc.FileUtils:getInstance():addSearchPath("src")
     cc.FileUtils:getInstance():addSearchPath("res")
     
-    --适配
+    --adaptation
     local pEGLView = cc.Director:getInstance():getOpenGLView()
     local frameSize = pEGLView:getFrameSize()
     local winSize = {width=1136,height=640}
@@ -32,9 +32,7 @@ local function main()
     local widthRate = frameSize.width/winSize.width
     local heightRate = frameSize.height/winSize.height
 
-    --    如果是if中的语句，说明逻辑的高度有点大了，就把逻辑的高缩小到和宽度一样的比率
     if widthRate > heightRate then
-        --    里边传入的前俩个参数就是逻辑分辨率的大小，也就是通过getWinSize()得到的大小
         pEGLView:setDesignResolutionSize(winSize.width,
             winSize.height*heightRate/widthRate, 1)
     else
@@ -48,7 +46,10 @@ local function main()
 --    local scene = require("LoadingScene")
 --    local scene = require("ChooseRoleScene")
 --    local scene = require("ChooseRoleScene")
-    --local scene = require("BattleFieldScene")
+
+    --create scene
+--    local scene = require("ChooseRoleScene")
+--      local scene = require("BattleFieldScene")
     local scene = require("MainMenuScene")
     local activateGameScene = scene.create()
     --activateGameScene:playBgMusic()

@@ -22,11 +22,6 @@
 -- @param #mat4_table mat4
         
 --------------------------------
--- @function [parent=#OBB] getCorners 
--- @param self
--- @param #vec3_table vec3
-        
---------------------------------
 -- @function [parent=#OBB] containPoint 
 -- @param self
 -- @param #vec3_table vec3

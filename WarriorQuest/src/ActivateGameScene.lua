@@ -54,7 +54,7 @@ end
 function ActivateGame:addHero(layer)
     --add hero
     local hero = require("Hero").create(0)
-    hero:setScale(8.0)
+    hero:setScale(2.0)
     hero:setRotation3D({x=0,y=-60,z=0})
     hero:setPosition({x=self.size.width*0.95, y=self.size.height*0.15})   
     layer:addChild(hero)

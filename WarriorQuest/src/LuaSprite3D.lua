@@ -30,17 +30,24 @@ EnumState = CreateEnumTable(EnumState)
 ----------------------------------------
 ----LuaSprite3D
 ----------------------------------------
-LuaSprite3D = {sprite3d = 0, scheduleAttackId = 0, target = 0, raceType=EnumRace.BASE, stateType = EnumState.STAND, alive = true, life = 100, speed = 100, attack = 30, priority = speed, action = {}}
+LuaSprite3D = {sprite3d = 0, scheduleAttackId = 0, target = 0, drawDebug = 0, obbt = 0, raceType=EnumRace.BASE, stateType = EnumState.STAND, alive = true, life = 100, speed = 100, attack = 30, priority = speed, action = {}}
 LuaSprite3D.__index = LuaSprite3D
 
 function LuaSprite3D:new(filename)
     local self = {}
     setmetatable(self, LuaSprite3D)
-    self.sprite3d = EffectSprite3D:create(filename)    
+    self.sprite3d = cc.EffectSprite3D:create(filename)    
     self.action.stand = ""
     self.action.attack = filename
     self.action.walk = ""
     self.action.defend = ""
+    
+    local aa = self.sprite3d:getAABB()
+    self.obbt = cc.OBB:new(aa)
+    self.drawDebug = cc.DrawNode3D:create()
+    self.sprite3d:addChild(self.drawDebug)
+    self.drawDebug:setScale(2)
+    
     return self
 end
 
@@ -119,10 +126,29 @@ function Warrior3D:new(filename)
     tempTalbe.weapon = math.random()..""     
     tempTalbe.attack = 50
     self.raceType = EnumRace.WARRIOR
+    
     local function update(dt)
         if self.alive == true then
-            self:FindEnemy2Attack()
+            self:FindEnemy2Attack()             
         end                  
+        
+        self.drawDebug:clear()
+        local mat = self.sprite3d:getNodeToWorldTransform()
+        cc.V3Assign(self.obbt._xAxis, cc.Mat4getRightVector(mat))         
+        cc.V3Normalize(self.obbt._xAxis)
+
+        cc.V3Assign(self.obbt._yAxis, cc.Mat4getUpVector(mat))
+        cc.V3Normalize(self.obbt._yAxis)
+
+        cc.V3Assign(self.obbt._zAxis, cc.Mat4getForwardVector(mat))
+        cc.V3Normalize(self.obbt._zAxis)
+
+        cc.V3Assign(self.obbt._center, self.drawDebug:getPosition3D())
+
+        local corners = cc.V3Array(8)            
+        corners = self.obbt:getCorners(corners)
+        self.drawDebug:drawCube(corners, cc.c4f(0,0,1,1))
+        printTab(self.obbt._center)          
     end
 
     scheduler:scheduleScriptFunc(update, 0.5, false)
@@ -198,7 +224,20 @@ function Monster3D:new(filename)
     local function update(dt)
         if self.alive == true then
             self:FindEnemy2Attack()
-        end                  
+            local mat = self.sprite3d:getNodeToWorldTransform()
+            self.obbt._xAxis = cc.Mat4getRightVector(mat)
+            cc.V3Normalize(self.obbt._xAxis)
+            
+            self.obbt._yAxis = cc.Mat4getUpVector(mat)
+            cc.V3Normalize(self.obbt._yAxis)
+            
+            self.obbt._zAxis = cc.Mat4getForwardVector(mat)
+            cc.V3Normalize(self.obbt._zAxis)
+            
+            self.obbt._center = self.drawDebug:getPosition3D()
+            local corners = self.obbt:getCorners()
+            self.drawDebug:drawCube(corners, cc.c4f(0,0,1,1))           
+        end
     end
        
     scheduler:scheduleScriptFunc(update, 0.5, false)
