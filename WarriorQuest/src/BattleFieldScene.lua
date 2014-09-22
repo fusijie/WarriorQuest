@@ -13,22 +13,11 @@ local gloableZOrder = 1
 local camera = nil 
 local touchPos = nil
 local beginUpdate = false
-
-local BattleFieldScene = class("BattleFieldScene",function()
-    return cc.Scene:create()
-end)
-
-----------------------------------------
-----Sprite3DWithSkinTest
-----------------------------------------
-local Sprite3DWithSkinTest = {currentLayer = nil}
-Sprite3DWithSkinTest.__index = Sprite3DWithSkinTest
+local chosenOne = nil
 
 
-local function isOutOfBound()
-    local playser = WarriorManager[0].sprite3d
-    
-    local currentPos = playser:getPosition3D();
+local function isOutOfBound(object)
+    local currentPos = object.sprite3d:getPosition3D();
     local state = false;
 
     if currentPos.x < -10.5 then
@@ -55,56 +44,85 @@ local function isOutOfBound()
         beginUpdate = false
     end
 
-    playser:setPosition3D(currentPos)
-    return state;
+    object.sprite3d:setPosition3D(currentPos)
+    return state
 end
 
-local function update(dt)
-    if List.getSize(WarriorManager) == 0 or isOutOfBound() then return end
-    
-    local playser = WarriorManager[0].sprite3d
-    if beginUpdate then
-        local position = playser:getPosition3D()
-        local dir = cc.V3Sub(touchPos, position) 
-    	cc.V3Normalize(dir)
-    	local dp = cc.V3MulEx(dir, 5.0*dt)
-        local endPos = cc.V3Add(position, dp)
-        if cc.V3LengthSquared(cc.V3Sub(endPos, touchPos)) <= cc.V3LengthSquared(dp) then
-        	if cc.V3Dot(cc.V3Sub(endPos, touchPos), dir) then
-        		endPos = touchPos
-        		beginUpdate = false
-        	end
+local function collisionDetect()
+    for val = 1, List.getSize(WarriorManager) do
+        local sprite = WarriorManager[val-1]
+        if sprite.alive == true then
+            --detect warriors
+            collisionDetectWarrior(sprite)
+            
+            --detect monsters
+                    
+            --detect boss
+            
+            isOutOfBound(sprite)
         end
-        
-        if endPos.y < 0 then endPos.y = 0 end
-        
-    	playser:setPosition3D(endPos)
-    	--cclog("%.2f %.2f %.2f", endPos.x, endPos.y, endPos.z)
-    	local aspect = cc.V3Dot(dir, cc.V3(0.0, 0.0, 1.0))
-    	aspect = math.acos(aspect)
-    	if dir.x < 0.0 then	aspect = -aspect end
-    	playser:setRotation3D(cc.V3(0.0, aspect * 57.29577951 +180.0, 0.0))
-    	
-    	if camera then
-            local position = playser:getPosition3D()
-            camera:lookAt(position, cc.V3(0.0, 1.0, 0.0))
-            camera:setPosition3D(cc.V3Add(position, cc.V3(0.0, 10.0, 10.0)))
-    	end
     end
 end
 
+local function update(dt)
+    collisionDetect()
+
+    chosenOne = findAliveWarrior() --Assume it is the selected people
+    if chosenOne == 0 then return end
+    local player = chosenOne.sprite3d
+
+    --change camera angle
+    if beginUpdate then
+        local position = player:getPosition3D()
+        local dir = cc.V3Sub(touchPos, position) 
+        cc.V3Normalize(dir)
+        local dp = cc.V3MulEx(dir, 5.0*dt)
+        local endPos = cc.V3Add(position, dp)
+        if cc.V3LengthSquared(cc.V3Sub(endPos, touchPos)) <= cc.V3LengthSquared(dp) then
+            if cc.V3Dot(cc.V3Sub(endPos, touchPos), dir) then
+                endPos = touchPos
+                beginUpdate = false
+            end
+        end
+
+        if endPos.y < 0 then endPos.y = 0 end
+
+        player:setPosition3D(endPos)
+        --cclog("%.2f %.2f %.2f", endPos.x, endPos.y, endPos.z)
+        local aspect = cc.V3Dot(dir, cc.V3(0.0, 0.0, 1.0))
+        aspect = math.acos(aspect)
+        if dir.x < 0.0 then aspect = -aspect end
+        
+        local roate3d = cc.V3(0.0, aspect * 57.29577951 +180.0, 0.0)
+        player:getChildByTag(3):setRotation3D(roate3d)
+        --cclog("%.2f %.2f %.2f", roate3d.x, roate3d.y, roate3d.z)
+        
+        if camera then
+            local position = player:getPosition3D()
+            camera:lookAt(position, cc.V3(0.0, 1.0, 0.0))
+            camera:setPosition3D(cc.V3Add(position, cc.V3(0.0, 10.0, 10.0)))
+        end
+    end
+end
+
+local BattleFieldScene = class("BattleFieldScene",function()
+    return cc.Scene:create()
+end)
+
+----------------------------------------
+----Sprite3DWithSkinTest
+----------------------------------------
+local Sprite3DWithSkinTest = {currentLayer = nil}
+Sprite3DWithSkinTest.__index = Sprite3DWithSkinTest
 
 function Sprite3DWithSkinTest.addNewSpriteWithCoords(parent, x, y, tag)
-    y = y+70
     local sprite = nil
     local animation = nil
     if tag == warrior3DTag then
         sprite = Warrior3D:new("Sprite3DTest/orc.c3b")
-        --sprite.sprite3d:setScale(3)
         List.pushlast(WarriorManager, sprite)
     elseif tag == monster3DTag then
         sprite = Monster3D:new("Sprite3DTest/orc.c3b")    
-        sprite.sprite3d:setScale(3)   
         List.pushlast(MonsterManager, sprite)
     elseif tag == boss3DTag then
         sprite = Boss3D:new("Sprite3DTest/girl.c3b")        
@@ -113,22 +131,19 @@ function Sprite3DWithSkinTest.addNewSpriteWithCoords(parent, x, y, tag)
         return
     end
 
-    sprite.sprite3d:setRotation3D({x = 0, y = 180, z = 0})
-    
-    local positionX, positionY = parent:getPosition()
-    sprite.sprite3d:setScale(0.1)
-    --sprite.sprite3d:setPosition(cc.p(x - positionX, y - positionY))
+    sprite.sprite3d:getChildByTag(3):setRotation3D({x = 0, y = 180, z = 0})
+    sprite.sprite3d:getChildByTag(3):setScale(0.1)
+    sprite.sprite3d:setPosition3D(cc.V3(x, 0, y))
     gloableZOrder = gloableZOrder + 1
     sprite.sprite3d:setGlobalZOrder(gloableZOrder)
     parent:addChild(sprite.sprite3d)
-    sprite.sprite3d:setTag(tag);
     --BattleFieldScene.createRandomDebut(sprite.sprite3d, sprite.sprite3d:getPosition())        
     
-    local effect  = cc.Effect3DOutline:create()
-    local tempColor = {x=1,y=0,z=0}
-    effect:setOutlineColor(tempColor)
-    effect:setOutlineWidth(0.01)
-    sprite.sprite3d:addEffect(effect, -1)
+--    local effect  = cc.Effect3DOutline:create()
+--    local tempColor = {x=1,y=0,z=0}
+--    effect:setOutlineColor(tempColor)
+--    effect:setOutlineWidth(0.01)
+--    sprite.sprite3d:addEffect(effect, -1)
    
     local rand2 = math.random()
     local speed = 1.0
@@ -148,9 +163,9 @@ end
 function Sprite3DWithSkinTest.create(layer)
     Sprite3DWithSkinTest.currentLayer = layer
  
-    Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, size.width / 2 - 300, size.height / 4 + 40, warrior3DTag)
-    --Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, size.width / 2 - 260, size.height / 4 + 10, warrior3DTag)
-    --Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, size.width / 2 - 300, size.height / 4 - 20, warrior3DTag)
+    Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, 0, 0, warrior3DTag)
+    Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, 3, 2, warrior3DTag)
+    Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, -3, 2, warrior3DTag)
 
     return layer
 end
@@ -174,7 +189,6 @@ function BattleFieldScene.create()
     local scene = BattleFieldScene:new()
     local layer = cc.Layer:create()
     scene:addChild(layer)
---    layer:setScale(2)
     
     BattleFieldScene:createBackground(layer)
     BattleFieldScene.setCamera(layer)
@@ -191,7 +205,7 @@ function BattleFieldScene.create()
 
     local return_Button = ccui.Button:create()
     return_Button:setTouchEnabled(true)
-    return_Button:loadTextures("cr_btn_normal.png", "cr_btn_pressed.png", "")
+    return_Button:loadTextures("btn_circle_normal.png", "btn_circle_normal.png", "")
     return_Button:setTitleText("Return")
     return_Button:setAnchorPoint(0,1)
     
@@ -200,10 +214,6 @@ function BattleFieldScene.create()
     layer:addChild(return_Button, 10)
     return_Button:setScale(0.5)
 
-    --local moveBack = cc.EaseSineInOut:create(cc.MoveBy:create(2.0, cc.p(177, 0)))
-    --local moveFunction = cc.CallFunc:create(BattleFieldScene.moveForth)
-    --layer:runAction(cc.Sequence:create(moveBack, cc.DelayTime:create(1.0), moveFunction));
-    
     local function battle_success(event)
         BattleFieldScene.success()
     end
@@ -249,9 +259,10 @@ function BattleFieldScene.create()
         local tt = cc.V3MulEx(dir, dist)
         touchPos =  cc.V3Add(nearP, tt)
         
-        WarriorManager[0].sprite3d:runAction(cc.JumpBy:create(0.5, cc.p(0, 0), 5, 1))
+        --WarriorManager[0].sprite3d:runAction(cc.JumpBy:create(0.5, cc.p(0, 0), 5, 1))
+        touchPos.y = 0
         WarriorManager[0].sprite3d:runAction(cc.MoveTo:create(0.5, touchPos))
-        beginUpdate = true;       
+        beginUpdate = true;          
     end
 
     local listener = cc.EventListenerTouchOneByOne:create()
@@ -328,11 +339,6 @@ function BattleFieldScene.nextRound()
         scheduler:unscheduleScriptEntry(schedulerEntry)
         return
     end    
-    
-    --local priority = findNextPriority()
-    --BattleFieldScene.prepareCombat(priority)
-    
-    --schedulerEntry = scheduler:scheduleScriptFunc(BattleFieldScene.combat, priority + 1.0, false)
 end
 
 
