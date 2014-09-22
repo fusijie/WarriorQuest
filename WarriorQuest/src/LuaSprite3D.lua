@@ -1,6 +1,5 @@
 require("Helper")
 local scheduler = cc.Director:getInstance():getScheduler()
-
 ----------------------------------------
 ----Manager
 ----------------------------------------
@@ -36,17 +35,26 @@ LuaSprite3D.__index = LuaSprite3D
 function LuaSprite3D:new(filename)
     local self = {}
     setmetatable(self, LuaSprite3D)
-    self.sprite3d = cc.EffectSprite3D:create(filename)    
     self.action.stand = ""
     self.action.attack = filename
     self.action.walk = ""
     self.action.defend = ""
     
-    local aa = self.sprite3d:getAABB()
-    self.obbt = cc.OBB:new(aa)
-    self.drawDebug = cc.DrawNode3D:create()
-    self.sprite3d:addChild(self.drawDebug)
-    self.drawDebug:setScale(2)
+--    local aa = self.sprite3d:getAABB()
+--    self.obbt = cc.OBB:new(aa)
+--    self.drawDebug = cc.DrawNode3D:create()
+--    self.sprite3d:addChild(self.drawDebug)
+--    self.drawDebug:setScale(2)
+        
+    self.sprite3d = cc.Node:create();    
+    tempSprite = cc.Sprite:create("btn_circle_normal.png")
+    self.sprite3d:addChild(tempSprite)
+    tempSprite:setTag(2)
+    tempSprite:setScale(0.03)
+    
+    local tempSprite = cc.EffectSprite3D:create(filename)    
+    self.sprite3d:addChild(tempSprite)
+    tempSprite:setTag(3)
     
     return self
 end
@@ -130,25 +138,24 @@ function Warrior3D:new(filename)
     local function update(dt)
         if self.alive == true then
             self:FindEnemy2Attack()             
-        end                  
-        
-        self.drawDebug:clear()
-        local mat = self.sprite3d:getNodeToWorldTransform()
-        cc.V3Assign(self.obbt._xAxis, cc.Mat4getRightVector(mat))         
-        cc.V3Normalize(self.obbt._xAxis)
-
-        cc.V3Assign(self.obbt._yAxis, cc.Mat4getUpVector(mat))
-        cc.V3Normalize(self.obbt._yAxis)
-
-        cc.V3Assign(self.obbt._zAxis, cc.Mat4getForwardVector(mat))
-        cc.V3Normalize(self.obbt._zAxis)
-
-        cc.V3Assign(self.obbt._center, self.drawDebug:getPosition3D())
-
-        local corners = cc.V3Array(8)            
-        corners = self.obbt:getCorners(corners)
-        self.drawDebug:drawCube(corners, cc.c4f(0,0,1,1))
-        printTab(self.obbt._center)          
+        end     
+--        self.drawDebug:clear()
+--        local mat = self.sprite3d:getNodeToWorldTransform()
+--        cc.V3Assign(self.obbt._xAxis, cc.Mat4getRightVector(mat))         
+--        cc.V3Normalize(self.obbt._xAxis)
+--
+--        cc.V3Assign(self.obbt._yAxis, cc.Mat4getUpVector(mat))
+--        cc.V3Normalize(self.obbt._yAxis)
+--
+--        cc.V3Assign(self.obbt._zAxis, cc.Mat4getForwardVector(mat))
+--        cc.V3Normalize(self.obbt._zAxis)
+--
+--        cc.V3Assign(self.obbt._center, self.drawDebug:getPosition3D())
+--
+--        local corners = cc.V3Array(8)            
+--        corners = self.obbt:getCorners(corners)
+--        self.drawDebug:drawCube(corners, cc.c4f(0,0,1,1))
+--        printTab(self.obbt._center)          
     end
 
     scheduler:scheduleScriptFunc(update, 0.5, false)
@@ -224,19 +231,19 @@ function Monster3D:new(filename)
     local function update(dt)
         if self.alive == true then
             self:FindEnemy2Attack()
-            local mat = self.sprite3d:getNodeToWorldTransform()
-            self.obbt._xAxis = cc.Mat4getRightVector(mat)
-            cc.V3Normalize(self.obbt._xAxis)
-            
-            self.obbt._yAxis = cc.Mat4getUpVector(mat)
-            cc.V3Normalize(self.obbt._yAxis)
-            
-            self.obbt._zAxis = cc.Mat4getForwardVector(mat)
-            cc.V3Normalize(self.obbt._zAxis)
-            
-            self.obbt._center = self.drawDebug:getPosition3D()
-            local corners = self.obbt:getCorners()
-            self.drawDebug:drawCube(corners, cc.c4f(0,0,1,1))           
+--            local mat = self.sprite3d:getNodeToWorldTransform()
+--            self.obbt._xAxis = cc.Mat4getRightVector(mat)
+--            cc.V3Normalize(self.obbt._xAxis)
+--            
+--            self.obbt._yAxis = cc.Mat4getUpVector(mat)
+--            cc.V3Normalize(self.obbt._yAxis)
+--            
+--            self.obbt._zAxis = cc.Mat4getForwardVector(mat)
+--            cc.V3Normalize(self.obbt._zAxis)
+--            
+--            self.obbt._center = self.drawDebug:getPosition3D()
+--            local corners = self.obbt:getCorners()
+--            self.drawDebug:drawCube(corners, cc.c4f(0,0,1,1))           
         end
     end
        
@@ -379,4 +386,31 @@ function findAliveBoss()
     end  
 
     return 0
+end
+
+function collisionDetectWarrior(Object)
+    for val = 1, List.getSize(WarriorManager) do
+        local sprite = WarriorManager[val-1]
+        if sprite.alive == true and sprite ~= Object then
+            local minDistance = sprite.sprite3d:getContentSize().width/2 + Object.sprite3d:getContentSize().width/2
+            minDistance = 2
+--            local minDistance = sprite.sprite3d:getContentSize().width/2 + Object.sprite3d:getContentSize().width/2
+            local startP = sprite.sprite3d:getPosition3D()
+            local endP = Object.sprite3d:getPosition3D()
+            local tempDistance = cc.pGetDistance(cc.p(startP.x, startP.z), cc.p(endP.x, endP.z))
+            if tempDistance < minDistance then
+                tempDistance = minDistance - math.abs(startP.x - endP.x)                
+                if startP.x > endP.x then
+                    startP.x = startP.x + tempDistance/2
+                    endP.x = endP.x - tempDistance/2
+                else
+                    startP.x = startP.x - tempDistance/2
+                    endP.x = endP.x + tempDistance/2                                        
+                end
+                
+            	sprite.sprite3d:setPosition3D(startP)
+                Object.sprite3d:setPosition3D(endP)
+            end               
+        end                  
+    end  
 end
