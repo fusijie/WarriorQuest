@@ -181,7 +181,9 @@ physics/chipmunk/CCPhysicsWorldInfo_chipmunk.cpp \
 ../external/unzip/ioapi.cpp \
 ../external/unzip/unzip.cpp \
 ../external/edtaa3func/edtaa3func.cpp \
-../external/xxhash/xxhash.c
+../external/xxhash/xxhash.c \
+custom/EffectSprite3D.cpp \
+custom/DrawNode3D.cpp
 
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH) \

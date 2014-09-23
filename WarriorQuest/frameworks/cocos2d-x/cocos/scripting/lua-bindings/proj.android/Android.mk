@@ -11,6 +11,7 @@ LOCAL_SRC_FILES := ../manual/CCLuaBridge.cpp \
           ../manual/CCLuaValue.cpp \
           ../manual/Cocos2dxLuaLoader.cpp \
           ../manual/LuaBasicConversions.cpp \
+          ../auto/lua_cocos2dx_custom.cpp \
           ../auto/lua_cocos2dx_auto.cpp \
           ../auto/lua_cocos2dx_physics_auto.cpp \
           ../auto/lua_cocos2dx_experimental_auto.cpp \

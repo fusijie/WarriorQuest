@@ -29,7 +29,7 @@ EnumState = CreateEnumTable(EnumState)
 ----------------------------------------
 ----LuaSprite3D
 ----------------------------------------
-LuaSprite3D = {sprite3d = 0, scheduleAttackId = 0, target = 0, drawDebug = 0, obbt = 0, raceType=EnumRace.BASE, stateType = EnumState.STAND, alive = true, life = 100, speed = 100, attack = 30, priority = speed, action = {}}
+LuaSprite3D = {node = 0, sprite3d = 0, scheduleAttackId = 0, target = 0, drawDebug = 0, obbt = 0, raceType=EnumRace.BASE, stateType = EnumState.STAND, alive = true, life = 100, speed = 100, attack = 30, priority = speed, action = {}}
 LuaSprite3D.__index = LuaSprite3D
 
 function LuaSprite3D:new(filename)
@@ -46,15 +46,15 @@ function LuaSprite3D:new(filename)
 --    self.sprite3d:addChild(self.drawDebug)
 --    self.drawDebug:setScale(2)
         
-    self.sprite3d = cc.Node:create();    
-    tempSprite = cc.Sprite:create("btn_circle_normal.png")
-    self.sprite3d:addChild(tempSprite)
+    self.node = cc.Node:create();    
+    local tempSprite = cc.Sprite:create("btn_circle_normal.png")
+    self.node:addChild(tempSprite)
     tempSprite:setTag(2)
     tempSprite:setScale(0.03)
     
-    local tempSprite = cc.EffectSprite3D:create(filename)    
-    self.sprite3d:addChild(tempSprite)
-    tempSprite:setTag(3)
+    self.sprite3d  = cc.EffectSprite3D:create(filename)    
+    self.node:addChild(self.sprite3d)
+    self.sprite3d:setTag(3)
     
     return self
 end
@@ -137,7 +137,7 @@ function Warrior3D:new(filename)
     
     local function update(dt)
         if self.alive == true then
-            self:FindEnemy2Attack()             
+            --self:FindEnemy2Attack()             
         end     
 --        self.drawDebug:clear()
 --        local mat = self.sprite3d:getNodeToWorldTransform()
@@ -230,7 +230,7 @@ function Monster3D:new(filename)
    
     local function update(dt)
         if self.alive == true then
-            self:FindEnemy2Attack()
+            --self:FindEnemy2Attack()
 --            local mat = self.sprite3d:getNodeToWorldTransform()
 --            self.obbt._xAxis = cc.Mat4getRightVector(mat)
 --            cc.V3Normalize(self.obbt._xAxis)
@@ -307,7 +307,7 @@ function Boss3D:new(filename)
 
     local function update(dt)
         if self.alive == true then
-            self:FindEnemy2Attack()
+            --self:FindEnemy2Attack()
         end                  
     end
        
@@ -388,29 +388,73 @@ function findAliveBoss()
     return 0
 end
 
+function tooClose(object1, object2)
+    local aaa = object1.sprite3d:getBoundingBox()
+    local bbb = object2.sprite3d:getBoundingBox()
+    
+    local minDistance = (aaa.width + bbb.width)/2
+    local startP = object1.node:getPosition3D()
+    local endP = object2.node:getPosition3D()
+
+    local tempDistance = cc.pGetDistance(cc.p(startP.x, startP.z), cc.p(endP.x, endP.z))
+    if tempDistance < minDistance then
+        local tempX, tempZ
+        if startP.x > endP.x then
+            tempX =  startP.x - endP.x                
+        else
+            tempX = endP.x - startP.x
+        end
+
+        if startP.z > endP.z then
+            tempZ =  startP.z - endP.z                
+        else
+            tempZ = endP.z - startP.z
+        end
+
+        local ratio = (minDistance - tempDistance) / minDistance
+        tempX = ratio * tempX
+        tempZ = ratio * tempZ
+
+        if startP.x > endP.x then
+            startP.x = startP.x + tempX/2
+            endP.x = endP.x - tempX/2
+        else
+            startP.x = startP.x - tempX/2
+            endP.x = endP.x + tempX/2                                        
+        end
+
+        if startP.z > endP.z then
+            startP.z = startP.z + tempZ/2
+            endP.z = endP.z - tempZ/2
+        else
+            startP.z = startP.z - tempZ/2
+            endP.z = endP.z + tempZ/2                                        
+        end                
+
+        object1.node:setPosition3D(startP)
+        object2.node:setPosition3D(endP)
+    end  
+end
+
 function collisionDetectWarrior(Object)
     for val = 1, List.getSize(WarriorManager) do
         local sprite = WarriorManager[val-1]
         if sprite.alive == true and sprite ~= Object then
-            local minDistance = sprite.sprite3d:getContentSize().width/2 + Object.sprite3d:getContentSize().width/2
-            minDistance = 2
---            local minDistance = sprite.sprite3d:getContentSize().width/2 + Object.sprite3d:getContentSize().width/2
-            local startP = sprite.sprite3d:getPosition3D()
-            local endP = Object.sprite3d:getPosition3D()
-            local tempDistance = cc.pGetDistance(cc.p(startP.x, startP.z), cc.p(endP.x, endP.z))
-            if tempDistance < minDistance then
-                tempDistance = minDistance - math.abs(startP.x - endP.x)                
-                if startP.x > endP.x then
-                    startP.x = startP.x + tempDistance/2
-                    endP.x = endP.x - tempDistance/2
-                else
-                    startP.x = startP.x - tempDistance/2
-                    endP.x = endP.x + tempDistance/2                                        
-                end
-                
-            	sprite.sprite3d:setPosition3D(startP)
-                Object.sprite3d:setPosition3D(endP)
-            end               
+             tooClose(sprite, Object)
+        end
+    end
+    
+    for val = 1, List.getSize(MonsterManager) do
+        local sprite = MonsterManager[val-1]
+        if sprite.alive == true and sprite ~= Object then
+            tooClose(sprite, Object)
         end                  
-    end  
+    end 
+    
+    for val = 1, List.getSize(BossManager) do
+        local sprite = BossManager[val-1]
+        if sprite.alive == true and sprite ~= Object then
+            tooClose(sprite, Object)
+        end
+    end     
 end

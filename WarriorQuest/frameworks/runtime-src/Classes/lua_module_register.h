@@ -9,7 +9,7 @@
 #include "ui/lua_cocos2dx_ui_manual.hpp"
 #include "spine/lua_cocos2dx_spine_manual.hpp"
 #include "3d/lua_cocos2dx_3d_manual.h"
-
+#include "lua_cocos2dx_custom.hpp"
 
 int lua_module_register(lua_State* L)
 {
@@ -21,6 +21,7 @@ int lua_module_register(lua_State* L)
     register_ui_moudle(L);
     register_spine_module(L);
     register_cocos3d_module(L);
+    register_all_cocos2dx_custom(L);
     return 1;
 }
 

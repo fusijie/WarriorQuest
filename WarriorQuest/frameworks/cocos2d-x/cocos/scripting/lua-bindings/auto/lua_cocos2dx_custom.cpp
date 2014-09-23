@@ -1,6 +1,6 @@
 #include "lua_cocos2dx_custom.hpp"
-#include "EffectSprite3D.h"
-#include "DrawNode3D.h"
+#include "custom/EffectSprite3D.h"
+#include "custom/DrawNode3D.h"
 #include "tolua_fix.h"
 #include "LuaBasicConversions.h"
 
@@ -791,6 +791,8 @@ int lua_register_cocos2dx_custom_DrawNode3D(lua_State* tolua_S)
 }
 TOLUA_API int register_all_cocos2dx_custom(lua_State* tolua_S)
 {
+    lua_getglobal(tolua_S, "_G");
+
 	tolua_open(tolua_S);
 	
 	tolua_module(tolua_S,"cc",0);
@@ -802,6 +804,9 @@ TOLUA_API int register_all_cocos2dx_custom(lua_State* tolua_S)
 	lua_register_cocos2dx_custom_DrawNode3D(tolua_S);
 
 	tolua_endmodule(tolua_S);
+    
+    lua_pop(tolua_S, 1);
+    
 	return 1;
 }
 

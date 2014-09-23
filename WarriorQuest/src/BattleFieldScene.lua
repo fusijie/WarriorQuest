@@ -17,7 +17,7 @@ local chosenOne = nil
 
 
 local function isOutOfBound(object)
-    local currentPos = object.sprite3d:getPosition3D();
+    local currentPos = object.node:getPosition3D();
     local state = false;
 
     if currentPos.x < -10.5 then
@@ -44,7 +44,7 @@ local function isOutOfBound(object)
         beginUpdate = false
     end
 
-    object.sprite3d:setPosition3D(currentPos)
+    object.node:setPosition3D(currentPos)
     return state
 end
 
@@ -52,16 +52,27 @@ local function collisionDetect()
     for val = 1, List.getSize(WarriorManager) do
         local sprite = WarriorManager[val-1]
         if sprite.alive == true then
-            --detect warriors
             collisionDetectWarrior(sprite)
-            
-            --detect monsters
-                    
-            --detect boss
-            
-            isOutOfBound(sprite)
+            isOutOfBound(sprite)            
         end
     end
+    
+    for val = 1, List.getSize(MonsterManager) do
+        local sprite = MonsterManager[val-1]
+        if sprite.alive == true then
+            collisionDetectWarrior(sprite)
+            isOutOfBound(sprite)            
+        end
+    end    
+    
+    for val = 1, List.getSize(BossManager) do
+        local sprite = BossManager[val-1]
+        if sprite.alive == true then
+            collisionDetectWarrior(sprite)
+            isOutOfBound(sprite)            
+        end
+    end        
+    
 end
 
 local function update(dt)
@@ -69,11 +80,10 @@ local function update(dt)
 
     chosenOne = findAliveWarrior() --Assume it is the selected people
     if chosenOne == 0 then return end
-    local player = chosenOne.sprite3d
 
     --change camera angle
     if beginUpdate then
-        local position = player:getPosition3D()
+        local position = chosenOne.node:getPosition3D()
         local dir = cc.V3Sub(touchPos, position) 
         cc.V3Normalize(dir)
         local dp = cc.V3MulEx(dir, 5.0*dt)
@@ -87,18 +97,18 @@ local function update(dt)
 
         if endPos.y < 0 then endPos.y = 0 end
 
-        player:setPosition3D(endPos)
+        chosenOne.node:setPosition3D(endPos)
         --cclog("%.2f %.2f %.2f", endPos.x, endPos.y, endPos.z)
         local aspect = cc.V3Dot(dir, cc.V3(0.0, 0.0, 1.0))
         aspect = math.acos(aspect)
         if dir.x < 0.0 then aspect = -aspect end
         
         local roate3d = cc.V3(0.0, aspect * 57.29577951 +180.0, 0.0)
-        player:getChildByTag(3):setRotation3D(roate3d)
+        chosenOne.sprite3d:setRotation3D(roate3d)
         --cclog("%.2f %.2f %.2f", roate3d.x, roate3d.y, roate3d.z)
         
         if camera then
-            local position = player:getPosition3D()
+            local position = chosenOne.node:getPosition3D()
             camera:lookAt(position, cc.V3(0.0, 1.0, 0.0))
             camera:setPosition3D(cc.V3Add(position, cc.V3(0.0, 10.0, 10.0)))
         end
@@ -120,30 +130,33 @@ function Sprite3DWithSkinTest.addNewSpriteWithCoords(parent, x, y, tag)
     local animation = nil
     if tag == warrior3DTag then
         sprite = Warrior3D:new("Sprite3DTest/orc.c3b")
+        sprite.sprite3d:setScale(0.1)
         List.pushlast(WarriorManager, sprite)
     elseif tag == monster3DTag then
         sprite = Monster3D:new("Sprite3DTest/orc.c3b")    
+        sprite.sprite3d:setScale(0.1)
         List.pushlast(MonsterManager, sprite)
+        local effect  = cc.Effect3DOutline:create()
+        local tempColor = {x=1,y=0,z=0}
+        effect:setOutlineColor(tempColor)
+        effect:setOutlineWidth(0.01)
+        sprite.sprite3d:addEffect(effect, -1)
     elseif tag == boss3DTag then
         sprite = Boss3D:new("Sprite3DTest/girl.c3b")        
+        sprite.sprite3d:setScale(0.03)
         List.pushlast(BossManager, sprite)
     else
         return
     end
 
-    sprite.sprite3d:getChildByTag(3):setRotation3D({x = 0, y = 180, z = 0})
-    sprite.sprite3d:getChildByTag(3):setScale(0.1)
-    sprite.sprite3d:setPosition3D(cc.V3(x, 0, y))
+    sprite.sprite3d:setRotation3D({x = 0, y = 180, z = 0})
+    sprite.node:setPosition3D(cc.V3(x, 0, y))
     gloableZOrder = gloableZOrder + 1
-    sprite.sprite3d:setGlobalZOrder(gloableZOrder)
-    parent:addChild(sprite.sprite3d)
+    sprite.node:setGlobalZOrder(gloableZOrder)
+    parent:addChild(sprite.node)
     --BattleFieldScene.createRandomDebut(sprite.sprite3d, sprite.sprite3d:getPosition())        
     
---    local effect  = cc.Effect3DOutline:create()
---    local tempColor = {x=1,y=0,z=0}
---    effect:setOutlineColor(tempColor)
---    effect:setOutlineWidth(0.01)
---    sprite.sprite3d:addEffect(effect, -1)
+
    
     local rand2 = math.random()
     local speed = 1.0
@@ -166,6 +179,12 @@ function Sprite3DWithSkinTest.create(layer)
     Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, 0, 0, warrior3DTag)
     Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, 3, 2, warrior3DTag)
     Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, -3, 2, warrior3DTag)
+    
+    Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, -3, -3, monster3DTag)
+    Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, -3, -2, monster3DTag)
+    Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, -3, -1, monster3DTag)
+--
+--    Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, 1, 2, boss3DTag)
 
     return layer
 end
@@ -259,10 +278,10 @@ function BattleFieldScene.create()
         local tt = cc.V3MulEx(dir, dist)
         touchPos =  cc.V3Add(nearP, tt)
         
-        --WarriorManager[0].sprite3d:runAction(cc.JumpBy:create(0.5, cc.p(0, 0), 5, 1))
+        --WarriorManager[0].node:runAction(cc.JumpBy:create(0.5, cc.p(0, 0), 5, 1))
         touchPos.y = 0
-        WarriorManager[0].sprite3d:runAction(cc.MoveTo:create(0.5, touchPos))
-        beginUpdate = true;          
+        WarriorManager[0].node:runAction(cc.MoveTo:create(0.5, touchPos))
+        --beginUpdate = true;          
     end
 
     local listener = cc.EventListenerTouchOneByOne:create()

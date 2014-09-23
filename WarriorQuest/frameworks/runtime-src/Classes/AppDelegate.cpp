@@ -76,12 +76,8 @@ bool AppDelegate::applicationDidFinishLaunching()
     LuaStack* stack = engine->getLuaStack();
     stack->setXXTEAKeyAndSign("2dxLua", strlen("2dxLua"), "XXTEA", strlen("XXTEA"));
     
-    // register custom function
-    auto state = stack->getLuaState();
-    lua_getglobal(state, "_G");
-    register_all_cocos2dx_custom(state);
-    lua_pop(state, 1);
-    
+    director->setDisplayStats(true);
+
     //register custom function
     //LuaStack* stack = engine->getLuaStack();
     //register_custom_function(stack->getLuaState());
