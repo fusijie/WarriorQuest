@@ -1,6 +1,6 @@
 require "Helper"
 
-WarriorManager = List.new()
+HeroManager = List.new()
 MonsterManager = List.new()
 BossManager = List.new()
 
@@ -14,10 +14,10 @@ function findAliveMonster()
     return 0
 end
 
-function findAliveWarrior()
-    for val = 1, List.getSize(WarriorManager) do
-        if WarriorManager[val-1]._isalive == true then
-            return WarriorManager[val-1]
+function findAliveHero()
+    for val = 1, List.getSize(HeroManager) do
+        if HeroManager[val-1]._isalive == true then
+            return HeroManager[val-1]
         end                  
     end  
 
@@ -82,9 +82,9 @@ function tooClose(object1, object2)
     end  
 end
 
-function collisionDetectWarrior(Object)
-    for val = 1, List.getSize(WarriorManager) do
-        local sprite = WarriorManager[val-1]
+function collisionDetectHero(Object)
+    for val = 1, List.getSize(HeroManager) do
+        local sprite = HeroManager[val-1]
         if sprite._isalive == true and sprite ~= Object then
             tooClose(sprite, Object)
         end

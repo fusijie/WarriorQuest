@@ -39,7 +39,7 @@ namespace cocos2d {
 
 class EffectSprite3D;
 
-class Effect3D : public Ref
+class CC_DLL Effect3D : public Ref
 {
 public:
     virtual void draw(const Mat4 &transform) = 0;
@@ -91,7 +91,7 @@ protected:
     static GLProgram* getOrCreateProgram(bool isSkinned = false);
 };
 
-class EffectSprite3D : public Sprite3D
+class CC_DLL EffectSprite3D : public Sprite3D
 {
 public:
     static EffectSprite3D* create(const std::string &modelPath);
