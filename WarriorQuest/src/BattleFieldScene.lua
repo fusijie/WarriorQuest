@@ -101,10 +101,12 @@ local function update(dt)
         --cclog("%.2f %.2f %.2f", endPos.x, endPos.y, endPos.z)
         local aspect = cc.V3Dot(dir, cc.V3(0.0, 0.0, 1.0))
         aspect = math.acos(aspect)
-        if dir.x < 0.0 then aspect = -aspect end
-        
+        if dir.x < 0.0 then aspect = -aspect end 
+               
         local roate3d = cc.V3(0.0, aspect * 57.29577951 +180.0, 0.0)
         chosenOne.sprite3d:setRotation3D(roate3d)
+--        local aaaaa = math.deg(roate3d.y)
+--        chosenOne.node:getChildByTag(1):setRotation3D(cc.V3(0, 0, aaaaa))
         --cclog("%.2f %.2f %.2f", roate3d.x, roate3d.y, roate3d.z)
         
         if camera then
@@ -144,6 +146,7 @@ function Sprite3DWithSkinTest.addNewSpriteWithCoords(parent, x, y, tag)
     elseif tag == boss3DTag then
         sprite = Boss3D:new("Sprite3DTest/girl.c3b")        
         sprite.sprite3d:setScale(0.03)
+        sprite:setState(EnumState.ATTACK)
         List.pushlast(BossManager, sprite)
     else
         return
@@ -154,9 +157,6 @@ function Sprite3DWithSkinTest.addNewSpriteWithCoords(parent, x, y, tag)
     gloableZOrder = gloableZOrder + 1
     sprite.node:setGlobalZOrder(gloableZOrder)
     parent:addChild(sprite.node)
-    --BattleFieldScene.createRandomDebut(sprite.sprite3d, sprite.sprite3d:getPosition())        
-    
-
    
     local rand2 = math.random()
     local speed = 1.0
@@ -177,8 +177,8 @@ function Sprite3DWithSkinTest.create(layer)
     Sprite3DWithSkinTest.currentLayer = layer
  
     Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, 0, 0, warrior3DTag)
-    Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, 3, 2, warrior3DTag)
-    Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, -3, 2, warrior3DTag)
+--    Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, 3, 2, warrior3DTag)
+--    Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, -3, 2, warrior3DTag)
     
     Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, -3, -3, monster3DTag)
     Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, -3, -2, monster3DTag)
@@ -281,7 +281,7 @@ function BattleFieldScene.create()
         --WarriorManager[0].node:runAction(cc.JumpBy:create(0.5, cc.p(0, 0), 5, 1))
         touchPos.y = 0
         WarriorManager[0].node:runAction(cc.MoveTo:create(0.5, touchPos))
-        --beginUpdate = true;          
+        beginUpdate = true;          
     end
 
     local listener = cc.EventListenerTouchOneByOne:create()

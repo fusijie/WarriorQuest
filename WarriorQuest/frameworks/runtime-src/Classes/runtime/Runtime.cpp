@@ -148,6 +148,7 @@ void startScript(string strDebugArg)
     auto engine = LuaEngine::getInstance();
     if (!strDebugArg.empty())
     {
+        luaopen_debugger(engine->getLuaStack()->getLuaState());
         engine->executeString(strDebugArg.c_str());
     }
     cocos2d::log("debug args = %s",strDebugArg.c_str());
@@ -1123,7 +1124,7 @@ bool initRuntime()
     ScriptEngineManager::getInstance()->setScriptEngine(engine);
     LuaStack* stack = engine->getLuaStack();
     register_runtime_override_function(stack->getLuaState());
-    luaopen_debugger(engine->getLuaStack()->getLuaState());
+    //luaopen_debugger(engine->getLuaStack()->getLuaState());
     return true;
 }
 
