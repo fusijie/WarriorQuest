@@ -33,7 +33,7 @@ end
 
 function ChooseRoleScene:addHero(hero_type, pos)
     local hero3d = require("Hero3D")
-    local hero = hero3d:create(hero_type)
+    local hero = hero3d.create(hero_type)
     hero:setScale(8)
     hero:setRotation3D({0,0,0})
     hero:setPosition(pos)    

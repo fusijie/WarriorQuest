@@ -35,8 +35,8 @@ function findAliveBoss()
 end
 
 function tooClose(object1, object2)
-    local aaa = object1.sprite3d:getBoundingBox()
-    local bbb = object2.sprite3d:getBoundingBox()
+    local aaa = object1._sprite3d:getBoundingBox()
+    local bbb = object2._sprite3d:getBoundingBox()
 
     local minDistance = (aaa.width + bbb.width)/2
     local startP = object1:getPosition3D()

@@ -2,13 +2,13 @@ local Monster3D = class("Monster3D",function ()
 	return require "Base3D".create()
 end)
 
-function Monster:ctor()
+function Monster3D:ctor()
 
 end
 
 function Monster3D.create(type)
 
-    local monster = Monster.new()
+    local monster = Monster3D.new()
     monster:AddSprite3D(type)    
     
     --base
@@ -22,7 +22,7 @@ end
 function Monster3D:AddSprite3D(type)
 	
     local filename = "Sprite3DTest/orc.c3b";
-    self._sprite3d = cc.Sprite3D:create(filename)
+    self._sprite3d = cc.EffectSprite3D:create(filename)
     self:addChild(self._sprite3d)
 
     --run animation

@@ -10,15 +10,14 @@ function Hero3D:ctor()
     self._weapon = ""
 end
 
-function Hero3D:create(type)
+function Hero3D.create(type)
     
     local hero = Hero3D.new()
     hero:AddSprite3D(type)
     
     -- base
     hero:setRaceType(type)
-    hero._attack = 50
-    
+
     --self
     hero._weapon = math.random() .. ""
     
@@ -46,7 +45,9 @@ function Hero3D:AddSprite3D(type)
     self._sprite3d:runAction(cc.RepeatForever:create(animate))
 
     --set default equipment
-    self:setDefaultEqt()
+    if type ~= EnumRaceType.DEBUG then
+        self:setDefaultEqt()
+    end
 end
 
 -- set default equipments

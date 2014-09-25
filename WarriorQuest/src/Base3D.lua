@@ -4,6 +4,7 @@ require "Helper"
 
 EnumRaceType = 
 { 
+    "DEBUG",
     "BASE",
     "HERO", 
     "WARRIOR",
