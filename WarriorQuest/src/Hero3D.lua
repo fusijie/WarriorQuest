@@ -1,18 +1,26 @@
-
-local Hero3D = class("Hero3D",function ()
-	return require "Base3D".create(EnumType.HERO)
+local Hero3D = class("Hero3D", function()
+    return require "Base3D".create()
 end)
 
 function Hero3D:ctor()
     self._useWeaponId = 0
     self._useArmourId = 0
+    self._arm = ""
+    self._chest = ""
+    self._weapon = ""
 end
 
 function Hero3D:create(type)
-
+    
     local hero = Hero3D.new()
     hero:AddSprite3D(type)
-	self._type = type
+    
+    -- base
+    hero:setRaceType(type)
+    hero._attack = 50
+    
+    --self
+    hero._weapon = math.random() .. ""
     
     return hero
 end
@@ -20,17 +28,16 @@ end
 function Hero3D:AddSprite3D(type)
     
     local filename;
-    if type == EnumType.WARRIOR then --warrior
+    if type == EnumRaceType.WARRIOR then --warrior
         filename = "Sprite3DTest/ReskinGirl.c3b"
-    elseif type == EnumType.ARCHER then --archer
+    elseif type == EnumRaceType.ARCHER then --archer
         filename = "Sprite3DTest/ReskinGirl.c3b"
-    elseif type == EnumType.SORCERESS then --sorceress
+    elseif type == EnumRaceType.SORCERESS then --sorceress
         filename = "Sprite3DTest/ReskinGirl.c3b"
     else
         filename = "Sprite3DTest/orc.c3b" 
     end
     self._sprite3d = cc.Sprite3D:create(filename)
-    local axx = self._sprite3d
     self:addChild(self._sprite3d)
 
     --run animation
@@ -118,6 +125,60 @@ end
 -- get armour id
 function Hero3D:getArmourID()
     return self._useArmourId
+end
+
+local scheduler = cc.Director:getInstance():getScheduler()
+
+-- find enemy
+function Hero3D:FindEnemy2Attack()
+    if self._isalive == false then return end 
+
+    if self._target ~= 0 and self._target._isalive then
+        if self._statetype == EnumStateType.ATTACK then
+            return
+        end
+
+        local x1, y1 = self:getPosition()
+        local x2, y2 = self.target:getPosition()
+        local distance = math.abs(x1-x2)
+
+        if distance < 100 then
+            self:setState(EnumStateType.ATTACK)
+
+            local function scheduleAttack(dt)
+                if self._isalive == false or self._target == 0 or self._target._isalive == false then
+                    scheduler:unscheduleScriptEntry(self._scheduleAttackId)
+                    self._scheduleAttackId = 0
+                    return          
+                end
+
+                local attacker = self
+                local defender = self._target
+
+                defender._blood = defender._blood - attacker._attack
+                if defender._blood > 0 then
+                    if defender._racetype == EnumRaceType.BOSS then
+                        local action = cc.Sequence:create(cc.MoveBy:create(0.05, cc.p(10,10)),  cc.MoveBy:create(0.05, cc.p(-10,-10)))
+                        defender:runAction(action)
+                    else 
+                        defender:runAction(cc.RotateBy:create(0.5, 360.0))
+                    end     
+                else
+                    defender._alive = false
+                    defender:setState(EnumStateType.DEAD)
+                    attacker:setState(EnumStateType.STAND)
+                end
+            end
+
+            self._scheduleAttackId = scheduler:scheduleScriptFunc(scheduleAttack, self._priority+5, false)            
+        end  
+    end
+
+    self._target = findAliveMonster()
+
+    if self._target == 0 then
+        self._target = findAliveBoss()
+    end   
 end
 
 return Hero3D
