@@ -47,11 +47,8 @@ function Hero3D:AddSprite3D(type)
     self._sprite3d = cc.Sprite3D:create(filename)
     self:addChild(self._sprite3d)
 
-    --run animation
-    local animation = cc.Animation3D:create(filename)
-    local animate = cc.Animate3D:create(animation)
-    self._sprite3d:runAction(cc.RepeatForever:create(animate))
-
+    self._action.attack = filename
+    
     --set default equipment
     if type ~= EnumRaceType.DEBUG then
         self:setDefaultEqt()

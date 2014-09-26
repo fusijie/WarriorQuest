@@ -129,7 +129,7 @@ function Base3D:setState(type)
     
     if type == EnumStateType.KNOCKED then
         if self._racetype == EnumRaceType.BOSS then
-            local action = cc.Sequence:create(cc.MoveBy:create(0.05, cc.p(10,10)),  cc.MoveBy:create(0.05, cc.p(-10,-10)))
+            local action = cc.Sequence:create(cc.MoveBy:create(0.05, cc.p(1,1)),  cc.MoveBy:create(0.05, cc.p(-1,-1)))
             self._sprite3d:runAction(action)
         else 
             self._sprite3d:runAction(cc.RotateBy:create(0.5, 360.0))

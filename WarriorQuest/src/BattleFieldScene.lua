@@ -82,7 +82,6 @@ end
 local function update(dt)
     collisionDetect()
 
-    chosenOne = findAliveHero() --Assume it is the selected people
     if chosenOne == 0 then return end
 
     --change camera angle
@@ -153,7 +152,6 @@ function Sprite3DWithSkinTest.addNewSpriteWithCoords(parent, x, y, tag)
 
     sprite._circle:setScale(0.03)
 
-    sprite._sprite3d:setRotation3D({x = 0, y = 180, z = 0})
     sprite:setPosition3D(cc.V3(x, 0, y))
     gloableZOrder = gloableZOrder + 1
     sprite:setGlobalZOrder(gloableZOrder)
@@ -178,14 +176,17 @@ function Sprite3DWithSkinTest.create(layer)
     Sprite3DWithSkinTest.currentLayer = layer
  
     Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, 0, 0, Hero3DTag)
---    Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, 3, 2, Hero3DTag)
---    Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, -3, 2, Hero3DTag)
+    Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, 3, 2, Hero3DTag)
+    Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, -3, 2, Hero3DTag)
     
     Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, -3, -3, monster3DTag)
     Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, -3, -2, monster3DTag)
     Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, -3, -1, monster3DTag)
 --
---    Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, 1, 2, boss3DTag)
+    Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, 1, 2, boss3DTag)
+
+    chosenOne = findAliveHero() --Assume it is the selected people
+    --chosenOne = findAliveBoss() --Assume it is the selected people
 
     return layer
 end
@@ -279,9 +280,9 @@ function BattleFieldScene.create()
         local tt = cc.V3MulEx(dir, dist)
         touchPos =  cc.V3Add(nearP, tt)
         
-        --HeroManager[0]:runAction(cc.JumpBy:create(0.5, cc.p(0, 0), 5, 1))
+        --chosenOne:runAction(cc.JumpBy:create(0.5, cc.p(0, 0), 5, 1))
         touchPos.y = 0
-        HeroManager[0]:runAction(cc.MoveTo:create(0.5, touchPos))
+        chosenOne:runAction(cc.MoveTo:create(0.5, touchPos))
         beginUpdate = true;          
     end
 

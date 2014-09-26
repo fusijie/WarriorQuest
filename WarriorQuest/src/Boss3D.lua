@@ -20,14 +20,11 @@ function Boss3D.create()
 end
 
 function Boss3D:addSprite3D()
-    local filename = "Sprite3DTest/orc.c3b";
+    local filename = "Sprite3DTest/girl.c3b";
     self._sprite3d = cc.Sprite3D:create(filename)
     self:addChild(self._sprite3d)
-
-    --run animation
-    local animation = cc.Animation3D:create(filename)
-    local animate = cc.Animate3D:create(animation)
-    self._sprite3d:runAction(cc.RepeatForever:create(animate))
+    
+    self._action.attack = filename    
 end
 
 local scheduler = cc.Director:getInstance():getScheduler()

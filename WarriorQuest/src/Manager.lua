@@ -81,7 +81,7 @@ function tooClose(object1, object2)
         --cclog("i'm ready for attack")
         if object1:getRaceType() ~= object2:getRaceType() then
             object1:setState(EnumStateType.ATTACK)
-            object1:setTarget(object2)          
+            object1:setTarget(object2)
         end
     else
         if object1._target == object2 then
