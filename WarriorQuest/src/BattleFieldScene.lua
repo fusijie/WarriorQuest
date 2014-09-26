@@ -1,10 +1,14 @@
 require "Helper"
-require("LuaSprite3D")
+require "Base3D"
+require "Hero3D"
+require "Monster3D"
+require "Boss3D"
+require "Manager"
 
 local size = cc.Director:getInstance():getWinSize()
 local scheduler = cc.Director:getInstance():getScheduler()
 local schedulerEntry = nil
-local warrior3DTag = 10086
+local Hero3DTag = 10086
 local monster3DTag = 10010
 local boss3DTag = 10000
 local spriteBg = nil
@@ -17,7 +21,7 @@ local chosenOne = nil
 
 
 local function isOutOfBound(object)
-    local currentPos = object.node:getPosition3D();
+    local currentPos = object:getPosition3D();
     local state = false;
 
     if currentPos.x < -10.5 then
@@ -44,31 +48,31 @@ local function isOutOfBound(object)
         beginUpdate = false
     end
 
-    object.node:setPosition3D(currentPos)
+    object:setPosition3D(currentPos)
     return state
 end
 
 local function collisionDetect()
-    for val = 1, List.getSize(WarriorManager) do
-        local sprite = WarriorManager[val-1]
-        if sprite.alive == true then
-            collisionDetectWarrior(sprite)
+    for val = 1, List.getSize(HeroManager) do
+        local sprite = HeroManager[val-1]
+        if sprite._isalive == true then
+            collisionDetectHero(sprite)
             isOutOfBound(sprite)            
         end
     end
     
     for val = 1, List.getSize(MonsterManager) do
         local sprite = MonsterManager[val-1]
-        if sprite.alive == true then
-            collisionDetectWarrior(sprite)
+        if sprite._isalive == true then
+            collisionDetectHero(sprite)
             isOutOfBound(sprite)            
         end
     end    
     
     for val = 1, List.getSize(BossManager) do
         local sprite = BossManager[val-1]
-        if sprite.alive == true then
-            collisionDetectWarrior(sprite)
+        if sprite._isalive == true then
+            collisionDetectHero(sprite)
             isOutOfBound(sprite)            
         end
     end        
@@ -78,12 +82,12 @@ end
 local function update(dt)
     collisionDetect()
 
-    chosenOne = findAliveWarrior() --Assume it is the selected people
+    chosenOne = findAliveHero() --Assume it is the selected people
     if chosenOne == 0 then return end
 
     --change camera angle
     if beginUpdate then
-        local position = chosenOne.node:getPosition3D()
+        local position = chosenOne:getPosition3D()
         local dir = cc.V3Sub(touchPos, position) 
         cc.V3Normalize(dir)
         local dp = cc.V3MulEx(dir, 5.0*dt)
@@ -97,20 +101,19 @@ local function update(dt)
 
         if endPos.y < 0 then endPos.y = 0 end
 
-        chosenOne.node:setPosition3D(endPos)
-        --cclog("%.2f %.2f %.2f", endPos.x, endPos.y, endPos.z)
+        chosenOne:setPosition3D(endPos)
         local aspect = cc.V3Dot(dir, cc.V3(0.0, 0.0, 1.0))
         aspect = math.acos(aspect)
         if dir.x < 0.0 then aspect = -aspect end 
                
         local roate3d = cc.V3(0.0, aspect * 57.29577951 +180.0, 0.0)
-        chosenOne.sprite3d:setRotation3D(roate3d)
+        chosenOne._sprite3d:setRotation3D(roate3d)
 --        local aaaaa = math.deg(roate3d.y)
---        chosenOne.node:getChildByTag(1):setRotation3D(cc.V3(0, 0, aaaaa))
+--        chosenOne:getChildByTag(1):setRotation3D(cc.V3(0, 0, aaaaa))
         --cclog("%.2f %.2f %.2f", roate3d.x, roate3d.y, roate3d.z)
         
         if camera then
-            local position = chosenOne.node:getPosition3D()
+            local position = chosenOne:getPosition3D()
             camera:lookAt(position, cc.V3(0.0, 1.0, 0.0))
             camera:setPosition3D(cc.V3Add(position, cc.V3(0.0, 10.0, 10.0)))
         end
@@ -130,33 +133,34 @@ Sprite3DWithSkinTest.__index = Sprite3DWithSkinTest
 function Sprite3DWithSkinTest.addNewSpriteWithCoords(parent, x, y, tag)
     local sprite = nil
     local animation = nil
-    if tag == warrior3DTag then
-        sprite = Warrior3D:new("Sprite3DTest/orc.c3b")
-        sprite.sprite3d:setScale(0.1)
-        List.pushlast(WarriorManager, sprite)
+    if tag == Hero3DTag then
+        sprite = Hero3D.create(EnumRaceType.DEBUG)
+        sprite._sprite3d:setScale(0.1)
+        List.pushlast(HeroManager, sprite)
     elseif tag == monster3DTag then
-        sprite = Monster3D:new("Sprite3DTest/orc.c3b")    
-        sprite.sprite3d:setScale(0.1)
+        sprite = Monster3D.create(EnumRaceType.MONSTER)   
+        sprite._sprite3d:setScale(0.1)
         List.pushlast(MonsterManager, sprite)
         local effect  = cc.Effect3DOutline:create()
-        local tempColor = {x=1,y=0,z=0}
-        effect:setOutlineColor(tempColor)
+        effect:setOutlineColor(cc.V3(1,0,0))
         effect:setOutlineWidth(0.01)
-        sprite.sprite3d:addEffect(effect, -1)
+        sprite._sprite3d:addEffect(effect, -1)
     elseif tag == boss3DTag then
-        sprite = Boss3D:new("Sprite3DTest/girl.c3b")        
-        sprite.sprite3d:setScale(0.03)
-        sprite:setState(EnumState.ATTACK)
+        sprite = Boss3D.create()
+        sprite._sprite3d:setScale(0.03)
+        sprite:setState(EnumStateType.ATTACK)
         List.pushlast(BossManager, sprite)
     else
         return
     end
 
-    sprite.sprite3d:setRotation3D({x = 0, y = 180, z = 0})
-    sprite.node:setPosition3D(cc.V3(x, 0, y))
+    sprite._circle:setScale(0.03)
+
+    sprite._sprite3d:setRotation3D({x = 0, y = 180, z = 0})
+    sprite:setPosition3D(cc.V3(x, 0, y))
     gloableZOrder = gloableZOrder + 1
-    sprite.node:setGlobalZOrder(gloableZOrder)
-    parent:addChild(sprite.node)
+    sprite:setGlobalZOrder(gloableZOrder)
+    parent:addChild(sprite)
    
     local rand2 = math.random()
     local speed = 1.0
@@ -170,15 +174,15 @@ function Sprite3DWithSkinTest.addNewSpriteWithCoords(parent, x, y, tag)
     sprite.speed =  speed + 0.5
     sprite.priority = sprite.speed        
     
-    sprite:setState(EnumState.STAND)
+    sprite:setState(EnumStateType.STAND)
 end
 
 function Sprite3DWithSkinTest.create(layer)
     Sprite3DWithSkinTest.currentLayer = layer
  
-    Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, 0, 0, warrior3DTag)
---    Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, 3, 2, warrior3DTag)
---    Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, -3, 2, warrior3DTag)
+    Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, 0, 0, Hero3DTag)
+--    Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, 3, 2, Hero3DTag)
+--    Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, -3, 2, Hero3DTag)
     
     Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, -3, -3, monster3DTag)
     Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, -3, -2, monster3DTag)
@@ -278,9 +282,9 @@ function BattleFieldScene.create()
         local tt = cc.V3MulEx(dir, dist)
         touchPos =  cc.V3Add(nearP, tt)
         
-        --WarriorManager[0].node:runAction(cc.JumpBy:create(0.5, cc.p(0, 0), 5, 1))
+        --HeroManager[0]:runAction(cc.JumpBy:create(0.5, cc.p(0, 0), 5, 1))
         touchPos.y = 0
-        WarriorManager[0].node:runAction(cc.MoveTo:create(0.5, touchPos))
+        HeroManager[0]:runAction(cc.MoveTo:create(0.5, touchPos))
         beginUpdate = true;          
     end
 
@@ -380,11 +384,11 @@ function BattleFieldScene.success()
 end
 
 function BattleFieldScene.restore()
-    for val = 1, List.getSize(WarriorManager) do
-       WarriorManager[val-1].life = 100
-       WarriorManager[val-1].alive = true
-       WarriorManager[val-1]:setState(EnumState.STAND)
-       WarriorManager[val-1]:setState(EnumState.WALK)
+    for val = 1, List.getSize(HeroManager) do
+       HeroManager[val-1]._blood = 100
+       HeroManager[val-1]._isalive = true
+       HeroManager[val-1]:setState(EnumStateType.STAND)
+       HeroManager[val-1]:setState(EnumStateType.WALK)
     end  
 end
 

@@ -1,4 +1,4 @@
-local Boss3D = class("Boss3D",function ()
+Boss3D = class("Boss3D",function ()
 	return require "Base3D".create()
 end)
 

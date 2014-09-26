@@ -1,6 +1,8 @@
-local Hero3D = class("Hero3D", function()
+Hero3D = class("Hero3D", function()
     return require "Base3D".create()
 end)
+
+local scheduler = cc.Director:getInstance():getScheduler()
 
 function Hero3D:ctor()
     self._useWeaponId = 0
@@ -21,6 +23,12 @@ function Hero3D.create(type)
     --self
     hero._weapon = math.random() .. ""
     
+    local function update(dt)
+        hero:FindEnemy2Attack()
+    end
+
+    scheduler:scheduleScriptFunc(update, 0.5, false)    
+    
     return hero
 end
 
@@ -31,7 +39,7 @@ function Hero3D:AddSprite3D(type)
         filename = "Sprite3DTest/ReskinGirl.c3b"
     elseif type == EnumRaceType.ARCHER then --archer
         filename = "Sprite3DTest/ReskinGirl.c3b"
-    elseif type == EnumRaceType.SORCERESS then --sorceress
+    elseif type == EnumRaceType.WAGE then --wage
         filename = "Sprite3DTest/ReskinGirl.c3b"
     else
         filename = "Sprite3DTest/orc.c3b" 
@@ -128,58 +136,30 @@ function Hero3D:getArmourID()
     return self._useArmourId
 end
 
-local scheduler = cc.Director:getInstance():getScheduler()
 
 -- find enemy
 function Hero3D:FindEnemy2Attack()
     if self._isalive == false then return end 
 
-    if self._target ~= 0 and self._target._isalive then
-        if self._statetype == EnumStateType.ATTACK then
-            return
-        end
-
-        local x1, y1 = self:getPosition()
-        local x2, y2 = self.target:getPosition()
-        local distance = math.abs(x1-x2)
-
-        if distance < 100 then
-            self:setState(EnumStateType.ATTACK)
-
-            local function scheduleAttack(dt)
-                if self._isalive == false or self._target == 0 or self._target._isalive == false then
-                    scheduler:unscheduleScriptEntry(self._scheduleAttackId)
-                    self._scheduleAttackId = 0
-                    return          
-                end
-
-                local attacker = self
-                local defender = self._target
-
-                defender._blood = defender._blood - attacker._attack
-                if defender._blood > 0 then
-                    if defender._racetype == EnumRaceType.BOSS then
-                        local action = cc.Sequence:create(cc.MoveBy:create(0.05, cc.p(10,10)),  cc.MoveBy:create(0.05, cc.p(-10,-10)))
-                        defender:runAction(action)
-                    else 
-                        defender:runAction(cc.RotateBy:create(0.5, 360.0))
-                    end     
-                else
-                    defender._alive = false
-                    defender:setState(EnumStateType.DEAD)
-                    attacker:setState(EnumStateType.STAND)
-                end
+    local fjksd = self._statetype
+    local bbbb = self._scheduleAttackId
+    if self._statetype == EnumStateType.ATTACK and self._scheduleAttackId == 0 then
+        local function scheduleAttack(dt)
+            if self._isalive == false or (self._target == 0 and self.target._isalive == false) then
+                scheduler:unscheduleScriptEntry(self._scheduleAttackId)
+                self._scheduleAttackId = 0
+                return          
             end
 
-            self._scheduleAttackId = scheduler:scheduleScriptFunc(scheduleAttack, self._priority+5, false)            
-        end  
+            self._target:hurt(self._attack)
+        end    
+        self._scheduleAttackId = scheduler:scheduleScriptFunc(scheduleAttack, 1, false)            
     end
 
-    self._target = findAliveMonster()
-
-    if self._target == 0 then
-        self._target = findAliveBoss()
-    end   
+    if self._statetype ~= EnumStateType.ATTACK and self._scheduleAttackId ~= 0 then
+        scheduler:unscheduleScriptEntry(self._scheduleAttackId)
+        self._scheduleAttackId = 0
+    end  
 end
 
 return Hero3D
