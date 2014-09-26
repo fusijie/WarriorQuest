@@ -2,7 +2,7 @@
 --------------------------------
 -- @module Effect3D
 -- @extend Ref
--- @parent_module 
+-- @parent_module cc
 
 --------------------------------
 -- @function [parent=#Effect3D] draw 
@@ -12,6 +12,6 @@
 --------------------------------
 -- @function [parent=#Effect3D] setTarget 
 -- @param self
--- @param #EffectSprite3D effectsprite3d
+-- @param #cc.Sprite3D sprite3d
         
 return nil

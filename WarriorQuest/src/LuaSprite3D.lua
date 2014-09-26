@@ -57,7 +57,7 @@ function LuaSprite3D:new(filename)
     --attackArea:setPosition3D(cc.V3(0, 0, 0))
     --attackArea:setRotation(140)
     
-    self.sprite3d  = cc.EffectSprite3D:create(filename)    
+    self.sprite3d  = cc.EffectSprite3D:create(filename)
     self.node:addChild(self.sprite3d)
     self.sprite3d:setTag(3)
         

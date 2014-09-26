@@ -21,7 +21,9 @@ int lua_module_register(lua_State* L)
     register_ui_moudle(L);
     register_spine_module(L);
     register_cocos3d_module(L);
+    lua_getglobal(L, "_G");
     register_all_cocos2dx_custom(L);
+    lua_pop(L, 1);
     return 1;
 }
 

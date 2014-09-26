@@ -2,7 +2,7 @@
 --------------------------------
 -- @module Effect3DOutline
 -- @extend Effect3D
--- @parent_module 
+-- @parent_module cc
 
 --------------------------------
 -- @function [parent=#Effect3DOutline] setOutlineWidth 
@@ -17,7 +17,7 @@
 --------------------------------
 -- @function [parent=#Effect3DOutline] create 
 -- @param self
--- @return Effect3DOutline#Effect3DOutline ret (return value: Effect3DOutline)
+-- @return Effect3DOutline#Effect3DOutline ret (return value: cc.Effect3DOutline)
         
 --------------------------------
 -- @function [parent=#Effect3DOutline] draw 
@@ -27,6 +27,6 @@
 --------------------------------
 -- @function [parent=#Effect3DOutline] setTarget 
 -- @param self
--- @param #EffectSprite3D effectsprite3d
+-- @param #cc.Sprite3D sprite3d
         
 return nil

@@ -96,17 +96,38 @@ void EffectSprite3D::setEffect3D(Effect3D *effect)
     _defaultEffect = effect;
 }
 
-void EffectSprite3D::addEffect(Effect3DOutline* effect, ssize_t order)
+void EffectSprite3D::addEffect(const Vec3& outlineColor, float width, ssize_t order)
 {
-    if(nullptr == effect) return;
-    effect->retain();
-    effect->setTarget(this);
-    
-    _effects.push_back(std::make_tuple(order,effect,CustomCommand()));
-
-    std::sort(std::begin(_effects), std::end(_effects), tuple_sort);
+    if(this->_meshes.size()>0)
+    {
+        Effect3DOutline* effect = Effect3DOutline::create();
+        effect->retain();
+        effect->setOutlineColor(outlineColor);
+        effect->setOutlineWidth(width);
+        effect->setTarget(this);
+        _effects.push_back(std::make_tuple(order,effect,CustomCommand()));
+        std::sort(std::begin(_effects), std::end(_effects), tuple_sort);
+    }
+    addChildEffect(outlineColor,width,order);
 }
-
+void EffectSprite3D::addChildEffect(const Vec3& outlineColor, float width,ssize_t order)
+{
+    auto& children = this->getChildren();
+    for(const auto &obj : children) 
+    {
+        Sprite3D * sprite3D = dynamic_cast<Sprite3D *>(obj);
+        if(sprite3D)
+        {
+            Effect3DOutline* effect = Effect3DOutline::create();
+            effect->setOutlineColor(outlineColor);
+            effect->setOutlineWidth(width);
+            effect->retain();
+            effect->setTarget(sprite3D);
+            _effects.push_back(std::make_tuple(order,effect,CustomCommand()));
+            std::sort(std::begin(_effects), std::end(_effects), tuple_sort); 
+        }
+    }
+}
 const std::string Effect3DOutline::_vertShaderFile = "Shaders3D/OutLine.vert";
 const std::string Effect3DOutline::_fragShaderFile = "Shaders3D/OutLine.frag";
 const std::string Effect3DOutline::_keyInGLProgramCache = "Effect3DLibrary_Outline";
@@ -207,7 +228,7 @@ void Effect3DOutline::setOutlineWidth(float width)
     }
 }
 
-void Effect3DOutline::setTarget(EffectSprite3D *sprite)
+void Effect3DOutline::setTarget(Sprite3D *sprite)
 {
     CCASSERT(nullptr != sprite && nullptr != sprite->getMesh(),"Error: Setting a null pointer or a null mesh EffectSprite3D to Effect3D");
     
