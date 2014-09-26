@@ -52,7 +52,7 @@ function LuaSprite3D:new(filename)
     tempSprite:setTag(2)
     tempSprite:setScale(0.03)
     
-    self.sprite3d  = cc.EffectSprite3D:create(filename)    
+    self.sprite3d  = cc.EffectSprite3D:create(filename)
     self.node:addChild(self.sprite3d)
     self.sprite3d:setTag(3)
     
