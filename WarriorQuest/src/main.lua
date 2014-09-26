@@ -39,17 +39,10 @@ local function main()
         pEGLView:setDesignResolutionSize(winSize.width*widthRate/heightRate, winSize.height,
             1)
     end
-    
-    --create scene 
-    --local scene = require("ChooseRoleScene")
---    local scene = require("ActivateGameScene")
---    local scene = require("LoadingScene")
---    local scene = require("ChooseRoleScene")
---    local scene = require("ChooseRoleScene")
 
     --create scene
     local scene = require("ChooseRoleScene")
---      local scene = require("BattleFieldScene")
+--    local scene = require("BattleFieldScene")
 --    local scene = require("MainMenuScene")
     local activateGameScene = scene.create()
     --activateGameScene:playBgMusic()
