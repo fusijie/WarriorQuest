@@ -23,8 +23,9 @@ function Boss3D:addSprite3D()
     local filename = "Sprite3DTest/girl.c3b";
     self._sprite3d = cc.Sprite3D:create(filename)
     self:addChild(self._sprite3d)
-    
-    self._action.attack = filename    
+    self._sprite3d:setRotation3D({x = 0, y = 0, z = 0})        
+
+    self._action.attack = filename
 end
 
 local scheduler = cc.Director:getInstance():getScheduler()

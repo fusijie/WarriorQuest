@@ -46,6 +46,7 @@ function Hero3D:AddSprite3D(type)
     end
     self._sprite3d = cc.Sprite3D:create(filename)
     self:addChild(self._sprite3d)
+    self._sprite3d:setRotation3D({x = 0, y = 180, z = 0})        
 
     self._action.attack = filename
     

@@ -50,7 +50,6 @@ function Base3D:ctor()
 end
 
 function Base3D.create()
-	
     local base = Base3D.new()	
     base:addCircle()
 	return base
