@@ -84,8 +84,10 @@ function tooClose(object1, object2)
             object1:setTarget(object2)
         end
     else
-        if object1._target == object2 then
-            object2:setState(EnumStateType.STAND)
+        if object1._target == 0 then 
+            object1:setState(EnumStateType.STAND)
+        elseif object1._target._isalive == false then
+            object1:setState(EnumStateType.STAND)
         end
     end  
 end
