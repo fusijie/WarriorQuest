@@ -7,18 +7,12 @@ require "Manager"
 
 local size = cc.Director:getInstance():getWinSize()
 local scheduler = cc.Director:getInstance():getScheduler()
-local schedulerEntry = nil
-local Hero3DTag = 10086
-local monster3DTag = 10010
-local boss3DTag = 10000
-local spriteBg = nil
-local battleStep = 1
 local gloableZOrder = 1
 local camera = nil 
 local touchPos = nil
 local beginUpdate = false
 local chosenOne = nil
-
+local currentLayer = nil
 
 local function isOutOfBound(object)
     local currentPos = object:getPosition3D();
@@ -119,29 +113,20 @@ local function update(dt)
     end
 end
 
-local BattleFieldScene = class("BattleFieldScene",function()
-    return cc.Scene:create()
-end)
 
-----------------------------------------
-----Sprite3DWithSkinTest
-----------------------------------------
-local Sprite3DWithSkinTest = {currentLayer = nil}
-Sprite3DWithSkinTest.__index = Sprite3DWithSkinTest
-
-function Sprite3DWithSkinTest.addNewSpriteWithCoords(parent, x, y, tag)
+local function addNewSprite(x, y, tag)
     local sprite = nil
     local animation = nil
-    if tag == Hero3DTag then
+    if tag == EnumRaceType.DEBUG then
         sprite = Hero3D.create(EnumRaceType.DEBUG)
         sprite._sprite3d:setScale(0.1)
         List.pushlast(HeroManager, sprite)
-    elseif tag == monster3DTag then
+    elseif tag == EnumRaceType.MONSTER then
         sprite = Monster3D.create(EnumRaceType.MONSTER)   
         sprite._sprite3d:setScale(0.1)
         List.pushlast(MonsterManager, sprite)
         sprite._sprite3d:addEffect(cc.V3(1,0,0),0.01, -1)
-    elseif tag == boss3DTag then
+    elseif tag == EnumRaceType.BOSS then
         sprite = Boss3D.create()
         sprite._sprite3d:setScale(0.03)
         sprite:setState(EnumStateType.ATTACK)
@@ -151,11 +136,10 @@ function Sprite3DWithSkinTest.addNewSpriteWithCoords(parent, x, y, tag)
     end
 
     sprite._circle:setScale(0.03)
-
     sprite:setPosition3D(cc.V3(x, 0, y))
     gloableZOrder = gloableZOrder + 1
     sprite:setGlobalZOrder(gloableZOrder)
-    parent:addChild(sprite)
+    currentLayer:addChild(sprite)
    
     local rand2 = math.random()
     local speed = 1.0
@@ -172,49 +156,34 @@ function Sprite3DWithSkinTest.addNewSpriteWithCoords(parent, x, y, tag)
     sprite:setState(EnumStateType.STAND)
 end
 
-function Sprite3DWithSkinTest.create(layer)
-    Sprite3DWithSkinTest.currentLayer = layer
+local function createRole()
  
-    Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, 0, 0, Hero3DTag)
-    Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, 3, 2, Hero3DTag)
-    Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, -3, 2, Hero3DTag)
+    addNewSprite(0, 0, EnumRaceType.DEBUG)
+    addNewSprite(3, 2, EnumRaceType.DEBUG)
+    addNewSprite(-3, 2, EnumRaceType.DEBUG)
     
-    Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, -3, -3, monster3DTag)
-    Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, -3, -2, monster3DTag)
-    Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, -3, -1, monster3DTag)
---
-    Sprite3DWithSkinTest.addNewSpriteWithCoords(spriteBg, 1, 2, boss3DTag)
+    addNewSprite(-3, -3, EnumRaceType.MONSTER)
+    addNewSprite(-3, -2, EnumRaceType.MONSTER)
+    addNewSprite(-3, -1, EnumRaceType.MONSTER)
+    addNewSprite(1, 2, EnumRaceType.BOSS)
 
     chosenOne = findAliveHero() --Assume it is the selected people
     --chosenOne = findAliveBoss() --Assume it is the selected people
-
-    return layer
 end
 
-
-function BattleFieldScene:createBackground(layer)
-    spriteBg = cc.Sprite3D:create("Sprite3DTest/scene/DemoScene.c3b")
-    local children = spriteBg:getChildren()
-    layer:addChild(spriteBg);
-end
-
-function BattleFieldScene.setCamera(layer)
-    camera = cc.Camera:createPerspective(60.0, size.width/size.height, 1.0, 1000.0)
-    camera:setCameraFlag(2)
-    camera:setPosition3D(cc.V3(0.0, 10.0, 10.0))
-    camera:lookAt(cc.V3(0.0, 0.0, 0.0), cc.V3(0.0, 1.0, 0.0))
-    layer:addChild(camera)
-end
+local BattleFieldScene = class("BattleFieldScene",function()
+    return cc.Scene:create()
+end)
 
 function BattleFieldScene.create()
     local scene = BattleFieldScene:new()
-    local layer = cc.Layer:create()
-    scene:addChild(layer)
-    
-    BattleFieldScene:createBackground(layer)
-    BattleFieldScene.setCamera(layer)
-    Sprite3DWithSkinTest.create(layer)
-    layer:setCameraMask(2);
+    currentLayer = cc.Layer:create()
+    scene:addChild(currentLayer)
+
+    BattleFieldScene:createBackground()
+    BattleFieldScene.setCamera()
+    createRole()
+    currentLayer:setCameraMask(2);
 
     --button
     local function touchEvent_return(sender,eventType)
@@ -229,32 +198,32 @@ function BattleFieldScene.create()
     return_Button:loadTextures("btn_circle_normal.png", "btn_circle_normal.png", "")
     return_Button:setTitleText("Return")
     return_Button:setAnchorPoint(0,1)
-    
+
     return_Button:setPosition(size.width / 2 - 300, size.height  - 200)
     return_Button:addTouchEventListener(touchEvent_return)        
-    layer:addChild(return_Button, 10)
+    currentLayer:addChild(return_Button, 10)
     return_Button:setScale(0.5)
 
     local function battle_success(event)
         BattleFieldScene.success()
     end
-    
+
     local function battle_fail(event)
         BattleFieldScene.fail()
     end    
-        
+
     local listener1 = cc.EventListenerCustom:create("battle_success", battle_success)
-    local eventDispatcher = layer:getEventDispatcher()
+    local eventDispatcher = currentLayer:getEventDispatcher()
     eventDispatcher:addEventListenerWithFixedPriority(listener1, 1)
-    
+
     local listener2 = cc.EventListenerCustom:create("battle_fail", battle_fail)
     eventDispatcher:addEventListenerWithFixedPriority(listener2, 2)    
-    
+
     -- handling touch events   
     local function onTouchBegan(touch, event)
         return true
     end
-    
+
     local function onTouchMoved(touches, event)     
     end    
 
@@ -266,20 +235,20 @@ function BattleFieldScene.create()
         local farP = cc.V3(location.x, location.y, 1.0)
         nearP = camera:unproject(size, nearP, nearP)
         farP = camera:unproject(size, farP, farP)
-    
+
         local dir = cc.V3Sub(farP, nearP)
         local dist = 0.0
         local temp = cc.V3(0.0, 1.0, 0.0)
         local ndd = cc.V3Dot(temp, dir)
-    
+
         if ndd == 0 then dist = 0.0 end
-        
+
         local ndo = cc.V3Dot(temp, nearP)
         dist = (0 - ndo) / ndd
-        
+
         local tt = cc.V3MulEx(dir, dist)
         touchPos =  cc.V3Add(nearP, tt)
-        
+
         --chosenOne:runAction(cc.JumpBy:create(0.5, cc.p(0, 0), 5, 1))
         touchPos.y = 0
         chosenOne:runAction(cc.MoveTo:create(0.5, touchPos))
@@ -290,84 +259,46 @@ function BattleFieldScene.create()
     listener:registerScriptHandler(onTouchBegan,cc.Handler.EVENT_TOUCH_BEGAN )
     listener:registerScriptHandler(onTouchMoved,cc.Handler.EVENT_TOUCHES_MOVED )
     listener:registerScriptHandler(onTouchEnded,cc.Handler.EVENT_TOUCH_ENDED )
-    local eventDispatcher = layer:getEventDispatcher()
-    eventDispatcher:addEventListenerWithSceneGraphPriority(listener, layer)
-    
+    local eventDispatcher = currentLayer:getEventDispatcher()
+    eventDispatcher:addEventListenerWithSceneGraphPriority(listener, currentLayer)
+
     scheduler:scheduleScriptFunc(update, 0, false)
 
     return scene
 end
 
-function BattleFieldScene.moveForth()
-    Sprite3DWithSkinTest.currentLayer:removeChildByTag(monster3DTag)
-    Sprite3DWithSkinTest.currentLayer:removeChildByTag(monster3DTag)
-    Sprite3DWithSkinTest.currentLayer:removeChildByTag(monster3DTag)
-
-    local x, y = spriteBg:getPosition()
-
-    if x < 300 then
---    if x > 500 then
-        return    
+function BattleFieldScene:createBackground()
+    local spriteBg = cc.Sprite3D:create("Sprite3DTest/scene/DemoScene.c3b")
+    local children = spriteBg:getChildren()
+    for key1, var1 in ipairs(children) do
+        if key1 ~= 2 then
+            var1:setVisible(false)
+        else
+            for key2, var2 in ipairs(var1:getChildren()) do
+                print(key2)
+                if key2 ~=2 then
+                    var2:setVisible(false)
+                end
+            end
+        end
     end
-     
-    --background move forth
-    local move = cc.EaseSineInOut:create(cc.MoveBy:create(5.0, cc.p(-50, 0)))
-    local monsterFunction = cc.CallFunc:create(BattleFieldScene.monsterDebut)
-    spriteBg:runAction(cc.Sequence:create(move, monsterFunction))
-    
+
+    currentLayer:addChild(spriteBg);
 end
 
-function BattleFieldScene.monsterDebut()
-    --moster group1
-    if battleStep == 1 then
-        local layer = Sprite3DWithSkinTest.currentLayer 
-        Sprite3DWithSkinTest.addNewSpriteWithCoords(layer, size.width / 2 + 300, size.height / 4 + 40, monster3DTag)
-        Sprite3DWithSkinTest.addNewSpriteWithCoords(layer, size.width / 2 + 250, size.height / 4 + 10, monster3DTag)
-        Sprite3DWithSkinTest.addNewSpriteWithCoords(layer, size.width / 2 + 300, size.height / 4 - 20, monster3DTag)
-    end
-   
-    --monster group2
-    if battleStep == 2 then
-        local layer = Sprite3DWithSkinTest.currentLayer 
-        Sprite3DWithSkinTest.addNewSpriteWithCoords(layer, size.width / 2 + 200, size.height / 4 + 40, monster3DTag)
-        Sprite3DWithSkinTest.addNewSpriteWithCoords(layer, size.width / 2 + 250, size.height / 4 + 10, monster3DTag)
-        Sprite3DWithSkinTest.addNewSpriteWithCoords(layer, size.width / 2 + 300, size.height / 4 - 20, monster3DTag)
-    end
-        
-    --monster group3 with boss
-    if battleStep == 3 then
-        local layer = Sprite3DWithSkinTest.currentLayer 
-        Sprite3DWithSkinTest.addNewSpriteWithCoords(layer, size.width / 2 + 300, size.height / 4 + 40, monster3DTag)
-        Sprite3DWithSkinTest.addNewSpriteWithCoords(layer, size.width / 2 + 250, size.height / 4 + 10, monster3DTag)
-        Sprite3DWithSkinTest.addNewSpriteWithCoords(layer, size.width / 2 + 300, size.height / 4 - 20, monster3DTag)
-        Sprite3DWithSkinTest.addNewSpriteWithCoords(layer, size.width / 2 + 200, size.height / 4 + 10, boss3DTag)
-    end 
-        
-    battleStep = battleStep + 1             
-        
-    schedulerEntry = scheduler:scheduleScriptFunc(BattleFieldScene.nextRound, 0.5, false)
+function BattleFieldScene.setCamera()
+    camera = cc.Camera:createPerspective(60.0, size.width/size.height, 1.0, 1000.0)
+    camera:setCameraFlag(2)
+    camera:setPosition3D(cc.V3(0.0, 10.0, 10.0))
+    camera:lookAt(cc.V3(0.0, 0.0, 0.0), cc.V3(0.0, 1.0, 0.0))
+    currentLayer:addChild(camera)
 end
-
-function BattleFieldScene.nextRound()
-    if findAliveMonster() == 0 and findAliveBoss() == 0 then
-    	BattleFieldScene.success()
-        scheduler:unscheduleScriptEntry(schedulerEntry)
-    	return
-    end
-    
-    if findAliveWarrior() == 0 then
-        BattleFieldScene.fail()
-        scheduler:unscheduleScriptEntry(schedulerEntry)
-        return
-    end    
-end
-
 
 function BattleFieldScene.success()
     local successLabel = cc.Label:createWithTTF("Warrior SUCCESS!!!", "fonts/Marker Felt.ttf", 18)
     
     successLabel:setPosition(size.width / 2 - 100, size.height / 2)
-    Sprite3DWithSkinTest.currentLayer:addChild(successLabel)
+    currentLayer:addChild(successLabel)
     
     local spawnAction = cc.Spawn:create(cc.ScaleBy:create(3.0, 3.0), cc.FadeOut:create(3.0))
     local action = cc.Sequence:create(showAction, spawnAction)
@@ -394,31 +325,12 @@ function BattleFieldScene.fail()
     local failLabel = cc.Label:createWithTTF("YOU LOSE!!!", "fonts/Marker Felt.ttf", 18)
     failLabel:setTextColor(cc.c4b(255, 0, 0, 255))
     failLabel:setPosition(size.width / 2 - 100, size.height / 2)
-    Sprite3DWithSkinTest.currentLayer:addChild(failLabel)
+    currentLayer:addChild(failLabel)
 
     local action = cc.Sequence:create(showAction, cc.ScaleBy:create(3.0, 3.0))
 
     failLabel:runAction(action)
 end
 
-function BattleFieldScene.createRandomDebut(sprite, x,y)
-    math.randomseed(os.clock())
-    local tempRand = math.random(0,1)
-    
-    local actionDebut    
-    if tempRand < 1/2 then
-        sprite:setPosition(cc.p(1000, y))
-        actionDebut = cc.MoveTo:create(2.0, cc.p(x, y))
-    else
-        sprite:setPosition(cc.p(x, 1000))
-        actionDebut = cc.MoveTo:create(2.0, cc.p(x, y))
-    end
-    
-    local rotateAction = cc.RotateBy:create(2.0, 720)
-    local spawnAction = cc.Spawn:create(rotateAction, actionDebut)
-    actionDebut = cc.EaseSineInOut:create(spawnAction)
-
-    sprite:runAction(actionDebut)
-end
 
 return BattleFieldScene
