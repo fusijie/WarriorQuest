@@ -2,31 +2,32 @@
 --------------------------------
 -- @module EffectSprite3D
 -- @extend Sprite3D
--- @parent_module 
+-- @parent_module cc
 
 --------------------------------
 -- @function [parent=#EffectSprite3D] setEffect3D 
 -- @param self
--- @param #Effect3D effect3d
+-- @param #cc.Effect3D effect3d
         
 --------------------------------
 -- @function [parent=#EffectSprite3D] addEffect 
 -- @param self
--- @param #Effect3DOutline effect3doutline
+-- @param #vec3_table vec3
+-- @param #float float
 -- @param #long long
         
 --------------------------------
 -- @function [parent=#EffectSprite3D] create 
 -- @param self
 -- @param #string str
--- @return EffectSprite3D#EffectSprite3D ret (return value: EffectSprite3D)
+-- @return EffectSprite3D#EffectSprite3D ret (return value: cc.EffectSprite3D)
         
 --------------------------------
 -- @function [parent=#EffectSprite3D] createFromObjFileAndTexture 
 -- @param self
 -- @param #string str
 -- @param #string str
--- @return EffectSprite3D#EffectSprite3D ret (return value: EffectSprite3D)
+-- @return EffectSprite3D#EffectSprite3D ret (return value: cc.EffectSprite3D)
         
 --------------------------------
 -- @function [parent=#EffectSprite3D] draw 

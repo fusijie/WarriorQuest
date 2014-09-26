@@ -2,7 +2,7 @@
 --------------------------------
 -- @module DrawNode3D
 -- @extend Node
--- @parent_module 
+-- @parent_module cc
 
 --------------------------------
 -- @function [parent=#DrawNode3D] getBlendFunc 
