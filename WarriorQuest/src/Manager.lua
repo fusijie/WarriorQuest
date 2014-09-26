@@ -35,15 +35,12 @@ function findAliveBoss()
 end
 
 function tooClose(object1, object2)
-    local aaa = object1._sprite3d:getBoundingBox()
-    local bbb = object2._sprite3d:getBoundingBox()
-
-    local minDistance = (aaa.width + bbb.width)/2
+    local miniDistance = 2
     local startP = object1:getPosition3D()
     local endP = object2:getPosition3D()
 
     local tempDistance = cc.pGetDistance(cc.p(startP.x, startP.z), cc.p(endP.x, endP.z))
-    if tempDistance < minDistance then
+    if tempDistance < miniDistance then
         local tempX, tempZ
         if startP.x > endP.x then
             tempX =  startP.x - endP.x                
@@ -57,9 +54,10 @@ function tooClose(object1, object2)
             tempZ = endP.z - startP.z
         end
 
-        local ratio = (minDistance - tempDistance) / minDistance
-        tempX = ratio * tempX
-        tempZ = ratio * tempZ
+        local ratio = (miniDistance - tempDistance) / miniDistance
+        tempX = ratio * tempX + tempX * 0.01
+        tempZ = ratio * tempZ + tempZ * 0.01
+        if tempX == 0 then tempX = 0.01 end  -- setPosition3D doesn't work when only z is changed      
 
         if startP.x > endP.x then
             startP.x = startP.x + tempX/2
@@ -79,6 +77,16 @@ function tooClose(object1, object2)
 
         object1:setPosition3D(startP)
         object2:setPosition3D(endP)
+    elseif tempDistance < miniDistance + 0.02 then           
+        --cclog("i'm ready for attack")
+        if object1:getRaceType() ~= object2:getRaceType() then
+            object1:setState(EnumStateType.ATTACK)
+            object1:setTarget(object2)
+        end
+    else
+        if object1._target == object2 then
+            object2:setState(EnumStateType.STAND)
+        end
     end  
 end
 
