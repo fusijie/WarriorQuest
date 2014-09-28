@@ -269,6 +269,7 @@ end
 
 function BattleFieldScene:createBackground()
     local spriteBg = cc.Sprite3D:create("Sprite3DTest/scene/DemoScene.c3b")
+    spriteBg:setRotation3D(cc.V3(90, 0, 0))
     local children = spriteBg:getChildren()
     for key1, var1 in ipairs(children) do
         if key1 ~= 2 then
@@ -289,7 +290,17 @@ end
 function BattleFieldScene.setCamera()
     camera = cc.Camera:createPerspective(60.0, size.width/size.height, 1.0, 1000.0)
     camera:setCameraFlag(2)
-    camera:setPosition3D(cc.V3(0.0, 10.0, 10.0))
+    
+    local camDir = cc.V3(0.0, 10.0, 10.0)
+    cc.V3Normalize(camDir)
+
+    local rot = cc.Mat4()
+    cc.Mat4createRotationX(rot, 90*0.01745329252)    
+    cc.Mat4transformVector(rot, camDir)
+    
+    local camPos=  cc.V3MulEx(camDir, cc.V3Length(camDir))
+    
+    camera:setPosition3D(camPos)
     camera:lookAt(cc.V3(0.0, 0.0, 0.0), cc.V3(0.0, 1.0, 0.0))
     currentLayer:addChild(camera)
 end
