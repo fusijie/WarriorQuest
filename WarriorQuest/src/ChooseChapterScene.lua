@@ -81,7 +81,7 @@ end
 function ChooseChapter:addHero()
     --add hero
     local hero = require("Hero3D").create(0)
-    hero:setRotation3D({x=90,y=0,z=0})
+    hero:setRotation3D({x=0,y=0,z=0})
     hero:setScale(10)
     hero:setPosition({x=self.size.width*0.95, y=self.size.height*0.15})   
     self:addChild(hero)
