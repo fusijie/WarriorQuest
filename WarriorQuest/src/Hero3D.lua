@@ -27,7 +27,7 @@ function Hero3D.create(type)
         hero:FindEnemy2Attack()
     end
 
-    scheduler:scheduleScriptFunc(update, 0.5, false)    
+    --scheduler:scheduleScriptFunc(update, 0.5, false)    
     
     return hero
 end
@@ -46,8 +46,9 @@ function Hero3D:AddSprite3D(type)
     end
     self._sprite3d = cc.Sprite3D:create(filename)
     self:addChild(self._sprite3d)
-    self._sprite3d:setRotation3D({x = 0, y = 180, z = 0})        
-
+    self._sprite3d:setRotation3D({x = 90, y = 0, z = 0})        
+    self._sprite3d:setRotation(180)
+            
     self._action.attack = filename
     
     --set default equipment

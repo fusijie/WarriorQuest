@@ -74,7 +74,7 @@ local function collisionDetect()
 end
 
 local function update(dt)
-    collisionDetect()
+    --collisionDetect()
 
     if chosenOne == 0 then return end
 
@@ -92,7 +92,7 @@ local function update(dt)
             end
         end
 
-        if endPos.y < 0 then endPos.y = 0 end
+        --if endPos.y < 0 then endPos.y = 0 end
 
         chosenOne:setPosition3D(endPos)
         local aspect = cc.V3Dot(dir, cc.V3(0.0, 0.0, 1.0))
@@ -119,24 +119,23 @@ local function addNewSprite(x, y, tag)
     local animation = nil
     if tag == EnumRaceType.DEBUG then
         sprite = Hero3D.create(EnumRaceType.DEBUG)
-        sprite._sprite3d:setScale(0.1)
+        sprite._sprite3d:setScale(5)
         List.pushlast(HeroManager, sprite)
     elseif tag == EnumRaceType.MONSTER then
         sprite = Monster3D.create(EnumRaceType.MONSTER)   
-        sprite._sprite3d:setScale(0.1)
+        sprite._sprite3d:setScale(5)
         List.pushlast(MonsterManager, sprite)
         sprite._sprite3d:addEffect(cc.V3(1,0,0),0.01, -1)
     elseif tag == EnumRaceType.BOSS then
         sprite = Boss3D.create()
-        sprite._sprite3d:setScale(0.03)
+        sprite._sprite3d:setScale(1)
         sprite:setState(EnumStateType.ATTACK)
         List.pushlast(BossManager, sprite)
     else
         return
     end
 
-    sprite._circle:setScale(0.03)
-    sprite:setPosition3D(cc.V3(x, 0, y))
+    sprite:setPosition(cc.p(x, y))
     gloableZOrder = gloableZOrder + 1
     sprite:setGlobalZOrder(gloableZOrder)
     currentLayer:addChild(sprite)
@@ -158,9 +157,9 @@ end
 
 local function createRole()
  
-    addNewSprite(0, 0, EnumRaceType.DEBUG)
-    addNewSprite(3, 2, EnumRaceType.DEBUG)
-    addNewSprite(-3, 2, EnumRaceType.DEBUG)
+    addNewSprite(size.width/2, size.height/2, EnumRaceType.DEBUG)
+    addNewSprite(size.width/2 - 200, size.height/2, EnumRaceType.DEBUG)
+    addNewSprite(size.width/2 - 30, size.height/2 + 20, EnumRaceType.DEBUG)
     
     addNewSprite(-3, -3, EnumRaceType.MONSTER)
     addNewSprite(-3, -2, EnumRaceType.MONSTER)
@@ -180,10 +179,9 @@ function BattleFieldScene.create()
     currentLayer = cc.Layer:create()
     scene:addChild(currentLayer)
 
-    BattleFieldScene:createBackground()
+    BattleFieldScene.createBackground()
     BattleFieldScene.setCamera()
     createRole()
-    currentLayer:setCameraMask(2);
 
     --button
     local function touchEvent_return(sender,eventType)
@@ -249,10 +247,8 @@ function BattleFieldScene.create()
         local tt = cc.V3MulEx(dir, dist)
         touchPos =  cc.V3Add(nearP, tt)
 
-        --chosenOne:runAction(cc.JumpBy:create(0.5, cc.p(0, 0), 5, 1))
-        touchPos.y = 0
         chosenOne:runAction(cc.MoveTo:create(0.5, touchPos))
-        beginUpdate = true;          
+        --beginUpdate = true;          
     end
 
     local listener = cc.EventListenerTouchOneByOne:create()
@@ -267,9 +263,8 @@ function BattleFieldScene.create()
     return scene
 end
 
-function BattleFieldScene:createBackground()
+function BattleFieldScene.createBackground()
     local spriteBg = cc.Sprite3D:create("Sprite3DTest/scene/DemoScene.c3b")
-    spriteBg:setRotation3D(cc.V3(90, 0, 0))
     local children = spriteBg:getChildren()
     for key1, var1 in ipairs(children) do
         if key1 ~= 2 then
@@ -284,25 +279,17 @@ function BattleFieldScene:createBackground()
         end
     end
 
-    currentLayer:addChild(spriteBg);
+    currentLayer:addChild(spriteBg)
+    spriteBg:setScale(40)
+    spriteBg:setPosition3D(cc.V3(size.width/2, size.height/2, 0))
+    spriteBg:setRotation3D(cc.V3(90,0,0))
 end
 
 function BattleFieldScene.setCamera()
     camera = cc.Camera:createPerspective(60.0, size.width/size.height, 1.0, 1000.0)
-    camera:setCameraFlag(2)
-    
-    local camDir = cc.V3(0.0, 10.0, 10.0)
-    cc.V3Normalize(camDir)
-
-    local rot = cc.Mat4()
-    cc.Mat4createRotationX(rot, 90*0.01745329252)    
-    cc.Mat4transformVector(rot, camDir)
-    
-    local camPos=  cc.V3MulEx(camDir, cc.V3Length(camDir))
-    
-    camera:setPosition3D(camPos)
-    camera:lookAt(cc.V3(0.0, 0.0, 0.0), cc.V3(0.0, 1.0, 0.0))
-    currentLayer:addChild(camera)
+    camera:setPosition3D(cc.V3(size.width/2, -size.height/2, 200.0))
+    camera:lookAt(cc.V3(size.width/2, size.height/2, 0.0), cc.V3(0.0, 1.0, 0.0))
+    currentLayer:addChild(camera)  
 end
 
 function BattleFieldScene.success()
