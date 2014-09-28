@@ -24,7 +24,8 @@ function Monster3D:AddSprite3D(type)
     local filename = "Sprite3DTest/orc.c3b";
     self._sprite3d = cc.EffectSprite3D:create(filename)
     self:addChild(self._sprite3d)
-    self._sprite3d:setRotation3D({x = 0, y = 180, z = 0})
+    self._sprite3d:setRotation3D({x = 90, y = 0, z = 0})        
+    self._sprite3d:setRotation(180)
       
     self._action.attack = filename
 end
