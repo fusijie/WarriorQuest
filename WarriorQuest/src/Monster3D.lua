@@ -1,4 +1,4 @@
-local Monster3D = class("Monster3D",function ()
+Monster3D = class("Monster3D",function ()
 	return require "Base3D".create()
 end)
 
@@ -24,11 +24,9 @@ function Monster3D:AddSprite3D(type)
     local filename = "Sprite3DTest/orc.c3b";
     self._sprite3d = cc.EffectSprite3D:create(filename)
     self:addChild(self._sprite3d)
-
-    --run animation
-    local animation = cc.Animation3D:create(filename)
-    local animate = cc.Animate3D:create(animation)
-    self._sprite3d:runAction(cc.RepeatForever:create(animate))
+    self._sprite3d:setRotation3D({x = 0, y = 180, z = 0})
+      
+    self._action.attack = filename
 end
 
 local scheduler = cc.Director:getInstance():getScheduler()

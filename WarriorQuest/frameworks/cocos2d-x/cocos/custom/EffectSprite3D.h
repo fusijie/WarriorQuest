@@ -27,15 +27,13 @@
 
 #include "cocos2d.h"
 #include <string>
-
 USING_NS_CC;
 
-namespace cocos2d {
-    class Animate3D;
-    class Sprite3D;
-    class Delay;
-}
+NS_CC_BEGIN
 
+class Animate3D;
+class Sprite3D;
+class Delay;
 
 class EffectSprite3D;
 
@@ -43,7 +41,7 @@ class CC_DLL Effect3D : public Ref
 {
 public:
     virtual void draw(const Mat4 &transform) = 0;
-    virtual void setTarget(EffectSprite3D *sprite) = 0;
+    virtual void setTarget(Sprite3D *sprite) = 0;
 protected:
     Effect3D() : _glProgramState(nullptr) {}
     virtual ~Effect3D()
@@ -54,7 +52,7 @@ protected:
     GLProgramState* _glProgramState;
 };
 
-class Effect3DOutline: public Effect3D
+class CC_DLL Effect3DOutline: public Effect3D
 {
 public:
     static Effect3DOutline* create();
@@ -64,7 +62,7 @@ public:
     void setOutlineWidth(float width);
     
     virtual void draw(const Mat4 &transform) override;
-    virtual void setTarget(EffectSprite3D *sprite) override;
+    virtual void setTarget(Sprite3D *sprite) override;
 protected:
     
     Effect3DOutline();
@@ -75,7 +73,7 @@ protected:
     Vec3 _outlineColor;
     float _outlineWidth;
     //weak reference
-    EffectSprite3D* _sprite;
+    Sprite3D* _sprite;
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     EventListenerCustom* _backToForegroundListener;
 #endif
@@ -98,15 +96,18 @@ public:
 
     static EffectSprite3D* createFromObjFileAndTexture(const std::string& objFilePath, const std::string& textureFilePath);
     void setEffect3D(Effect3D* effect);
-    void addEffect(Effect3DOutline* effect, ssize_t order);
+    void addEffect(const Vec3& outlineColor, float width, ssize_t order);
+   
     virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
 protected:
     EffectSprite3D();
     virtual ~EffectSprite3D();
-    
+    void addChildEffect(const Vec3& outlineColor, float width,ssize_t order); 
     std::vector<std::tuple<ssize_t,Effect3D*,CustomCommand>> _effects;
     Effect3D* _defaultEffect;
     CustomCommand _command;
 };
 
 #endif
+
+NS_CC_END

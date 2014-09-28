@@ -41,7 +41,7 @@ local function main()
     end
 
     --create scene
---    local scene = require("ChooseChapterScene")
+    --    local scene = require("ChooseRoleScene")
 --    local scene = require("BattleFieldScene")
     local scene = require("MainMenuScene")
     local activateGameScene = scene.create()

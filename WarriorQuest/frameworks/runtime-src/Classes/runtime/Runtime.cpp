@@ -1124,6 +1124,7 @@ bool initRuntime()
     ScriptEngineManager::getInstance()->setScriptEngine(engine);
     LuaStack* stack = engine->getLuaStack();
     register_runtime_override_function(stack->getLuaState());
+    //luaopen_debugger(engine->getLuaStack()->getLuaState());
     return true;
 }
 

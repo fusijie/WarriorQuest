@@ -176,7 +176,7 @@ function ChooseRoleScene:createLayer()
     self.layer:addChild(archer)
     
     --create warrior,archer,sorceress
-    local sorceress = self:addHero(EnumRaceType.SORCERESS,pos[3])
+    local sorceress = self:addHero(EnumRaceType.WAGE,pos[3])
     sorceress:setPositionZ(-100)
     sorceress:setTag(3)
     self.layer:addChild(sorceress)
@@ -295,7 +295,7 @@ function ChooseRoleScene:getWeaponTextureName()
         elseif hero:getWeaponID() ==1 then
             return cc.Director:getInstance():getTextureCache():addImage("eqticon/cr_a_w_0.jpg")
         end
-    elseif hero:getRaceType() == EnumRaceType.SORCERESS then --sorceress
+    elseif hero:getRaceType() == EnumRaceType.WAGE then --sorceress
         if hero:getWeaponID() == 0 then
             return cc.Director:getInstance():getTextureCache():addImage("eqticon/cr_s_w_1.jpg")
         elseif hero:getWeaponID() ==1 then
@@ -318,7 +318,7 @@ function ChooseRoleScene:getArmourTextureName()
         elseif hero:getArmourID() ==1 then
             return cc.Director:getInstance():getTextureCache():addImage("eqticon/cr_a_a_0.jpg")
         end
-    elseif hero:getRaceType() == EnumRaceType.SORCERESS then --sorceress
+    elseif hero:getRaceType() == EnumRaceType.WAGE then --sorceress
         if hero:getArmourID() == 0 then
             return cc.Director:getInstance():getTextureCache():addImage("eqticon/cr_s_a_1.jpg")
         elseif hero:getArmourID() ==1 then
@@ -411,7 +411,7 @@ function ChooseRoleScene:switchItemtextureWhenRotate()
         end
     end
     
-    if hero:getRaceType() == EnumRaceType.SORCERESS then --sorceress
+    if hero:getRaceType() == EnumRaceType.WAGE then --sorceress
         if hero:getWeaponID() == 0 then
             weaponTexture = cc.Director:getInstance():getTextureCache():addImage("eqticon/cr_s_w_1.jpg")
         else
