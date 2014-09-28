@@ -57,12 +57,12 @@ end
 
 function Base3D:addCircle()
 	self._circle = cc.Sprite:create("btn_circle_normal.png")
-	self._circle:setScale(0.3)
+	self._circle:setScale(1.5)
 	self:addChild(self._circle)
 	
     self._attackZone = cc.ProgressTimer:create(cc.Sprite:create("btn_circle_normal.png"))
     self:addChild(self._attackZone)
-    self._attackZone:setScale(0.035)
+    self._attackZone:setScale(1.5)
     self._attackZone:setColor(cc.c3b(255, 0, 0))
     self._attackZone:setType(cc.PROGRESS_TIMER_TYPE_RADIAL)
     self._attackZone:runAction(cc.ProgressTo:create(0, 25))	
