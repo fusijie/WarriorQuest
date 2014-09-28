@@ -408,6 +408,10 @@ function cc.V3LengthSquared(p)
     return (p.x * p.x + p.y * p.y + p.z * p.z)
 end
 
+function cc.V3Length(p)
+    return math.sqrt(p.x * p.x + p.y * p.y + p.z * p.z)
+end
+
 function cc.V3Normalize(p)
     local n = p.x * p.x + p.y * p.y + p.z * p.z
     if n == 1.0 then return end
@@ -420,6 +424,15 @@ function cc.V3Normalize(p)
     p.x = p.x * n
     p.y = p.y * n
     p.z = p.z * n
+end
+
+function cc.Mat4()
+    local m = {}
+    for i = 1, 16 do
+        m[i] = 0
+    end  
+
+    return m  
 end
 
 function cc.Mat4getUpVector(m)
@@ -444,6 +457,27 @@ end
 
 function cc.Mat4getBackVector(m)
     return {x = m[9], y = m[10], z = m[11]}
+end
+
+function cc.Mat4createRotationX(m, angle)
+    local c = math.cos(angle)
+    local s = math.sin(angle)
+
+    m[6]  = c;
+    m[7]  = s;
+    m[10]  = -s;
+    m[11] = c;
+end
+
+function cc.Mat4transformVector(m, p)
+    local x = p.x
+    local y = p.y
+    local z = p.z
+    local w = 0.0
+    
+    p.x = x * m[1] + y * m[5] + z * m[9] + w * m[13];
+    p.y = x * m[2] + y * m[6] + z * m[10] + w * m[14];
+    p.z = x * m[3] + y * m[7] + z * m[11] + w * m[15];
 end
 
 
