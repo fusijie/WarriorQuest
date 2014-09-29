@@ -211,6 +211,9 @@
     <Filter Include="cocosbuilder\Source Files">
       <UniqueIdentifier>{8579ed15-b266-4f80-818d-a3a9251c4248}</UniqueIdentifier>
     </Filter>
+    <Filter Include="custom">
+      <UniqueIdentifier>{8d3dcc28-5bcf-4662-85dc-87da7535189d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\physics\CCPhysicsBody.cpp">
@@ -1164,6 +1167,12 @@
     </ClCompile>
     <ClCompile Include="..\editor-support\cocosbuilder\CCSpriteLoader.cpp">
       <Filter>cocosbuilder\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\custom\DrawNode3D.cpp">
+      <Filter>custom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\custom\EffectSprite3D.cpp">
+      <Filter>custom</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2289,6 +2298,12 @@
     </ClInclude>
     <ClInclude Include="..\editor-support\cocosbuilder\CocosBuilder.h">
       <Filter>cocosbuilder\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\custom\DrawNode3D.h">
+      <Filter>custom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\custom\EffectSprite3D.h">
+      <Filter>custom</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
