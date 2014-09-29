@@ -2,6 +2,7 @@ Hero3D = class("Hero3D", function()
     return require "Base3D".create()
 end)
 
+local size = cc.Director:getInstance():getWinSize()
 local scheduler = cc.Director:getInstance():getScheduler()
 
 function Hero3D:ctor()
@@ -24,11 +25,11 @@ function Hero3D.create(type)
     hero._weapon = math.random() .. ""
     
     local function update(dt)
-        hero:FindEnemy2Attack()
+        if hero.FindEnemy2Attack == nil then return  end
+        hero:FindEnemy2Attack()        
     end
 
     scheduler:scheduleScriptFunc(update, 0.5, false)    
-    
     return hero
 end
 
@@ -138,16 +139,20 @@ end
 
 -- find enemy
 function Hero3D:FindEnemy2Attack()
-    if self._isalive == false then return end 
+    if self._isalive == false then
+        if self._scheduleAttackId ~= 0 then
+            scheduler:unscheduleScriptEntry(self._scheduleAttackId)
+            self._scheduleAttackId = 0
+        end
+        return
+    end 
 
-    local fjksd = self._statetype
-    local bbbb = self._scheduleAttackId
     if self._statetype == EnumStateType.ATTACK and self._scheduleAttackId == 0 then
         local function scheduleAttack(dt)
-            if self._isalive == false or (self._target == 0 and self.target._isalive == false) then
+            if self._target == nil or self._target == 0 or self._target._isalive == false then
                 scheduler:unscheduleScriptEntry(self._scheduleAttackId)
                 self._scheduleAttackId = 0
-                return          
+                return
             end
 
             self._target:hurt(self._attack)
