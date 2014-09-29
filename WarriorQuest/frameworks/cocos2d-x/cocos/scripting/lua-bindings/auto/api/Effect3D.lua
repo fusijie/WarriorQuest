@@ -13,5 +13,6 @@
 -- @function [parent=#Effect3D] setTarget 
 -- @param self
 -- @param #cc.Sprite3D sprite3d
+-- @param #cc.Mesh mesh
         
 return nil
