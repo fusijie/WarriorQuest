@@ -21,4 +21,9 @@
 -- @field [parent=#cc] DrawNode3D#DrawNode3D DrawNode3D preloaded module
 
 
+--------------------------------------------------------
+-- the cc BillboardParticleSystem
+-- @field [parent=#cc] BillboardParticleSystem#BillboardParticleSystem BillboardParticleSystem preloaded module
+
+
 return nil

@@ -1804,6 +1804,10 @@
 		660994D119CA8023003C76FE /* DrawNode3D.h in Headers */ = {isa = PBXBuildFile; fileRef = 660994CE19CA8023003C76FE /* DrawNode3D.h */; };
 		660994D219CA8023003C76FE /* DrawNode3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 660994CF19CA8023003C76FE /* DrawNode3D.cpp */; };
 		660994D319CA8023003C76FE /* DrawNode3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 660994CF19CA8023003C76FE /* DrawNode3D.cpp */; };
+		66AC65D519D93AA4007478A0 /* BillboardParticleSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66AC65D319D93AA4007478A0 /* BillboardParticleSystem.cpp */; };
+		66AC65D619D93AA4007478A0 /* BillboardParticleSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66AC65D319D93AA4007478A0 /* BillboardParticleSystem.cpp */; };
+		66AC65D719D93AA4007478A0 /* BillboardParticleSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = 66AC65D419D93AA4007478A0 /* BillboardParticleSystem.h */; };
+		66AC65D819D93AA4007478A0 /* BillboardParticleSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = 66AC65D419D93AA4007478A0 /* BillboardParticleSystem.h */; };
 		A07A4CAF1783777C0073F6A7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1551A342158F2AB200E66CFE /* Foundation.framework */; };
 		ACB25BD619BEB22A00F95C52 /* EffectSprite3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACB25BD419BEB22A00F95C52 /* EffectSprite3D.cpp */; };
 		ACB25BD719BEB22A00F95C52 /* EffectSprite3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACB25BD419BEB22A00F95C52 /* EffectSprite3D.cpp */; };
@@ -2843,6 +2847,8 @@
 		50FCEB9218C72017004AD434 /* WidgetReaderProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetReaderProtocol.h; sourceTree = "<group>"; };
 		660994CE19CA8023003C76FE /* DrawNode3D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawNode3D.h; sourceTree = "<group>"; };
 		660994CF19CA8023003C76FE /* DrawNode3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DrawNode3D.cpp; sourceTree = "<group>"; };
+		66AC65D319D93AA4007478A0 /* BillboardParticleSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BillboardParticleSystem.cpp; sourceTree = "<group>"; };
+		66AC65D419D93AA4007478A0 /* BillboardParticleSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillboardParticleSystem.h; sourceTree = "<group>"; };
 		A07A4D641783777C0073F6A7 /* libcocos2d iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libcocos2d iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACB25BD419BEB22A00F95C52 /* EffectSprite3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EffectSprite3D.cpp; sourceTree = "<group>"; };
 		ACB25BD519BEB22A00F95C52 /* EffectSprite3D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EffectSprite3D.h; sourceTree = "<group>"; };
@@ -4897,6 +4903,8 @@
 		ACB25BD319BEB22A00F95C52 /* custom */ = {
 			isa = PBXGroup;
 			children = (
+				66AC65D319D93AA4007478A0 /* BillboardParticleSystem.cpp */,
+				66AC65D419D93AA4007478A0 /* BillboardParticleSystem.h */,
 				660994CE19CA8023003C76FE /* DrawNode3D.h */,
 				660994CF19CA8023003C76FE /* DrawNode3D.cpp */,
 				ACB25BD419BEB22A00F95C52 /* EffectSprite3D.cpp */,
@@ -5331,6 +5339,7 @@
 				50ABBE471925AB6F00A911A9 /* CCEvent.h in Headers */,
 				15AE1B9E19AADFDF00C27E9E /* UIVBox.h in Headers */,
 				15AE192319AAD35000C27E9E /* DictionaryHelper.h in Headers */,
+				66AC65D719D93AA4007478A0 /* BillboardParticleSystem.h in Headers */,
 				B257B4501989D5E800D9A687 /* CCPrimitive.h in Headers */,
 				50ABBE6B1925AB6F00A911A9 /* CCEventListenerFocus.h in Headers */,
 				50ABBDA51925AB4100A911A9 /* CCQuadCommand.h in Headers */,
@@ -5684,6 +5693,7 @@
 				15AE1B0119AAD42500C27E9E /* cpRatchetJoint.h in Headers */,
 				15AE1AA819AAD40300C27E9E /* b2Island.h in Headers */,
 				1A570213180BCBF40088DEC7 /* CCProgressTimer.h in Headers */,
+				66AC65D819D93AA4007478A0 /* BillboardParticleSystem.h in Headers */,
 				B37510821823ACA100B3BA6A /* CCPhysicsJointInfo_chipmunk.h in Headers */,
 				1A570217180BCBF40088DEC7 /* CCRenderTexture.h in Headers */,
 				15AE1ABB19AAD40300C27E9E /* b2EdgeAndPolygonContact.h in Headers */,
@@ -6116,6 +6126,7 @@
 				15AE184419AAD2F700C27E9E /* CCSprite3DMaterial.cpp in Sources */,
 				50ABBE591925AB6F00A911A9 /* CCEventKeyboard.cpp in Sources */,
 				1A57007D180BC5A10088DEC7 /* CCActionInterval.cpp in Sources */,
+				66AC65D519D93AA4007478A0 /* BillboardParticleSystem.cpp in Sources */,
 				15AE189F19AAD33D00C27E9E /* CCNodeLoaderLibrary.cpp in Sources */,
 				1A570081180BC5A10088DEC7 /* CCActionManager.cpp in Sources */,
 				15AE1A6119AAD40300C27E9E /* b2Fixture.cpp in Sources */,
@@ -6650,6 +6661,7 @@
 				B375107E1823ACA100B3BA6A /* CCPhysicsContactInfo_chipmunk.cpp in Sources */,
 				15AE19AA19AAD39700C27E9E /* ListViewReader.cpp in Sources */,
 				1A5701C8180BCB5A0088DEC7 /* CCLabelTextFormatter.cpp in Sources */,
+				66AC65D619D93AA4007478A0 /* BillboardParticleSystem.cpp in Sources */,
 				1A5701CC180BCB5A0088DEC7 /* CCLabelTTF.cpp in Sources */,
 				15AE193419AAD35100C27E9E /* CCActionObject.cpp in Sources */,
 				15AE1AD619AAD40300C27E9E /* b2WheelJoint.cpp in Sources */,

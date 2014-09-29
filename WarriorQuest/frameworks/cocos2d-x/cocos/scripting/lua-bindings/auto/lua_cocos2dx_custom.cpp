@@ -1,6 +1,7 @@
 #include "lua_cocos2dx_custom.hpp"
-#include "custom/EffectSprite3D.h"
-#include "custom/DrawNode3D.h"
+#include "EffectSprite3D.h"
+#include "DrawNode3D.h"
+#include "BillboardParticleSystem.h"
 #include "tolua_fix.h"
 #include "LuaBasicConversions.h"
 
@@ -78,19 +79,20 @@ int lua_cocos2dx_custom_Effect3D_setTarget(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 2) 
     {
         cocos2d::Sprite3D* arg0;
         cocos2d::Mesh* arg1;
 
         ok &= luaval_to_object<cocos2d::Sprite3D>(tolua_S, 2, "cc.Sprite3D",&arg0);
+
         ok &= luaval_to_object<cocos2d::Mesh>(tolua_S, 3, "cc.Mesh",&arg1);
         if(!ok)
             return 0;
-        cobj->setTarget(arg0,arg1);
+        cobj->setTarget(arg0, arg1);
         return 0;
     }
-    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "cc.Effect3D:setTarget",argc, 1);
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "cc.Effect3D:setTarget",argc, 2);
     return 0;
 
 #if COCOS2D_DEBUG >= 1
@@ -794,6 +796,141 @@ int lua_register_cocos2dx_custom_DrawNode3D(lua_State* tolua_S)
     g_typeCast["DrawNode3D"] = "cc.DrawNode3D";
     return 1;
 }
+
+int lua_cocos2dx_custom_BillboardParticleSystem_setCamera(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::BillboardParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.BillboardParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::BillboardParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_custom_BillboardParticleSystem_setCamera'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        cocos2d::Camera* arg0;
+
+        ok &= luaval_to_object<cocos2d::Camera>(tolua_S, 2, "cc.Camera",&arg0);
+        if(!ok)
+            return 0;
+        cobj->setCamera(arg0);
+        return 0;
+    }
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "cc.BillboardParticleSystem:setCamera",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_custom_BillboardParticleSystem_setCamera'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_custom_BillboardParticleSystem_create(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"cc.BillboardParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 1)
+    {
+        std::string arg0;
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.BillboardParticleSystem:create");
+        if(!ok)
+            return 0;
+        cocos2d::BillboardParticleSystem* ret = cocos2d::BillboardParticleSystem::create(arg0);
+        object_to_luaval<cocos2d::BillboardParticleSystem>(tolua_S, "cc.BillboardParticleSystem",(cocos2d::BillboardParticleSystem*)ret);
+        return 1;
+    }
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d\n ", "cc.BillboardParticleSystem:create",argc, 1);
+    return 0;
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_custom_BillboardParticleSystem_create'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_cocos2dx_custom_BillboardParticleSystem_constructor(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::BillboardParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+            return 0;
+        cobj = new cocos2d::BillboardParticleSystem();
+        cobj->autorelease();
+        int ID =  (int)cobj->_ID ;
+        int* luaID =  &cobj->_luaID ;
+        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"cc.BillboardParticleSystem");
+        return 1;
+    }
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "cc.BillboardParticleSystem:BillboardParticleSystem",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_custom_BillboardParticleSystem_constructor'.",&tolua_err);
+#endif
+
+    return 0;
+}
+
+static int lua_cocos2dx_custom_BillboardParticleSystem_finalize(lua_State* tolua_S)
+{
+    printf("luabindings: finalizing LUA object (BillboardParticleSystem)");
+    return 0;
+}
+
+int lua_register_cocos2dx_custom_BillboardParticleSystem(lua_State* tolua_S)
+{
+    tolua_usertype(tolua_S,"cc.BillboardParticleSystem");
+    tolua_cclass(tolua_S,"BillboardParticleSystem","cc.BillboardParticleSystem","cc.ParticleSystemQuad",nullptr);
+
+    tolua_beginmodule(tolua_S,"BillboardParticleSystem");
+        tolua_function(tolua_S,"new",lua_cocos2dx_custom_BillboardParticleSystem_constructor);
+        tolua_function(tolua_S,"setCamera",lua_cocos2dx_custom_BillboardParticleSystem_setCamera);
+        tolua_function(tolua_S,"create", lua_cocos2dx_custom_BillboardParticleSystem_create);
+    tolua_endmodule(tolua_S);
+    std::string typeName = typeid(cocos2d::BillboardParticleSystem).name();
+    g_luaType[typeName] = "cc.BillboardParticleSystem";
+    g_typeCast["BillboardParticleSystem"] = "cc.BillboardParticleSystem";
+    return 1;
+}
 TOLUA_API int register_all_cocos2dx_custom(lua_State* tolua_S)
 {
 	tolua_open(tolua_S);
@@ -801,6 +938,7 @@ TOLUA_API int register_all_cocos2dx_custom(lua_State* tolua_S)
 	tolua_module(tolua_S,"cc",0);
 	tolua_beginmodule(tolua_S,"cc");
 
+	lua_register_cocos2dx_custom_BillboardParticleSystem(tolua_S);
 	lua_register_cocos2dx_custom_EffectSprite3D(tolua_S);
 	lua_register_cocos2dx_custom_Effect3D(tolua_S);
 	lua_register_cocos2dx_custom_Effect3DOutline(tolua_S);
