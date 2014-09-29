@@ -15,34 +15,34 @@ local chosenOne = nil
 local currentLayer = nil
 
 local function isOutOfBound(object)
-    local currentPos = object:getPosition3D();
+    local currentPos = cc.p(object:getPosition());
     local state = false;
 
-    if currentPos.x < -10.5 then
-        currentPos.x = -10.5
+    if currentPos.x < 0 then
+        currentPos.x = 0
         state = true
         beginUpdate = false
     end    
 
-    if currentPos.x > 9.5 then
-        currentPos.x = 9.5
+    if currentPos.x > size.width then
+        currentPos.x = size.width
         state = true
         beginUpdate = false
     end
 
-    if currentPos.z < -3.0 then
-        currentPos.z = -3.0
+    if currentPos.y < 0 then
+        currentPos.y = 0
         state = true
         beginUpdate = false
     end
 
-    if currentPos.z > 7.0 then
-        currentPos.z = 7.0
+    if currentPos.y > size.height then
+        currentPos.y = size.height
         state = true
         beginUpdate = false
     end
 
-    object:setPosition3D(currentPos)
+    object:setPosition(currentPos)
     return state
 end
 
@@ -74,7 +74,7 @@ local function collisionDetect()
 end
 
 local function update(dt)
-    --collisionDetect()
+    collisionDetect()
 
     if chosenOne == 0 then return end
 
@@ -159,12 +159,12 @@ local function createRole()
  
     addNewSprite(size.width/2, size.height/2, EnumRaceType.DEBUG)
     addNewSprite(size.width/2 - 200, size.height/2, EnumRaceType.DEBUG)
-    addNewSprite(size.width/2 - 30, size.height/2 + 20, EnumRaceType.DEBUG)
+    addNewSprite(size.width/2 - 100, size.height/2 + 50, EnumRaceType.DEBUG)
     
-    addNewSprite(-3, -3, EnumRaceType.MONSTER)
-    addNewSprite(-3, -2, EnumRaceType.MONSTER)
-    addNewSprite(-3, -1, EnumRaceType.MONSTER)
-    addNewSprite(1, 2, EnumRaceType.BOSS)
+    addNewSprite(size.width/2-200, size.height/2-200, EnumRaceType.MONSTER)
+    addNewSprite(size.width/2-300, size.height/2-200, EnumRaceType.MONSTER)
+    addNewSprite(size.width/2-300, size.height/2-100, EnumRaceType.MONSTER)
+    addNewSprite(size.width/2+300, size.height/2-100, EnumRaceType.BOSS)
 
     chosenOne = findAliveHero() --Assume it is the selected people
     --chosenOne = findAliveBoss() --Assume it is the selected people
@@ -229,6 +229,7 @@ function BattleFieldScene.create()
         if touch == nil then return end
 
         local location = touch:getLocationInView()
+        cclog("%f %f", location.x, location.y)
         local nearP = cc.V3(location.x, location.y, -1.0)
         local farP = cc.V3(location.x, location.y, 1.0)
         nearP = camera:unproject(size, nearP, nearP)
@@ -236,7 +237,7 @@ function BattleFieldScene.create()
 
         local dir = cc.V3Sub(farP, nearP)
         local dist = 0.0
-        local temp = cc.V3(0.0, 1.0, 0.0)
+        local temp = cc.V3(0.0, 0.0, 1.0)
         local ndd = cc.V3Dot(temp, dir)
 
         if ndd == 0 then dist = 0.0 end
@@ -286,8 +287,8 @@ function BattleFieldScene.createBackground()
 end
 
 function BattleFieldScene.setCamera()
-    camera = cc.Camera:createPerspective(60.0, size.width/size.height, 1.0, 1000.0)
-    camera:setPosition3D(cc.V3(size.width/2, -size.height/2, 200.0))
+    camera = cc.Camera:createPerspective(60.0, size.width/size.height, 1.0, 2000.0)
+    camera:setPosition3D(cc.V3(size.width/2, -size.height/2, size.width/2))
     camera:lookAt(cc.V3(size.width/2, size.height/2, 0.0), cc.V3(0.0, 1.0, 0.0))
     currentLayer:addChild(camera)  
 end
