@@ -89,8 +89,7 @@ function Base3D:setState(type)
         else 
             rotateAngle = -90.0
         end
-        --self._sprite3d:runAction(cc.RotateTo:create(0.02, rotateAngle)) 
-        self._sprite3d:runAction(cc.ScaleBy:create(0.2, 0.2))            
+        self._sprite3d:runAction(cc.RotateTo:create(0.5, cc.V3(0, 0, rotateAngle))) 
     end 
 
     if type == EnumStateType.WALK then
@@ -132,7 +131,7 @@ function Base3D:setState(type)
             local action = cc.Sequence:create(cc.MoveBy:create(0.05, cc.p(5,5)),  cc.MoveBy:create(0.05, cc.p(-5,-5)))
             self._sprite3d:runAction(action)
         else 
-            self._sprite3d:runAction(cc.RotateBy:create(0.5, 360.0))
+            self._sprite3d:runAction(cc.RotateBy:create(0.2, 360.0))
         end 
     end
 end
