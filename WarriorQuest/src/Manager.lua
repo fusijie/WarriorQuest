@@ -35,11 +35,11 @@ function findAliveBoss()
 end
 
 function tooClose(object1, object2)
-    local miniDistance = 2
-    local startP = object1:getPosition3D()
-    local endP = object2:getPosition3D()
+    local miniDistance = 100
+    local startP = cc.p(object1:getPosition())
+    local endP = cc.p(object2:getPosition())
 
-    local tempDistance = cc.pGetDistance(cc.p(startP.x, startP.z), cc.p(endP.x, endP.z))
+    local tempDistance = cc.pGetDistance(startP, endP)
     if tempDistance < miniDistance then
         local tempX, tempZ
         if startP.x > endP.x then
@@ -48,10 +48,10 @@ function tooClose(object1, object2)
             tempX = endP.x - startP.x
         end
 
-        if startP.z > endP.z then
-            tempZ =  startP.z - endP.z                
+        if startP.y > endP.y then
+            tempZ =  startP.y - endP.y                
         else
-            tempZ = endP.z - startP.z
+            tempZ = endP.y - startP.y
         end
 
         local ratio = (miniDistance - tempDistance) / miniDistance
@@ -67,17 +67,17 @@ function tooClose(object1, object2)
             endP.x = endP.x + tempX/2                                        
         end
 
-        if startP.z > endP.z then
-            startP.z = startP.z + tempZ/2
-            endP.z = endP.z - tempZ/2
+        if startP.y > endP.y then
+            startP.y = startP.y + tempZ/2
+            endP.y = endP.y - tempZ/2
         else
-            startP.z = startP.z - tempZ/2
-            endP.z = endP.z + tempZ/2                                        
+            startP.y = startP.y - tempZ/2
+            endP.y = endP.y + tempZ/2                                        
         end                
 
-        object1:setPosition3D(startP)
-        object2:setPosition3D(endP)
-    elseif tempDistance < miniDistance + 0.02 then           
+        object1:setPosition(startP)
+        object2:setPosition(endP)
+    elseif tempDistance < miniDistance + 1 then           
         --cclog("i'm ready for attack")
         if object1:getRaceType() ~= object2:getRaceType() then
             object1:setState(EnumStateType.ATTACK)

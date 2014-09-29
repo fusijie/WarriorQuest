@@ -27,7 +27,7 @@ function Hero3D.create(type)
         hero:FindEnemy2Attack()
     end
 
-    --scheduler:scheduleScriptFunc(update, 0.5, false)    
+    scheduler:scheduleScriptFunc(update, 0.5, false)    
     
     return hero
 end
