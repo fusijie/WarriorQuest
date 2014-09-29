@@ -1,6 +1,6 @@
 #include "lua_cocos2dx_custom.hpp"
-#include "EffectSprite3D.h"
-#include "DrawNode3D.h"
+#include "custom/EffectSprite3D.h"
+#include "custom/DrawNode3D.h"
 #include "tolua_fix.h"
 #include "LuaBasicConversions.h"
 
@@ -81,11 +81,13 @@ int lua_cocos2dx_custom_Effect3D_setTarget(lua_State* tolua_S)
     if (argc == 1) 
     {
         cocos2d::Sprite3D* arg0;
+        cocos2d::Mesh* arg1;
 
         ok &= luaval_to_object<cocos2d::Sprite3D>(tolua_S, 2, "cc.Sprite3D",&arg0);
+        ok &= luaval_to_object<cocos2d::Mesh>(tolua_S, 3, "cc.Mesh",&arg1);
         if(!ok)
             return 0;
-        cobj->setTarget(arg0);
+        cobj->setTarget(arg0,arg1);
         return 0;
     }
     CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "cc.Effect3D:setTarget",argc, 1);

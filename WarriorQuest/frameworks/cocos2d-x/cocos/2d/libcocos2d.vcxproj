@@ -271,6 +271,8 @@ xcopy /Y /Q "$(ProjectDir)..\..\external\win32-specific\spine\prebuilt\release-l
     <ClCompile Include="..\base\TGAlib.cpp" />
     <ClCompile Include="..\base\ZipUtils.cpp" />
     <ClCompile Include="..\cocos2d.cpp" />
+    <ClCompile Include="..\custom\DrawNode3D.cpp" />
+    <ClCompile Include="..\custom\EffectSprite3D.cpp" />
     <ClCompile Include="..\deprecated\CCArray.cpp" />
     <ClCompile Include="..\deprecated\CCDeprecated.cpp" />
     <ClCompile Include="..\deprecated\CCDictionary.cpp" />
@@ -623,6 +625,8 @@ xcopy /Y /Q "$(ProjectDir)..\..\external\win32-specific\spine\prebuilt\release-l
     <ClInclude Include="..\base\utlist.h" />
     <ClInclude Include="..\base\ZipUtils.h" />
     <ClInclude Include="..\cocos2d.h" />
+    <ClInclude Include="..\custom\DrawNode3D.h" />
+    <ClInclude Include="..\custom\EffectSprite3D.h" />
     <ClInclude Include="..\deprecated\CCArray.h" />
     <ClInclude Include="..\deprecated\CCBool.h" />
     <ClInclude Include="..\deprecated\CCDeprecated.h" />

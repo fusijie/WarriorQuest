@@ -41,7 +41,7 @@ class CC_DLL Effect3D : public Ref
 {
 public:
     virtual void draw(const Mat4 &transform) = 0;
-    virtual void setTarget(Sprite3D *sprite) = 0;
+    virtual void setTarget(Sprite3D *sprite,Mesh* childMesh) = 0;
 protected:
     Effect3D() : _glProgramState(nullptr) {}
     virtual ~Effect3D()
@@ -62,7 +62,7 @@ public:
     void setOutlineWidth(float width);
     
     virtual void draw(const Mat4 &transform) override;
-    virtual void setTarget(Sprite3D *sprite) override;
+    virtual void setTarget(Sprite3D *sprite,Mesh* childMesh) override;
 protected:
     
     Effect3DOutline();
@@ -74,6 +74,7 @@ protected:
     float _outlineWidth;
     //weak reference
     Sprite3D* _sprite;
+    Mesh*     _childMesh;
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     EventListenerCustom* _backToForegroundListener;
 #endif
